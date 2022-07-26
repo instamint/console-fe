@@ -4,7 +4,12 @@ import TopBarProgress from 'react-topbar-progress-indicator'
 import { getCSSVariableValue } from '../../_metronic/assets/ts/_utils'
 import { WithChildren } from '../../_metronic/helpers'
 import { MasterLayout } from '../../_metronic/layout/MasterLayout'
-import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
+import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
+import { ApiKeysWrapper } from '../pages/APIKeys/ApiKeysWrapper'
+import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
+import { DesignerWrapper } from '../pages/Designer/index'
+import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
+import { TransactionsWrapper } from '../pages/Transactions/TransactionsWrapper'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -20,12 +25,12 @@ const PrivateRoutes = () => {
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
-        <Route path='assets' element={<DashboardWrapper />} />
-        <Route path='designer' element={<DashboardWrapper />} />
-        <Route path='analytics' element={<DashboardWrapper />} />
-        <Route path='parties' element={<DashboardWrapper />} />
-        <Route path='transactions' element={<DashboardWrapper />} />
-        <Route path='api_keys' element={<DashboardWrapper />} />
+        <Route path='assets' element={<AssetsWrapper />} />
+        <Route path='designer' element={<DesignerWrapper />} />
+        <Route path='analytics' element={<AnalyticsWrapper />} />
+        <Route path='parties' element={<PartiesWrapper />} />
+        <Route path='transactions' element={<TransactionsWrapper />} />
+        <Route path='api_keys' element={<ApiKeysWrapper />} />
 
         {/* <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />

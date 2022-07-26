@@ -17,12 +17,14 @@
     align-items: center;
     padding-left: 0;
     margin: 0;
+    margin-left: 20px;
 
     // Input
     .form-check-input {
         margin: 0;
         float: none;
         flex-shrink: 0;
+        cursor: pointer;
     }
 
     // Label

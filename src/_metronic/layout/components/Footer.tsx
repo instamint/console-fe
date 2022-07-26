@@ -13,9 +13,9 @@ const Footer: FC = () => {
         {/* begin::Copyright */}
         <div className='text-dark order-2 order-md-1'>
           <span className='text-muted fw-bold me-2'>{new Date().getFullYear()} &copy;</span>
-          <a href='#' className='text-gray-800 text-hover-primary'>
-            Designer
-          </a>
+          <span className='text-gray-800 text-hover-primary'>
+            Instamint | Console
+          </span>
         </div>
         {/* end::Copyright */}
       </div>
