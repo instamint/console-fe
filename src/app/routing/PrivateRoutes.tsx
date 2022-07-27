@@ -12,12 +12,14 @@ import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
 import { TransactionsWrapper } from '../pages/Transactions/TransactionsWrapper'
 
 const PrivateRoutes = () => {
-  const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
-  const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
-  const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
-  const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
-  const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
-  const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
+  // const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
+  // const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
+  // const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
+  // const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
+  // const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
+  const UsersPage = lazy(() => import('../modules/admin/users/UsersPage'))
+  const LoginsPage = lazy(() => import('../modules/admin/logins/LoginsPage'))
+  const TransactionsPage = lazy(() => import('../modules/admin/transactions/TransactionsPage'))
 
   return (
     <Routes>
@@ -31,11 +33,21 @@ const PrivateRoutes = () => {
         <Route path='parties' element={<PartiesWrapper />} />
         <Route path='transactions' element={<TransactionsWrapper />} />
         <Route path='api_keys' element={<ApiKeysWrapper />} />
+        <Route
+          path='admin/*'
+          element={
+            <SuspensedView>
+              <UsersPage />
+              <LoginsPage />
+              <TransactionsPage />
+            </SuspensedView>
+          }
+        />
 
         {/* <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} /> */}
-        <Route
+        {/* <Route
           path='crafted/pages/profile/*'
           element={
             <SuspensedView>
@@ -82,7 +94,7 @@ const PrivateRoutes = () => {
               <UsersPage />
             </SuspensedView>
           }
-        />
+        /> */}
         {/* Page Not Found */}
         <Route path='*' element={<Navigate to='/assets' />} />
       </Route>
