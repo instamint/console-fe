@@ -10,11 +10,38 @@
   	--#{$prefix}modal-header-border-color: var(--kt-modal-header-border-color);
   	--#{$prefix}modal-footer-bg: var(--kt-modal-footer-bg);
   	--#{$prefix}modal-footer-border-color: var(--kt-modal-footer-border-color);
+	overflow-y: hidden;
 }
 
  // Mobile dialog
 .modal-dialog {
 	outline: none !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.modal-dialog-600 {
+	outline: none !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	max-width: 600px !important;
+}
+
+.modal-dialog-700 {
+	outline: none !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: unset !important;
+	max-width: 700px !important;
+	& .modal-body {
+		overflow-y: auto !important;
+		height: 535px !important;
+	}
 }
 
 // Modal header
@@ -23,6 +50,7 @@
 	justify-content: space-between;
 	@include border-top-radius($modal-content-border-radius);
 	border-bottom: $modal-header-border-width solid var(--kt-modal-header-border-color);
+	padding: 10px 20px;
 
 	// Headings
 	h1,h2,h3,h4,h5,h6 {
@@ -42,6 +70,7 @@
 .modal-footer {
 	background-color: var(--kt-modal-footer-bg);
 	border-top: $modal-footer-border-width solid var(--#{$prefix}modal-footer-border-color);
+	padding: 10px 20px !important;
 }
 
 // Modal background

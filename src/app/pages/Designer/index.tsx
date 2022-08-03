@@ -6,6 +6,8 @@ import TreeView from './TreeView';
 import JsonView from './JsonView';
 import { PageTitle } from '../../../_metronic/layout/core';
 import { useIntl } from 'react-intl';
+import {Modal} from 'react-bootstrap'
+import { KTSVG } from '../../../_metronic/helpers';
 
 const EditorPage: React.FC = () => {
   // --------------------------------------------------
@@ -121,6 +123,7 @@ const EditorPage: React.FC = () => {
   // Schema
   // --------------------------------------------------
   const [schemaList, setSchemaList] = useState<any[]>([])
+  const [showModal, setShowModal] = useState<boolean>(false)
   const appendSchema = useCallback((schema: any) => {
     console.log('appendSchema', schema)
     setSchemaList((x) => {
@@ -149,12 +152,54 @@ const EditorPage: React.FC = () => {
     <Context.Provider value={contextValue}>
       <Container>
         <TreeView />
-        <JsonView />
+        <Modal
+          className='modal fade'
+          id='kt_modal_select_location'
+          data-backdrop='static'
+          tabIndex={-1}
+          role='dialog'
+          show={showModal}
+          dialogClassName='modal-ml modal-dialog-700'
+          aria-hidden='true'
+        >
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h5 className='modal-title' style={{color: '#5a5d72'}}>
+                JSON VIEW
+              </h5>
+              <div
+                className='btn btn-icon btn-sm btn-active-light-primary ms-2'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+                onClick={() => setShowModal(false)}
+              >
+                <KTSVG
+                  path='/media/icons/duotune/arrows/arr061.svg'
+                  className='svg-icon svg-icon-2x'
+                />
+              </div>
+            </div>
+            <div className='modal-body'>
+              <JsonView />
+            </div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-light'
+                data-bs-dismiss='modal'
+                onClick={() => setShowModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </Modal>
         <Toolbox
           clear={clear}
           setStore={setTreeStore}
           setSchemaList={setSchemaList}
           appendSchema={appendSchema}
+          setShowModal={setShowModal}
         />
       </Container>
     </Context.Provider>
@@ -175,7 +220,7 @@ export { DesignerWrapper }
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 2.4fr 2.4fr 1.5fr;
+  grid-template-columns: 5fr 3fr;
   grid-gap: 1.5rem;
   height: 95vh;
 `;

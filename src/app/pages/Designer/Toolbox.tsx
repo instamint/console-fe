@@ -6,32 +6,33 @@ import JsonSchemaView from './JsonSchemaView';
 import { ItemTypes, useAppendSchema, useStore } from './model';
 import IconSave from '../../images/save-white.png'
 import IconClear from '../../images/clear-white.png'
+import IconView from '../../images/view.png'
 
 export interface ToolboxProps {
-  clear: () => void;
-  setStore: (store: any) => void;
-  setSchemaList: (list: any) => void;
-  appendSchema: (schema: any) => void;
+  clear: () => void
+  setStore: (store: any) => void
+  setSchemaList: (list: any) => void
+  appendSchema: (schema: any) => void
+  setShowModal: (showModal: boolean) => void
 }
 
-const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList}) => {
-  const store = useStore();
+const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setShowModal}) => {
+  const store = useStore()
 
-  const appendSchemaHook = useAppendSchema();
-  
+  const appendSchemaHook = useAppendSchema()
+
   const saveSchema = useCallback(() => {
-    JsonSchemaService.createSchema(JSON.stringify(store)).then(x => {
-      const r = JSON.parse(x.document)[0];
-      appendSchemaHook({id: x.id, name: r.name});
-    });
-  }, [store]);
-
+    JsonSchemaService.createSchema(JSON.stringify(store)).then((x) => {
+      const r = JSON.parse(x.document)[0]
+      appendSchemaHook({id: x.id, name: r.name})
+    })
+  }, [store])
 
   const onDragStart = useCallback((ev: React.DragEvent<HTMLDivElement>) => {
-    console.log('Data', ev.currentTarget.dataset);
-    const item = ev.currentTarget.dataset.item as string;
-    ev.dataTransfer.setData('item', item);
-  }, []);
+    console.log('Data', ev.currentTarget.dataset)
+    const item = ev.currentTarget.dataset.item as string
+    ev.dataTransfer.setData('item', item)
+  }, [])
 
   return (
     <StyledGroupToolbox>
@@ -43,6 +44,9 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList}) => {
         ))}
 
         <GroupBtn>
+          <Button onClick={() => setShowModal(true)}>
+            <Image src={IconView} alt='save'></Image>View Json
+          </Button>
           <Button onClick={saveSchema}>
             <Image src={IconSave} alt='save'></Image>Save
           </Button>
@@ -55,7 +59,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList}) => {
       <JsonSchemaList setStore={setStore} setSchemaList={setSchemaList} />
     </StyledGroupToolbox>
   )
-};
+}
 
 export default Toolbox;
 
