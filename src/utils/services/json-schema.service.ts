@@ -5,18 +5,21 @@ export interface JsonSchema {
     document: string;
 }
 
-const getAllSchemas = async (): Promise<JsonSchema[]> => {
-    const response = await http.get<JsonSchema[]>("/json-schemas/all");
-    return response.data;
-};
+const getAllSchemas = async (username: string): Promise<JsonSchema[]> => {
+  const response = await http.get<JsonSchema[]>(`/json-schemas/user/${username}`)
+  return response.data
+}
 
 const getSchema = async (id: string): Promise<JsonSchema> => {
     const response = await http.get<JsonSchema>(`/json-schemas/${id}`);
     return response.data;
 };
 
-const createSchema = async (schema: string): Promise<JsonSchema> => {
-    const response = await http.post<JsonSchema>("/json-schemas", schema);
+const createSchema = async (schema: string, username: string): Promise<JsonSchema> => {
+    const response = await http.post<JsonSchema>('/json-schemas', {
+      document: schema,
+      username: username,
+    })
     return response.data;
 };
 

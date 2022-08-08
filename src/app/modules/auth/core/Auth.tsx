@@ -68,12 +68,13 @@ const AuthInit: FC<WithChildren> = ({children}) => {
   useEffect(() => {
     const requestUser = async (apiToken: string) => {
       try {
-        if (!didRequest.current) {
-          const {data} = await getUserByToken(apiToken)
-          if (data) {
-            setCurrentUser(data)
-          }
-        }
+        // if (!didRequest.current) {
+        //   const {data} = await getUserByToken(apiToken)
+        //   if (data) {
+        //     setCurrentUser(data)
+        //   }
+        // }
+        setCurrentUser(auth)
       } catch (error) {
         console.error(error)
         if (!didRequest.current) {
@@ -86,8 +87,8 @@ const AuthInit: FC<WithChildren> = ({children}) => {
       return () => (didRequest.current = true)
     }
 
-    if (auth && auth.api_token) {
-      requestUser(auth.api_token)
+    if (auth && auth.accessToken) {
+      requestUser(auth.accessToken)
     } else {
       logout()
       setShowSplashScreen(false)

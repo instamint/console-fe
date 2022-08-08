@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {useSchemaList} from './model'
 import JsonSchemaService from '../../../utils/services/json-schema.service'
 import IconDelete from '../../images/delete.png'
+import { useAuth } from '../../modules/auth'
 
 interface JsonSchemaListProps {
   setStore: (store: any) => void
@@ -13,9 +14,11 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
   const {setStore, setSchemaList} = props
 
   const schemaList = useSchemaList()
+  const {currentUser} = useAuth()
 
   useEffect(() => {
-    JsonSchemaService.getAllSchemas().then((schemas) => {
+    const username = currentUser?.username || ""
+    JsonSchemaService.getAllSchemas(username).then((schemas) => {
       const schemaList = schemas.map((x) => {
         const s = JSON.parse(x.document)
         try {

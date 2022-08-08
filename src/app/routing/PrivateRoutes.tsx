@@ -4,6 +4,7 @@ import TopBarProgress from 'react-topbar-progress-indicator'
 import { getCSSVariableValue } from '../../_metronic/assets/ts/_utils'
 import { WithChildren } from '../../_metronic/helpers'
 import { MasterLayout } from '../../_metronic/layout/MasterLayout'
+import { useAuth } from '../modules/auth'
 import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
 import { ApiKeysWrapper } from '../pages/APIKeys/ApiKeysWrapper'
 import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
@@ -12,6 +13,7 @@ import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
 import { TransactionsWrapper } from '../pages/Transactions/TransactionsWrapper'
 
 const PrivateRoutes = () => {
+  const {currentUser} = useAuth()
   // const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
   // const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
   // const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
@@ -33,7 +35,7 @@ const PrivateRoutes = () => {
         <Route path='parties' element={<PartiesWrapper />} />
         <Route path='transactions' element={<TransactionsWrapper />} />
         <Route path='api_keys' element={<ApiKeysWrapper />} />
-        <Route
+        {currentUser?.role?.length && currentUser?.role?.includes("ADMIN") ? <Route
           path='admin/*'
           element={
             <SuspensedView>
@@ -42,7 +44,7 @@ const PrivateRoutes = () => {
               <TransactionsPage />
             </SuspensedView>
           }
-        />
+        /> : ""}
 
         {/* <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />

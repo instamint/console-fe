@@ -35,50 +35,50 @@ const TablesParties: React.FC<Props> = ({className}) => {
       Array.isArray(listParties) &&
       listParties?.map((item, index) => {
         return (
-            <tr key={index}>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.id}</span>
-                  </div>
+          <tr key={index}>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.id}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.party_name}</span>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.party_name}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.namespace}</span>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.namespace}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex justify-content-end flex-shrink-0'>
-                  <a
-                    href='#'
-                    className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
-                  >
-                    Details
-                  </a>
-                  <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid'>
-                    <input
-                      className='form-check-input'
-                      type='checkbox'
-                      value=''
-                      name='notifications'
-                      defaultChecked={disable}
-                      onChange={() => setDisable(!disable)}
-                    />
-                    <label className='form-check-label fw-bold'>Disable</label>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex justify-content-end flex-shrink-0'>
+                <a
+                  href='#'
+                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
+                >
+                  Details
+                </a>
+                <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid form-ml-4'>
+                  <input
+                    className='form-check-input'
+                    type='checkbox'
+                    value=''
+                    name='notifications'
+                    defaultChecked={disable}
+                    onChange={() => setDisable(!disable)}
+                  />
+                  <label className='form-check-label fw-bold'>Disable</label>
                 </div>
-              </td>
-            </tr>
+              </div>
+            </td>
+          </tr>
         )
       }),
     [listParties]

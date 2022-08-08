@@ -1,10 +1,10 @@
-import React from 'react'
 import {MenuItem} from './MenuItem'
 import {MenuInnerWithSub} from './MenuInnerWithSub'
-import {MegaMenu} from './MegaMenu'
 import {useIntl} from 'react-intl'
+import { useAuth } from '../../../../app/modules/auth'
 
 export function MenuInner() {
+  const {currentUser} = useAuth()
   const intl = useIntl()
   return (
     <>
@@ -14,24 +14,24 @@ export function MenuInner() {
       <MenuItem title={intl.formatMessage({id: 'MENU.PARTIES'})} to='/parties' />
       <MenuItem title={intl.formatMessage({id: 'MENU.TRANSACTIONS'})} to='/transactions' />
       <MenuItem title={intl.formatMessage({id: 'MENU.API_KEYS'})} to='/api_keys' />
-      <MenuInnerWithSub
-        title='Admin'
-        to='/admin'
-        menuPlacement='bottom-start'
-        menuTrigger={`{default:'click', lg: 'hover'}`}
-      >
-        <MenuItem to='/admin/users' title='Users' fontIcon='bi-person' />
-        <MenuItem
-          icon='/media/icons/duotune/general/gen051.svg'
-          to='/admin/logins'
-          title='Logins'
-        />
-        <MenuItem
-          to='/admin/admin-transactions'
-          title='Transactions'
-          fontIcon='bi-layers'
-        />
-      </MenuInnerWithSub>
+      {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
+        <MenuInnerWithSub
+          title='Admin'
+          to='/admin'
+          menuPlacement='bottom-start'
+          menuTrigger={`{default:'click', lg: 'hover'}`}
+        >
+          <MenuItem to='/admin/users' title='Users' fontIcon='bi-person' />
+          <MenuItem
+            icon='/media/icons/duotune/general/gen051.svg'
+            to='/admin/logins'
+            title='Logins'
+          />
+          <MenuItem to='/admin/admin-transactions' title='Transactions' fontIcon='bi-layers' />
+        </MenuInnerWithSub>
+      ) : (
+        ''
+      )}
 
       {/* <MenuItem title='Layout Builder' to='/builder' /> */}
       {/* <MenuInnerWithSub

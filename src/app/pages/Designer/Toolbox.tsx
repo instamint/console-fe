@@ -7,6 +7,7 @@ import { ItemTypes, useAppendSchema, useStore } from './model';
 import IconSave from '../../images/save-white.png'
 import IconClear from '../../images/clear-white.png'
 import IconView from '../../images/view.png'
+import { useAuth } from '../../modules/auth';
 
 export interface ToolboxProps {
   clear: () => void
@@ -18,11 +19,13 @@ export interface ToolboxProps {
 
 const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setShowModal}) => {
   const store = useStore()
+  const {currentUser} = useAuth()
 
   const appendSchemaHook = useAppendSchema()
 
   const saveSchema = useCallback(() => {
-    JsonSchemaService.createSchema(JSON.stringify(store)).then((x) => {
+    const username = currentUser?.username || ''
+    JsonSchemaService.createSchema(JSON.stringify(store), username).then((x) => {
       const r = JSON.parse(x.document)[0]
       appendSchemaHook({id: x.id, name: r.name})
     })

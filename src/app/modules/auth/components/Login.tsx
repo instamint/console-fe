@@ -10,10 +10,9 @@ import {useAuth} from '../core/Auth'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Wrong email format')
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
-    .required('Email is required'),
+    .required('UserName is required'),
   password: Yup.string()
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
@@ -43,8 +42,9 @@ export function Login() {
       try {
         const {data: auth} = await login(values.email, values.password)
         saveAuth(auth)
-        const {data: user} = await getUserByToken(auth.api_token)
-        setCurrentUser(user)
+        setCurrentUser(auth)
+        // const {data: user} = await getUserByToken(auth.api_token)
+        // user.role = "user"
       } catch (error) {
         console.error(error)
         saveAuth(undefined)
@@ -84,7 +84,7 @@ export function Login() {
 
       {/* begin::Form group */}
       <div className='fv-row mb-10'>
-        <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
+        <label className='form-label fs-6 fw-bolder text-dark'>UserName</label>
         <input
           placeholder='Enter Username Here'
           {...formik.getFieldProps('email')}
