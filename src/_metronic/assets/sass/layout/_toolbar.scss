@@ -38,7 +38,6 @@
 
         // Aside default enabled, aside fixed & header sticky modes
 		.aside-enabled.aside-fixed.toolbar-fixed & {
-			left: get($aside-config, width);
 			transition: left get($aside-config, transition-speed) ease;
 		}
 

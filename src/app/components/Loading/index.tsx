@@ -8,7 +8,7 @@ const Loading = () => {
     margin: '0',
     width: 'auto',
     padding: '1rem 2rem',
-    top: 'calc(50% - 2rem)',
+    top: '130px',
     left: 'calc(50% - 4rem)',
   }
 

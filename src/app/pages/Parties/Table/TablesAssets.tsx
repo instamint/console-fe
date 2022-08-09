@@ -1,34 +1,55 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useState } from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
+import {getListParties} from '../../../../utils/api/parties'
+import { shortAddress } from '../../../../_metronic/helpers/format'
 import FilterSearch from '../../../components/FilterSearch'
+import { Loading } from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
   className: string
 }
 
-const fakeData = () => {
-  let arr = []
-  let obj = {
-    id: 0,
-    party_name: 'Ana Simmons',
-    namespace: 'Ana Simmons',
-  }
-  for (let i = 0; i < 30; i++) {
-    arr.push({
-      ...obj,
-      id: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    })
-  }
-  return arr || []
-}
-
 type Disable = boolean
 
 const TablesParties: React.FC<Props> = ({className}) => {
-  const [listParties, setListParties] = useState(fakeData() || [])
+  const [listParties, setListParties] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listParties, ['name', 'namespace'])
+  const [isLoading, setIsLoading] = useState(true)
   const [disable, setDisable] = useState<Disable>(false)
+
+  const fetchListParties = async () => {
+    try {
+      setIsLoading(true)
+      const responsive = await getListParties()
+      setListParties(responsive?.data || [])
+    } catch (error) {
+      console.error({error})
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const convertTimeZone = (date) => {
+    const dateToTime = (date) =>
+      date.toLocaleString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+
+    const dateString = date
+    const userOffset = new Date().getTimezoneOffset() * 60 * 1000
+    const localDate = new Date(dateString)
+    const utcTime = new Date(localDate.getTime() + userOffset)
+    return `${dateToTime(utcTime)}`
+  }
+
+  useEffect(() => {
+    fetchListParties()
+  }, [])
 
   const renderList = useCallback(
     () =>
@@ -46,7 +67,14 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.party_name}</span>
+                  <span className='text-dark fw-bold fs-7'>{shortAddress(item?.uuid || '')}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
                 </div>
               </div>
             </td>
@@ -54,6 +82,31 @@ const TablesParties: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.namespace}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.currentApiKey || '')}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {convertTimeZone(item?.createdAt)}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
                 </div>
               </div>
             </td>
@@ -97,25 +150,39 @@ const TablesParties: React.FC<Props> = ({className}) => {
       {/* begin::Body */}
       <div className='card-body py-4'>
         {/* begin::Table container */}
-        <div className='table-responsive'>
-          {/* begin::Table */}
-          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-            {/* begin::Table head */}
-            <thead>
-              <tr className='fw-bold text-muted'>
-                <th className='min-w-80px'>ID</th>
-                <th className='min-w-200px'>PARTY NAME</th>
-                <th className='min-w-200px'>NAMESPACE</th>
-                <th className='min-w-200px'></th>
-              </tr>
-            </thead>
-            {/* end::Table head */}
-            {/* begin::Table body */}
-            <tbody>{renderList()}</tbody>
-            {/* end::Table body */}
-          </table>
-          {/* end::Table */}
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className='table-responsive'>
+            {/* begin::Table */}
+            {listParties?.length > 0 ? (
+              <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+                {/* begin::Table head */}
+                <thead>
+                  <tr className='fw-bold text-muted'>
+                    <th>ID</th>
+                    <th>UUID</th>
+                    <th>NAME</th>
+                    <th>NAME SPACE</th>
+                    <th>CURRENT API KEY</th>
+                    <th>CREATED AT</th>
+                    <th>COSS REFERENCE ID</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                {/* end::Table head */}
+                {/* begin::Table body */}
+                <tbody>{renderList()}</tbody>
+                {/* end::Table body */}
+              </table>
+            ) : (
+              <h4 className='mt-5 d-flex justify-content-center'>
+                There is currently no data available
+              </h4>
+            )}
+            {/* end::Table */}
+          </div>
+        )}
         {/* end::Table container */}
       </div>
       {/* begin::Body */}
@@ -123,5 +190,4 @@ const TablesParties: React.FC<Props> = ({className}) => {
   )
 }
 
-export { TablesParties }
-
+export {TablesParties}
