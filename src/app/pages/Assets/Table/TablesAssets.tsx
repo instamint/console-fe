@@ -211,44 +211,52 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         ) : (
           <div className='table-responsive'>
             {/* begin::Table */}
-            {listAssets?.length > 0 ? (
-              <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-                {/* begin::Table head */}
-                <thead>
-                  <tr className='fw-bold text-muted'>
-                    <th>ID</th>
-                    <th className='min-w-150px'>COSS REFERENCE ID</th>
-                    <th>UUID</th>
-                    <th className='min-w-100px'>CREATE AT</th>
-                    <th>ACTIVE</th>
-                    <th>ASK</th>
-                    <th className='min-w-80px'>BEST BID</th>
-                    <th className='min-w-150px'>EXPLORER URL</th>
-                    <th className='min-w-150px'>IPFS META DATA URL</th>
-                    <th className='min-w-150px'>METE DATA</th>
-                    <th className='min-w-150px'>COMPLETED STATUS</th>
-                    <th className='min-w-150px'>MINT REQUEST JSON</th>
-                    <th className='min-w-150px'>TOKEN ID</th>
-                    <th className='min-w-200px'>TRANSACTION RECEIPT</th>
-                    <th className='min-w-150px'>BIDDER ID</th>
-                    <th className='min-w-150px'>CLIENT ID</th>
-                    <th className='min-w-150px'>CUSTODIAN ID</th>
-                    <th className='min-w-150px'>ISSUER ID</th>
-                    <th className='min-w-150px'>OWNER ID</th>
-                    <th className='min-w-150px'>TYPE ID</th>
-                    <th className=''></th>
+
+            <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+              {/* begin::Table head */}
+              <thead>
+                <tr className='fw-bold text-muted'>
+                  <th>ID</th>
+                  <th className='min-w-150px'>COSS REFERENCE ID</th>
+                  <th>UUID</th>
+                  <th className='min-w-100px'>CREATE AT</th>
+                  <th>ACTIVE</th>
+                  <th>ASK</th>
+                  <th className='min-w-80px'>BEST BID</th>
+                  <th className='min-w-150px'>EXPLORER URL</th>
+                  <th className='min-w-150px'>IPFS META DATA URL</th>
+                  <th className='min-w-150px'>METE DATA</th>
+                  <th className='min-w-150px'>COMPLETED STATUS</th>
+                  <th className='min-w-150px'>MINT REQUEST JSON</th>
+                  <th className='min-w-150px'>TOKEN ID</th>
+                  <th className='min-w-200px'>TRANSACTION RECEIPT</th>
+                  <th className='min-w-150px'>BIDDER ID</th>
+                  <th className='min-w-150px'>CLIENT ID</th>
+                  <th className='min-w-150px'>CUSTODIAN ID</th>
+                  <th className='min-w-150px'>ISSUER ID</th>
+                  <th className='min-w-150px'>OWNER ID</th>
+                  <th className='min-w-150px'>TYPE ID</th>
+                  <th className=''></th>
+                </tr>
+              </thead>
+              {/* end::Table head */}
+              {/* begin::Table body */}
+              <tbody>
+                {listAssets?.length > 0 ? (
+                  renderList()
+                ) : (
+                  <tr>
+                    <td colSpan={21} className='text-center'>
+                      <h4 className='mt-5 d-flex justify-content-center'>
+                        There is currently no data available
+                      </h4>
+                    </td>
                   </tr>
-                </thead>
-                {/* end::Table head */}
-                {/* begin::Table body */}
-                <tbody>{renderList()}</tbody>
-                {/* end::Table body */}
-              </table>
-            ) : (
-              <h4 className='mt-5 d-flex justify-content-center'>
-                There is currently no data available
-              </h4>
-            )}
+                )}
+              </tbody>
+              {/* end::Table body */}
+            </table>
+
             {/* end::Table */}
           </div>
         )}

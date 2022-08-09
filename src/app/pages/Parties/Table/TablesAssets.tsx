@@ -155,31 +155,39 @@ const TablesParties: React.FC<Props> = ({className}) => {
         ) : (
           <div className='table-responsive'>
             {/* begin::Table */}
-            {listParties?.length > 0 ? (
-              <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-                {/* begin::Table head */}
-                <thead>
-                  <tr className='fw-bold text-muted'>
-                    <th>ID</th>
-                    <th>UUID</th>
-                    <th>NAME</th>
-                    <th>NAME SPACE</th>
-                    <th>CURRENT API KEY</th>
-                    <th>CREATED AT</th>
-                    <th>COSS REFERENCE ID</th>
-                    <th></th>
+
+            <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+              {/* begin::Table head */}
+              <thead>
+                <tr className='fw-bold text-muted'>
+                  <th>ID</th>
+                  <th>UUID</th>
+                  <th>NAME</th>
+                  <th>NAME SPACE</th>
+                  <th>CURRENT API KEY</th>
+                  <th>CREATED AT</th>
+                  <th>COSS REFERENCE ID</th>
+                  <th></th>
+                </tr>
+              </thead>
+              {/* end::Table head */}
+              {/* begin::Table body */}
+              <tbody>
+                {listParties?.length > 0 ? (
+                  renderList()
+                ) : (
+                  <tr>
+                    <td colSpan={7} className='text-left'>
+                      <h4 className='mt-5 d-flex justify-content-center'>
+                        There is currently no data available
+                      </h4>
+                    </td>
                   </tr>
-                </thead>
-                {/* end::Table head */}
-                {/* begin::Table body */}
-                <tbody>{renderList()}</tbody>
-                {/* end::Table body */}
-              </table>
-            ) : (
-              <h4 className='mt-5 d-flex justify-content-center'>
-                There is currently no data available
-              </h4>
-            )}
+                )}
+              </tbody>
+              {/* end::Table body */}
+            </table>
+
             {/* end::Table */}
           </div>
         )}
