@@ -22,7 +22,6 @@ const DefaultTitle: FC = () => {
           {pageDescription && config.pageTitle && config.pageTitle.description && (
             <>
               <span className='h-20px border-gray-200 border-start ms-3 mx-2'></span>
-              {console.log('pageDescription', pageDescription)}
               <small className='text-muted fs-7 fw-bold my-1 ms-1'>{pageDescription}</small>
             </>
           )}

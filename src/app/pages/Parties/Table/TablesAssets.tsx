@@ -2,6 +2,7 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {getListParties} from '../../../../utils/api/parties'
 import { shortAddress } from '../../../../_metronic/helpers/format'
+import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
 import FilterSearch from '../../../components/FilterSearch'
 import { Loading } from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
@@ -28,23 +29,6 @@ const TablesParties: React.FC<Props> = ({className}) => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const convertTimeZone = (date) => {
-    const dateToTime = (date) =>
-      date.toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-
-    const dateString = date
-    const userOffset = new Date().getTimezoneOffset() * 60 * 1000
-    const localDate = new Date(dateString)
-    const utcTime = new Date(localDate.getTime() + userOffset)
-    return `${dateToTime(utcTime)}`
   }
 
   useEffect(() => {

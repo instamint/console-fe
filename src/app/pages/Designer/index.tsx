@@ -2,8 +2,8 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Context, TreeStore, TreeNode } from './model';
 import Toolbox from './Toolbox';
-import TreeView from './TreeView';
-import JsonView from './JsonView';
+import TreeView from './view/TreeView';
+import JsonView from './view/JsonView';
 import { PageTitle } from '../../../_metronic/layout/core';
 import { useIntl } from 'react-intl';
 import {Modal} from 'react-bootstrap'
@@ -47,7 +47,6 @@ const EditorPage: React.FC = () => {
     (node: TreeNode) => {
       const filtered = treeStore.filter((x) => {
         if (node.id === 'root') {
-          console.log('Not allowed!')
           return true
         } else {
           return x.id !== node.id
@@ -125,9 +124,8 @@ const EditorPage: React.FC = () => {
   const [schemaList, setSchemaList] = useState<any[]>([])
   const [showModal, setShowModal] = useState<boolean>(false)
   const appendSchema = useCallback((schema: any) => {
-    console.log('appendSchema', schema)
     setSchemaList((x) => {
-      return [...x, schema]
+      return [schema, ...x]
     })
   }, [])
 

@@ -28,12 +28,12 @@ export type ItemType = {
   validChildType?: string[];
 };
 
-export const ItemTypes: ItemType[] = [
+export const StandardTypes: ItemType[] = [
   {
     name: 'String',
     type: 'string',
     value: {
-      type: 'string'
+      type: 'string',
     },
     properties: {},
     leaf: true,
@@ -42,7 +42,7 @@ export const ItemTypes: ItemType[] = [
     name: 'Integer',
     type: 'integer',
     value: {
-      type: 'integer'
+      type: 'integer',
     },
     properties: {},
     leaf: true,
@@ -52,10 +52,10 @@ export const ItemTypes: ItemType[] = [
     name: 'Number',
     type: 'number',
     value: {
-      type: 'number'
+      type: 'number',
     },
     properties: {
-      multipleOf: { type: 'number' },
+      multipleOf: {type: 'number'},
     },
     leaf: true,
   },
@@ -63,7 +63,7 @@ export const ItemTypes: ItemType[] = [
     name: 'Boolean',
     type: 'boolean',
     value: {
-      type: 'boolean'
+      type: 'boolean',
     },
     properties: {},
     leaf: true,
@@ -72,7 +72,7 @@ export const ItemTypes: ItemType[] = [
     name: 'Array',
     type: 'array',
     value: {
-      type: 'array'
+      type: 'array',
     },
     properties: {},
     leaf: true,
@@ -82,10 +82,10 @@ export const ItemTypes: ItemType[] = [
     name: 'Object',
     type: 'object',
     value: {
-      type: 'object'
+      type: 'object',
     },
     properties: {
-      additionalProperties: { type: 'boolean' },
+      additionalProperties: {type: 'boolean'},
     },
     validChildType: ['properties', 'required'],
   },
@@ -95,11 +95,14 @@ export const ItemTypes: ItemType[] = [
     value: undefined,
     properties: {},
   },
+]
+
+export const ActusTypes: ItemType[] = [
   {
     name: 'MaturityDate',
     type: 'maturityDate',
     value: {
-      type: 'maturityDate'
+      type: 'maturityDate',
     },
     properties: {},
   },
@@ -107,11 +110,51 @@ export const ItemTypes: ItemType[] = [
     name: 'NominalInterestRate',
     type: 'nominalInterestRate',
     value: {
-      type: 'nominalInterestRate'
+      type: 'nominalInterestRate',
     },
     properties: {},
-  }
-];
+  },
+  {
+    name: 'SettlementCurrency',
+    type: 'settlementCurrency',
+    value: {
+      type: 'settlementCurrency',
+    },
+    properties: {},
+  },
+  {
+    name: 'Unit',
+    type: 'unit',
+    value: {
+      type: 'unit',
+    },
+    properties: {},
+  },
+  {
+    name: 'Seniority',
+    type: 'seniority',
+    value: {
+      type: 'seniority',
+    },
+    properties: {},
+  },
+  {
+    name: 'ContractRole',
+    type: 'contractRole',
+    value: {
+      type: 'contractRole',
+    },
+    properties: {},
+  },
+  {
+    name: 'ContractType',
+    type: 'contractType',
+    value: {
+      type: 'contractType',
+    },
+    properties: {},
+  },
+]
 
 export type TreeNode = {
   id: string;
@@ -148,7 +191,6 @@ export const Context = createContext<ContextType>(
 );
 
 function toTree(source: TreeStore, item?: TreeNode) {
-  // console.log('Tree0', source)
   if (!item) {
     item = source.find((item) => item.id === 'root');
   }

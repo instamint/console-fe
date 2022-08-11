@@ -217,7 +217,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th>ID</th>
-                  <th className='min-w-150px'>COSS REFERENCE ID</th>
+                  <th className='min-w-150px'>CROSS REFERENCE</th>
                   <th>UUID</th>
                   <th className='min-w-100px'>CREATE AT</th>
                   <th>ACTIVE</th>
@@ -225,7 +225,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                   <th className='min-w-80px'>BEST BID</th>
                   <th className='min-w-150px'>EXPLORER URL</th>
                   <th className='min-w-150px'>IPFS META DATA URL</th>
-                  <th className='min-w-150px'>METE DATA</th>
+                  <th className='min-w-150px'>META DATA</th>
                   <th className='min-w-150px'>COMPLETED STATUS</th>
                   <th className='min-w-150px'>MINT REQUEST JSON</th>
                   <th className='min-w-150px'>TOKEN ID</th>

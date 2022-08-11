@@ -5,6 +5,7 @@ export interface AuthModel {
   refreshToken: string
   issueDate: string
   expireDate: string
+  favorite?: Array<any>
 }
 
 export interface UserAddressModel {

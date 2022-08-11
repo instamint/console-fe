@@ -20,8 +20,8 @@ const loginSchema = Yup.object().shape({
 })
 
 const initialValues = {
-  email: 'admin@demo.com',
-  password: 'demo',
+  email: 'jamiel@instamint.com',
+  password: 'jamiel@123',
 }
 
 /*
@@ -43,12 +43,10 @@ export function Login() {
         const {data: auth} = await login(values.email, values.password)
         saveAuth(auth)
         setCurrentUser(auth)
-        // const {data: user} = await getUserByToken(auth.api_token)
-        // user.role = "user"
       } catch (error) {
         console.error(error)
         saveAuth(undefined)
-        setStatus('The login detail is incorrect')
+        setStatus('Login information is incorrect, please try again')
         setSubmitting(false)
         setLoading(false)
       }
@@ -84,7 +82,7 @@ export function Login() {
 
       {/* begin::Form group */}
       <div className='fv-row mb-10'>
-        <label className='form-label fs-6 fw-bolder text-dark'>UserName</label>
+        <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
         <input
           placeholder='Enter Username Here'
           {...formik.getFieldProps('email')}
@@ -101,7 +99,9 @@ export function Login() {
         />
         {formik.touched.email && formik.errors.email && (
           <div className='fv-plugins-message-container'>
-            <span role='alert'>{formik.errors.email}</span>
+            <div className='fv-help-block'>
+              <span role='alert'>{formik.errors.email}</span>
+            </div>
           </div>
         )}
       </div>
@@ -131,13 +131,8 @@ export function Login() {
           autoComplete='off'
           {...formik.getFieldProps('password')}
           className={clsx(
-            'form-control form-control-lg form-control-solid',
-            {
-              'is-invalid': formik.touched.password && formik.errors.password,
-            },
-            {
-              'is-valid': formik.touched.password && !formik.errors.password,
-            }
+            'form-control form-control-lg form-control-solid'
+            
           )}
         />
         {formik.touched.password && formik.errors.password && (
@@ -155,7 +150,7 @@ export function Login() {
         <button
           type='submit'
           id='kt_sign_in_submit'
-          className='btn btn-lg btn-primary w-100 mb-5'
+          className='btn btn-lg btn-primary w-100 mb-3'
           disabled={formik.isSubmitting || !formik.isValid}
         >
           {!loading && <span className='indicator-label'>Continue</span>}
@@ -166,6 +161,13 @@ export function Login() {
             </span>
           )}
         </button>
+        {formik?.status && formik?.status && (
+          <div className='fv-plugins-message-container'>
+            <span className='error-login' role='alert'>
+              {formik?.status}
+            </span>
+          </div>
+        )}
 
         {/* begin::Separator
         <div className='text-center text-muted text-uppercase fw-bolder mb-5'>or</div>

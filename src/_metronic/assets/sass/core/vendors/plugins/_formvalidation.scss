@@ -11,9 +11,13 @@
         font-weight: $font-weight-normal;
     }
 
-    &.valid-feedback,
-    &.invalid-feedback {
+    & .valid-feedback,
+    & .invalid-feedback {
         display: block;
         font-weight: $font-weight-normal;
+    }
+    & .error-login {
+        font-size: 14px;
+        color: #ee392a;
     }
 }

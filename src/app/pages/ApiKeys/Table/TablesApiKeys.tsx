@@ -5,7 +5,7 @@ import { KTSVG } from '../../../../_metronic/helpers'
 import useSearch from '../../../hooks/useSearch'
 import FilterSearch from '../FilterSearch/index'
 import CreateKey from '../Modal/create-key'
-import { Dropdown } from './Dropdown'
+import Dropdown from './Dropdown'
 
 type Props = {
   className: string

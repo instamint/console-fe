@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
 import IconEdit from '../../../images/edit.png'
 import IconDelete from '../../../images/delete.png'
 import styled from 'styled-components'
 
-export function Dropdown() {
+const Dropdown = () => {
   return (
     <div className='menu menu-sub menu-sub-dropdown w-250px w-md-150px p-4' data-kt-menu='true'>
       <div className='d-flex flex-column'>
@@ -18,6 +17,8 @@ export function Dropdown() {
     </div>
   )
 }
+
+export default Dropdown
 
 const Action = styled.div`
   display: flex;
