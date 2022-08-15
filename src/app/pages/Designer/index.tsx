@@ -16,7 +16,10 @@ const EditorPage: React.FC = () => {
   const [treeStore, setTreeStore] = useState<TreeStore>([
     {
       id: 'root',
-      type: 'jsonSchema',
+      category: {
+        id: 'root',
+        name: 'jsonSchema'
+      },
       isEditing: false,
       name: 'Json Schema',
     },
@@ -26,7 +29,10 @@ const EditorPage: React.FC = () => {
     setTreeStore([
       {
         id: 'root',
-        type: 'jsonSchema',
+        category: {
+          id: 'root',
+          name: 'jsonSchema'
+        },
         isEditing: false,
         name: 'Json Schema',
       },

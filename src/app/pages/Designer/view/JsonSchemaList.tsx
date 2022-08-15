@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {useSchemaList} from '../model'
 import JsonSchemaService from '../../../../utils/api/designer/json-schema.service'
 import IconDelete from '../../../images/delete.png'
-import { useAuth } from '../../../modules/auth'
-import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
+import {useAuth} from '../../../modules/auth'
+import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
+import {Loading} from '../../../components/Loading'
 
 interface JsonSchemaListProps {
   setStore: (store: any) => void
@@ -13,12 +14,13 @@ interface JsonSchemaListProps {
 
 const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
   const {setStore, setSchemaList} = props
-
   const schemaList = useSchemaList()
   const {currentUser} = useAuth()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const username = currentUser?.username || ""
+    setIsLoading(true)
+    const username = currentUser?.username || ''
     JsonSchemaService.getAllSchemas(username).then((schemas) => {
       const schemaList = schemas.map((x) => {
         const s = JSON.parse(x.document)
@@ -27,6 +29,7 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
           return {
             id: x.id,
             name: r.name,
+            updateAt: x.updateAt,
           }
         } catch (e) {
           return {
@@ -35,6 +38,7 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
           }
         }
       })
+      setIsLoading(false)
       setSchemaList(schemaList.filter((x) => x.name !== 'root'))
     })
   }, [])
@@ -52,21 +56,80 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
     })
   }
 
+  const renderList = useCallback(
+    () =>
+      schemaList?.length > 0 && schemaList?.map((x, i) => {
+        return (
+          <tr key={i}>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fs-7'>{i + 1}</span>
+                </div>
+              </div>
+            </td>
+            <td onClick={() => loadSchema(x)}>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <Name className='text-dark fs-7'>{x?.name}</Name>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fs-7'>{convertTimeZone(x?.updateAt)}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <Button onClick={(e) => deleteSchema(e, x)} src={IconDelete} alt='edit'></Button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        )
+      }),
+    [schemaList]
+  )
+
   return (
     <StyledJsonSchemaList>
-      {schemaList?.length > 0 && (
-        <StyledJsonSchemaTitle>The Json Schema is saved</StyledJsonSchemaTitle>
-      )}
-      <UlListJson>
-        {schemaList.map((x, i) => (
-          <StyledSchmaLabel key={x.id} onClick={() => loadSchema(x)}>
-            <Name>
-              {x?.name} <Time>({convertTimeZone(x?.updateAt || '2022-01-09T17:35:18.315Z')})</Time>
-            </Name>
-            <Button onClick={(e) => deleteSchema(e, x)} src={IconDelete} alt='edit'></Button>
-          </StyledSchmaLabel>
-        ))}
-      </UlListJson>
+      {schemaList?.length > 0 && <StyledJsonSchemaTitle>My Schema Library</StyledJsonSchemaTitle>}
+      <div className='table-responsive'>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+            <thead>
+              <tr className='fw-bold text-muted'>
+                <th>#</th>
+                <th style={{minWidth: '120px'}}>NAME</th>
+                <th>UPDATED DATE</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            {/* end::Table head */}
+            {/* begin::Table body */}
+            <tbody>
+              {!isLoading && schemaList?.length > 0 ? (
+                renderList()
+              ) : (
+                <tr>
+                  <td colSpan={4} className='text-left'>
+                    <span className='mt-5 d-flex justify-content-center'>
+                      There is currently no data available
+                    </span>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+            {/* end::Table body */}
+          </table>
+        )}
+      </div>
     </StyledJsonSchemaList>
   )
 }
@@ -83,29 +146,12 @@ const StyledJsonSchemaTitle = styled.div`
   color: #009ef7;
   margin: 15px 0px;
 `
-const UlListJson = styled.ul`
-  list-style-type: circle;
-  padding-left: unset;
-`
-
-const StyledSchmaLabel = styled.li`
-  margin-bottom: 7px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-`
 
 const Name = styled.span`
-  display: flex;
-  min-width: 262px;
-`
-
-const Time = styled.span`
-  color: #737373;
-  font-size: 12px;
-  display: flex;
-  min-width: 107px;
-  margin-left: 5px;
+  cursor: pointer;
+  &:hover {
+    font-weight: bold;
+  }
 `
 
 const Button = styled.img`

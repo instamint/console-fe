@@ -9,10 +9,14 @@ export default function Favorite({listFavorite, handleRemoveFavorite, onDragStar
       <UlListJson>
         {listFavorite.map((x, i) => (
           <StyledSchmaLabel key={i}>
-            <Name draggable onDragStart={onDragStart} data-item={JSON.stringify(x)}>
-              {x.name}
+            <Name draggable onDragStart={onDragStart} data-item={JSON.stringify(x?.property)}>
+              {x?.property?.name}
             </Name>
-            <Button onClick={() => handleRemoveFavorite(x)} src={IconDelete} alt='edit'></Button>
+            <Button
+              onClick={() => handleRemoveFavorite(x?.property)}
+              src={IconDelete}
+              alt='edit'
+            ></Button>
           </StyledSchmaLabel>
         ))}
       </UlListJson>

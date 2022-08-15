@@ -21,145 +21,25 @@ export type PropertyType =
 
 export type ItemType = {
   name: string;
-  type: string;
+  category?: {
+    id?: string
+    name?: string
+  };
   properties: Record<string, PropertyType>;
   value?: any;
   leaf?: boolean; // can have child node or not
   validChildType?: string[];
 };
 
-export const StandardTypes: ItemType[] = [
-  {
-    name: 'String',
-    type: 'string',
-    value: {
-      type: 'string',
-    },
-    properties: {},
-    leaf: true,
-  },
-  {
-    name: 'Integer',
-    type: 'integer',
-    value: {
-      type: 'integer',
-    },
-    properties: {},
-    leaf: true,
-  },
 
-  {
-    name: 'Number',
-    type: 'number',
-    value: {
-      type: 'number',
-    },
-    properties: {
-      multipleOf: {type: 'number'},
-    },
-    leaf: true,
-  },
-  {
-    name: 'Boolean',
-    type: 'boolean',
-    value: {
-      type: 'boolean',
-    },
-    properties: {},
-    leaf: true,
-  },
-  {
-    name: 'Array',
-    type: 'array',
-    value: {
-      type: 'array',
-    },
-    properties: {},
-    leaf: true,
-  },
-
-  {
-    name: 'Object',
-    type: 'object',
-    value: {
-      type: 'object',
-    },
-    properties: {
-      additionalProperties: {type: 'boolean'},
-    },
-    validChildType: ['properties', 'required'],
-  },
-  {
-    name: 'Properties',
-    type: 'properties',
-    value: undefined,
-    properties: {},
-  },
-]
-
-export const ActusTypes: ItemType[] = [
-  {
-    name: 'MaturityDate',
-    type: 'maturityDate',
-    value: {
-      type: 'maturityDate',
-    },
-    properties: {},
-  },
-  {
-    name: 'NominalInterestRate',
-    type: 'nominalInterestRate',
-    value: {
-      type: 'nominalInterestRate',
-    },
-    properties: {},
-  },
-  {
-    name: 'SettlementCurrency',
-    type: 'settlementCurrency',
-    value: {
-      type: 'settlementCurrency',
-    },
-    properties: {},
-  },
-  {
-    name: 'Unit',
-    type: 'unit',
-    value: {
-      type: 'unit',
-    },
-    properties: {},
-  },
-  {
-    name: 'Seniority',
-    type: 'seniority',
-    value: {
-      type: 'seniority',
-    },
-    properties: {},
-  },
-  {
-    name: 'ContractRole',
-    type: 'contractRole',
-    value: {
-      type: 'contractRole',
-    },
-    properties: {},
-  },
-  {
-    name: 'ContractType',
-    type: 'contractType',
-    value: {
-      type: 'contractType',
-    },
-    properties: {},
-  },
-]
 
 export type TreeNode = {
   id: string;
-  type: string;
   name: string;
+  category?: {
+    id?: string;
+    name?: string;
+  };
 
   valueSchema?: Object;
   value?: string
@@ -192,7 +72,7 @@ export const Context = createContext<ContextType>(
 
 function toTree(source: TreeStore, item?: TreeNode) {
   if (!item) {
-    item = source.find((item) => item.id === 'root');
+    item = source.find((item) => item?.id === 'root')
   }
 
   let parent: TreeNode = { ...item, children: [] };

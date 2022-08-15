@@ -185,7 +185,7 @@ const TablesApiKeys: React.FC<Props> = ({className}) => {
                 <th className='min-w-100px'>SCOPE</th>
                 <th className='min-w-100px'>STATUS</th>
                 <th className='min-w-150px'>CREATED DATE</th>
-                <th className='min-w-150px'>UPDETED DATE</th>
+                <th className='min-w-150px'>UPDATED DATE</th>
                 <th className='min-w-60px'></th>
               </tr>
             </thead>

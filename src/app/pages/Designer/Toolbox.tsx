@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import styled from 'styled-components'
 import JsonSchemaService from '../../../utils/api/designer/json-schema.service'
 import IconClear from '../../images/clear-white.png'
 import IconSave from '../../images/save-white.png'
 import IconView from '../../images/view.png'
-import { getAuth, setAuth, useAuth } from '../../modules/auth'
-import { ActusTypes, StandardTypes, useAppendSchema, useStore } from './model'
+import {getAuth, useAuth} from '../../modules/auth'
+import {useAppendSchema, useStore} from './model'
 import Favorite from './view/Favorite'
 import JsonSchemaList from './view/JsonSchemaList'
 
@@ -22,21 +22,21 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   const {currentUser} = useAuth()
   const appendSchemaHook = useAppendSchema()
   const auth = getAuth()
-  const [standardTypes, setStandardTypes] = useState<Array<any>>(StandardTypes || [])
-  const [actusTypes, setActusTypes] = useState<Array<any>>(ActusTypes || [])
-  const [listProperty, setListProperty] = useState<Array<any>>([])
+  const [standardTypes, setStandardTypes] = useState<Array<any>>([])
+  const [actusTypes, setActusTypes] = useState<Array<any>>([])
   const [listFavorite, setListFavorite] = useState<Array<any>>([])
   const [isLoadFavorite, setIsLoadFavorite] = useState(true)
+  const [selectProperty, setSelectProperty] = useState('standard')
 
   const favoriteActive = (item) => {
-    return listFavorite?.length && listFavorite?.some((i) => i?.name === item?.name)
+    return listFavorite?.length && listFavorite?.some((i) => i?.property?.id === item?.id)
   }
 
   const saveSchema = useCallback(() => {
     const username = currentUser?.username || ''
     JsonSchemaService.createSchema(JSON.stringify(store), username).then((x) => {
       const r = JSON.parse(x.document)[0]
-      appendSchemaHook({id: x.id, name: r.name})
+      appendSchemaHook({id: x.id, name: r.name, updateAt: x.updateAt})
     })
   }, [store])
 
@@ -45,46 +45,60 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
     ev.dataTransfer.setData('item', item)
   }, [])
 
-  const handleAddFavorite = (e, item) => {
+  const handleAddFavorite = async (e, item) => {
     e.stopPropagation()
-    let tmpAuth = JSON.parse(JSON.stringify(auth))
-    if (tmpAuth?.favorite && !favoriteActive(item)) {
-      tmpAuth.favorite.push(item)
+    try {
+      let tmpListFavorite = JSON.parse(JSON.stringify(listFavorite))
+      if (tmpListFavorite && !favoriteActive(item)) {
+        await JsonSchemaService.addFavourite(item?.id, auth?.username)
+        setIsLoadFavorite((preState) => !preState)
+      }
+    } catch (error) {
+      console.error({error})
     }
-    setAuth(tmpAuth)
-    setIsLoadFavorite((preState) => !preState)
   }
 
-  const handleRemoveFavorite = (item) => {
-    let tmpAuth = JSON.parse(JSON.stringify(auth))
-    if (tmpAuth?.favorite?.length) {
-      tmpAuth.favorite = tmpAuth?.favorite.filter((i: any) => i.name !== item.name)
+  const handleRemoveFavorite = async (item) => {
+    try {
+      let tmpListFavorite = JSON.parse(JSON.stringify(listFavorite))
+      if (tmpListFavorite?.length) {
+        await JsonSchemaService.removeFavourite(item?.id, auth?.username)
+        setIsLoadFavorite((preState) => !preState)
+      }
+    } catch (error) {
+      console.error({error})
     }
-    setAuth(tmpAuth)
-    setIsLoadFavorite((preState) => !preState)
   }
 
   const handleConvertDataProperties = (data) => {
-    let actusTypes = []
-    let standardTypes = []
     if (data && data?.length > 0) {
+      let actusTypes = []
+      let standardTypes = []
       data?.forEach((item) => {
         if (item?.category?.name === 'standard') {
-          actusTypes.push(item)
-        } else {
           standardTypes.push(item)
+        } else {
+          actusTypes.push(item)
         }
       })
+      setActusTypes(actusTypes)
+      setStandardTypes(standardTypes)
     }
-    setActusTypes(actusTypes)
-    setStandardTypes(standardTypes)
   }
 
   const fetchListProperties = async () => {
     try {
       const reps = await JsonSchemaService.getAllProperty()
-      setListProperty(reps || [])
-      handleConvertDataProperties(reps || [])
+      reps && handleConvertDataProperties(reps)
+    } catch (error) {
+      console.error({error})
+    }
+  }
+
+  const fetchListFavourite = async () => {
+    try {
+      const reps = await JsonSchemaService.getAllFavourite(auth?.username)
+      reps && setListFavorite(reps || [])
     } catch (error) {
       console.error({error})
     }
@@ -95,85 +109,43 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   }, [])
 
   useEffect(() => {
-    try {
-      let tmpAuth = JSON.parse(JSON.stringify(auth))
-      if (tmpAuth?.favorite) {
-        setListFavorite(tmpAuth?.favorite)
-      } else {
-        tmpAuth.favorite = []
-        setAuth(tmpAuth)
-      }
-    } catch (error) {
-      console.error({error})
-    }
+    fetchListFavourite()
   }, [isLoadFavorite])
 
   return (
     <StyledGroupToolbox>
       <GroupItem>
-        <GroupDropDown>
-          <DropStandard
-            className='menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500'
-            id='#kt_aside_menu_1'
-            data-kt-menu='true'
+        <div>
+          <button
+            data-kt-menu-trigger='hover'
+            data-kt-menu-placement='bottom-start'
+            data-kt-menu-flip='top-end'
+            className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary d-flex align-items-center'
           >
-            <div data-kt-menu-trigger='click' className='menu-item'>
-              <button className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary menu-link'>
-                <NameDropdow>Standard</NameDropdow>{' '}
-                <IconDrop className='fa-solid fa-caret-down'></IconDrop>
-              </button>
-              <div className='menu-sub menu-sub-accordion menu-active-bg'>
-                {standardTypes.map((t) => (
-                  <Item
-                    draggable
-                    onDragStart={onDragStart}
-                    data-item={JSON.stringify(t)}
-                    key={t.name}
-                  >
-                    <IconStar
-                      onClick={(e) => !favoriteActive(t) && handleAddFavorite(e, t)}
-                      className={`fa-star ${
-                        favoriteActive(t) ? 'fa-solid text-primary' : 'fa-regular'
-                      }`}
-                    ></IconStar>
-                    {t.name}
-                  </Item>
-                ))}
-              </div>
-            </div>
-          </DropStandard>
-
+            <Name>{selectProperty === 'standard' ? 'Standard' : 'ACTUS'}</Name>{' '}
+            <IconDrop className='fa-solid fa-caret-down'></IconDrop>
+          </button>
           <div
-            className='menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500'
-            id='#kt_aside_menu_2'
+            className='menu menu-sub menu-sub-dropdown w-250px w-md-150px p-4'
             data-kt-menu='true'
           >
-            <div data-kt-menu-trigger='click' className='menu-item'>
-              <button className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary menu-link'>
-                <NameDropdow>ACTUS</NameDropdow>{' '}
-                <IconDrop className='fa-solid fa-caret-down'></IconDrop>
-              </button>
-              <div className='menu-sub menu-sub-accordion menu-active-bg'>
-                {actusTypes.map((t) => (
-                  <Item
-                    draggable
-                    onDragStart={onDragStart}
-                    data-item={JSON.stringify(t)}
-                    key={t.name}
-                  >
-                    <IconStar
-                      onClick={(e) => !favoriteActive(t) && handleAddFavorite(e, t)}
-                      className={`fa-star ${
-                        favoriteActive(t) ? 'fa-solid text-primary' : 'fa-regular'
-                      }`}
-                    ></IconStar>
-                    {t.name}
-                  </Item>
-                ))}
-              </div>
+            <div className='d-flex flex-column'>
+              <NameDropdow onClick={() => setSelectProperty('standard')}>Standard</NameDropdow>
+              <NameDropdow onClick={() => setSelectProperty('actus')}>ACTUS</NameDropdow>
             </div>
           </div>
-        </GroupDropDown>
+        </div>
+        <div className='mt-3'>
+          {(selectProperty === 'standard' ? standardTypes : actusTypes)?.map((t) => (
+            <Item draggable onDragStart={onDragStart} data-item={JSON.stringify(t)} key={t.id}>
+              <IconStar
+                onClick={(e) => !favoriteActive(t) && handleAddFavorite(e, t)}
+                className={`fa-star ${favoriteActive(t) ? 'fa-solid text-primary' : 'fa-regular'}`}
+              ></IconStar>
+              {t.name}
+            </Item>
+          ))}
+        </div>
 
         <GroupBtn>
           <Button onClick={() => setShowModal(true)}>
@@ -239,7 +211,7 @@ const GroupBtn = styled.div`
   display: flex;
   justify-content: left;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 10px;
 `
 
 const Button = styled.button`
@@ -260,20 +232,9 @@ const Button = styled.button`
   }
 `
 
-const GroupDropDown = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-  margin-left: 6.5px;
-`
 const GroupFavorite = styled.div`
   border-bottom: 1px dashed #ccc;
   padding-bottom: 15px;
-`
-
-const DropStandard = styled.div`
-  margin-right: 30px;
-  margin-bottom: 15px;
 `
 
 const Image = styled.img`
@@ -295,7 +256,21 @@ const IconStar = styled.i`
     font-size: 1.1rem;
   }
 `
-const NameDropdow = styled.div`
-  min-width: 150px;
+
+const Name = styled.div`
+  min-width: 100px;
   display: flex;
+`
+
+const NameDropdow = styled.div`
+  padding: 5px;
+  min-width: 100px;
+  display: flex;
+  cursor: pointer;
+  border-radius: 4px;
+  &:hover {
+    color: #fff;
+    background-color: #009ef7;
+    transition: all 0.2s ease;
+  }
 `

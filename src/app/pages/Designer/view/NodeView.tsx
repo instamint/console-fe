@@ -24,7 +24,10 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
                 
                 appendHook({
                     id: nanoid(),
-                    type: item.type,
+                    category: {
+                      id: item.category.id,
+                      name: item.category.name
+                    },
                     name: item.name,
                     value: item.value,
                     isEditing: false,
@@ -93,7 +96,7 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
             {node.isEditing ? (
               <EditName node={node} setEdit={setEdit} setNewName={setNewName} />
             ) : (
-              node.type + ": " + node.name
+              node?.category?.name + ": " + node.name
             )}
             {!node?.isEditing && <GroupButton>
               <IconAction onClick={() => setEdit(node.id, true)} src={IconEdit} alt="edit"></IconAction>

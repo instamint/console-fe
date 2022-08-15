@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { getListAsset } from '../../../../utils/api/assets'
-import FilterSearch from '../../../components/FilterSearch'
+import FilterSearch from '../FilterSearch/index'
 import { Loading } from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
+import { Modal } from 'react-bootstrap'
+import ModalPool from '../Modal/modal-pool'
 
 type Props = {
   className: string
@@ -13,6 +16,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const [listAssets, setListAssets] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listAssets, ['name', 'namespace'])
   const [isLoading, setIsLoading] = useState(true)
+  const [selectAsset, setSelectAsset] = useState([])
+  const [modalPool, setModalPool] = useState(false)
+  const navigate = useNavigate()
 
   const fetchListAssets = async () => {
     setIsLoading(true)
@@ -26,10 +32,36 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     }
   }
 
+  const isCheckerAsset = (item: any) => {
+    return selectAsset?.some(i => i?.id === item?.id)
+  }
+
+  const handleSelectAsset = (item: any) => {
+    let arrSelect = [...selectAsset]
+    if (item && arrSelect) {
+      if (!isCheckerAsset(item)) {
+        arrSelect.push(item)
+      } else {
+        arrSelect = arrSelect?.filter((i) => i?.id !== item?.id)
+      }
+    }
+    setSelectAsset(arrSelect)
+  }
+
+  const openModalPool = () => {
+    setModalPool(true)
+  }
+
+  const handlePool = (values) =>{
+    console.log('values', values)
+    if (values) {
+      navigate('/pools')
+    }
+  }
+
   useEffect(() => {
     fetchListAssets()
   }, [])
-  
 
   const renderList = useCallback(
     () =>
@@ -37,6 +69,27 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       listAssets?.map((item, index) => {
         return (
           <tr key={index}>
+            <td>
+              {!item?.status ? (
+                <div className='d-flex align-items-center'>
+                  <div className='d-flex justify-content-start flex-column'>
+                    <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                      <input
+                        className='form-check-input'
+                        type='checkbox'
+                        value='1'
+                        data-kt-check='true'
+                        data-kt-check-target='.widget-9-check'
+                        checked={isCheckerAsset(item)}
+                        onChange={() => handleSelectAsset(item)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                ''
+              )}
+            </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
@@ -47,8 +100,28 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.select}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.b2Bcross_referenceid}</span>
                 </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex justify-content-end flex-shrink-0'>
+                <Link
+                  to={{
+                    pathname: `detail`,
+                    search: `?id=${item?.id}`,
+                  }}
+                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
+                >
+                  Details
+                </Link>
               </div>
             </td>
             <td>
@@ -62,6 +135,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.create_at}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.status ? 'P' : ''}</span>
                 </div>
               </div>
             </td>
@@ -177,20 +257,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 </div>
               </div>
             </td>
-            <td>
-              <div className='d-flex justify-content-end flex-shrink-0'>
-                <a
-                  href='#'
-                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
-                >
-                  Details
-                </a>
-              </div>
-            </td>
           </tr>
         )
       }),
-    [listAssets]
+    [listAssets, selectAsset]
   )
 
   return (
@@ -200,7 +270,11 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Yours Assets</span>
         </h3>
-        <FilterSearch setSearch={setSearch} />
+        <FilterSearch
+          setSearch={setSearch}
+          openModalPool={openModalPool}
+          selectAsset={selectAsset}
+        />
       </div>
       {/* end::Header */}
       {/* begin::Body */}
@@ -216,10 +290,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               {/* begin::Table head */}
               <thead>
                 <tr className='fw-bold text-muted'>
+                  <th></th>
                   <th>ID</th>
+                  <th>SELECT</th>
                   <th className='min-w-150px'>CROSS REFERENCE</th>
+                  <th>ACTION</th>
                   <th>UUID</th>
                   <th className='min-w-100px'>CREATE AT</th>
+                  <th>STATUS</th>
                   <th>ACTIVE</th>
                   <th>ASK</th>
                   <th className='min-w-80px'>BEST BID</th>
@@ -236,7 +314,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                   <th className='min-w-150px'>ISSUER ID</th>
                   <th className='min-w-150px'>OWNER ID</th>
                   <th className='min-w-150px'>TYPE ID</th>
-                  <th className=''></th>
                 </tr>
               </thead>
               {/* end::Table head */}
@@ -263,6 +340,18 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         {/* end::Table container */}
       </div>
       {/* begin::Body */}
+      <Modal
+        className='modal fade'
+        id='kt_modal_select_location'
+        data-backdrop='static'
+        tabIndex={-1}
+        role='dialog'
+        show={modalPool}
+        dialogClassName='modal-ml modal-dialog-500'
+        aria-hidden='true'
+      >
+        <ModalPool modalPool={modalPool} setModalPool={setModalPool} handlePool={handlePool} />
+      </Modal>
     </div>
   )
 }
