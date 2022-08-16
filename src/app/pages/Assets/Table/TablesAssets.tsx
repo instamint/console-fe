@@ -7,6 +7,7 @@ import { Loading } from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
 import { Modal } from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
+import { createPool } from '../../../../utils/api/pools'
 
 type Props = {
   className: string
@@ -52,10 +53,15 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     setModalPool(true)
   }
 
-  const handlePool = (values) =>{
-    console.log('values', values)
-    if (values) {
-      navigate('/pools')
+  const handlePool = async (values) =>{
+    try {
+      const list_assets_id = selectAsset?.map(i => i.id) || []
+      const reps = await createPool(values?.poolname, list_assets_id)
+      if (reps) {
+        navigate('/pools')
+      }
+    } catch (error) {
+      console.error({error})
     }
   }
 

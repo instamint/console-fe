@@ -21,6 +21,7 @@ export type PropertyType =
 
 export type ItemType = {
   name: string;
+  type?: any;
   category?: {
     id?: string
     name?: string
@@ -36,6 +37,7 @@ export type ItemType = {
 export type TreeNode = {
   id: string;
   name: string;
+  type?: any;
   category?: {
     id?: string;
     name?: string;

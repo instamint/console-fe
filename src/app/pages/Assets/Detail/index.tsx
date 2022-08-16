@@ -20,9 +20,9 @@ export default function AssetsDetail() {
       <div>
         <div>
           <div className='d-flex align-items-center'>
-              <Link to={'/assets'} className='btn btn-primary me-5'>
-                <i className='fa-solid fa-arrow-left'></i> Back
-              </Link>
+            <button onClick={() => navigate(-1)} className='btn btn-primary me-5'>
+              <i className='fa-solid fa-arrow-left'></i> Back
+            </button>
           </div>
         </div>
         <div className='mt-5'>Assets Detail Content...</div>
