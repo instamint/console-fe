@@ -8,6 +8,7 @@ import IconDelete from '../../../images/delete.png'
 import IconUp from '../../../images/up.png'
 import IconDown from '../../../images/down.png'
 import IconSave from '../../../images/save.png'
+import IconCopy from '../../../images/copy.png'
 
 const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
     const delHook = useDel();
@@ -28,6 +29,7 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
                       id: item.category.id,
                       name: item.category.name
                     },
+                    type: item.type,
                     name: item.name,
                     value: item.value,
                     isEditing: false,
@@ -71,8 +73,9 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
         moveDownHook(node);
     } , [moveDownHook, node]);
 
-    const setEdit = useCallback((id: string, editing: boolean) => {
-        editingHook(id, editing);
+    const setEdit = useCallback((id: string, editing: boolean, name: string) => {
+        if (!editing && (!name || name === '')) return
+        editingHook(id, editing)
     }, [editingHook]);
 
     const setNewName = useCallback((id: string, newName: string) => {
@@ -82,7 +85,7 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
     return (
       <StyledNodeView>
         <Node
-          draggable
+          draggable={node?.id !== "root"}
           dragOver={dragOver}
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
@@ -96,13 +99,14 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
             {node.isEditing ? (
               <EditName node={node} setEdit={setEdit} setNewName={setNewName} />
             ) : (
-              node?.category?.name + ": " + node.name
+              (node.id === "root" ? node?.category?.name : node?.type) + ": " + node.name
             )}
             {!node?.isEditing && <GroupButton>
-              <IconAction onClick={() => setEdit(node.id, true)} src={IconEdit} alt="edit"></IconAction>
+              <IconAction onClick={() => setEdit(node.id, true, "")} src={IconEdit} alt="edit"></IconAction>
               {node.id !== "root" && <IconAction onClick={remove} src={IconDelete} alt="edit"></IconAction>}
               {node.id !== "root" && <IconAction onClick={up} src={IconUp} alt="edit"></IconAction>}
               {node.id !== "root" && <IconAction onClick={down} src={IconDown} alt="edit"></IconAction>}
+              {node.id !== "root" && <IconAction src={IconCopy} alt="edit"></IconAction>}
             </GroupButton>}
           </StyledContentNode>
         </Node>
@@ -120,13 +124,13 @@ export default NodeView;
 
 interface EditNameProps {
     node: TreeNode;
-    setEdit: (id: string, editing: boolean) => void;
+    setEdit: (id: string, editing: boolean, name: string) => void;
     setNewName: (id: string, newName: string) => void;
 };
 const EditName: React.FC<EditNameProps> = (props) => {
     const {node, setEdit, setNewName} = props;
     const onSubmit = () => {
-        setEdit(node.id, false);
+        setEdit(node.id, false, node.name);
     }
 
     const onNewName = (e: React.ChangeEvent<HTMLInputElement>) => {

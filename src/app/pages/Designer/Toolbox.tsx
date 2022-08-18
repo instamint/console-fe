@@ -24,6 +24,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   const auth = getAuth()
   const [standardTypes, setStandardTypes] = useState<Array<any>>([])
   const [actusTypes, setActusTypes] = useState<Array<any>>([])
+  const [storageTypes, setStorageTypes] = useState<Array<any>>([])
   const [listFavorite, setListFavorite] = useState<Array<any>>([])
   const [isLoadFavorite, setIsLoadFavorite] = useState(true)
   const [selectProperty, setSelectProperty] = useState('standard')
@@ -41,8 +42,13 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   }, [store])
 
   const onDragStart = useCallback((ev: React.DragEvent<HTMLDivElement>) => {
-    const item = ev.currentTarget.dataset.item as string
-    ev.dataTransfer.setData('item', item)
+    let item: any = ev.currentTarget.dataset.item
+    // change name properties Storage
+    if (typeof item === "string") {
+      item = JSON.parse(item)
+    }
+    item.name = setTypeNameStorage(item?.name).name
+    ev.dataTransfer.setData('item', JSON.stringify(item))
   }, [])
 
   const handleAddFavorite = async (e, item) => {
@@ -52,6 +58,8 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       if (tmpListFavorite && !favoriteActive(item)) {
         await JsonSchemaService.addFavourite(item?.id, auth?.username)
         setIsLoadFavorite((preState) => !preState)
+      } else {
+        handleRemoveFavorite(item)
       }
     } catch (error) {
       console.error({error})
@@ -70,19 +78,47 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
     }
   }
 
+  const setTypeNameStorage = (name) => {
+    switch (name?.toLowerCase()) {
+      case 'image url':
+        return {
+          type: 'myVideo',
+          name: 'storageImageURL'
+        }
+      case 'text':
+        return {
+          type: 'storageText',
+          name: 'myMetadata',
+        }
+      default:
+        return {
+          type: name,
+          name: name,
+        }
+    }
+  }
+
   const handleConvertDataProperties = (data) => {
     if (data && data?.length > 0) {
       let actusTypes = []
       let standardTypes = []
+      let storageTypes = []
       data?.forEach((item) => {
+        // set Type Properties
+        if (item?.category?.name === 'Storage') {
+          item.type = setTypeNameStorage(item?.name)?.type
+        } else item.type = item?.name || ''
         if (item?.category?.name === 'standard') {
           standardTypes.push(item)
-        } else {
+        } else if (item?.category?.name === 'ACTUS') {
           actusTypes.push(item)
+        } else {
+          storageTypes.push(item)
         }
       })
       setActusTypes(actusTypes)
       setStandardTypes(standardTypes)
+      setStorageTypes(storageTypes)
     }
   }
 
@@ -97,10 +133,44 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
 
   const fetchListFavourite = async () => {
     try {
-      const reps = await JsonSchemaService.getAllFavourite(auth?.username)
-      reps && setListFavorite(reps || [])
+      let reps = await JsonSchemaService.getAllFavourite(auth?.username)
+      if (reps) {
+        // Set type properties
+        reps.forEach((i, idx) => {
+          reps[idx].property = {
+            ...reps?.[idx]?.property,
+            type: reps?.[idx]?.property?.name,
+          }
+        })
+        setListFavorite(reps || [])
+      }
     } catch (error) {
       console.error({error})
+    }
+  }
+
+  const ArrayProperties = (type) => {
+    switch (type?.toLowerCase()) {
+      case 'standard':
+        return {
+          name: 'Standard',
+          data: standardTypes,
+        }
+      case 'actus':
+        return {
+          name: 'ACTUS',
+          data: actusTypes,
+        }
+      case 'storage':
+        return {
+          name: 'Storage',
+          data: storageTypes,
+        }
+      default:
+        return {
+          name: 'Standard',
+          data: standardTypes,
+        }
     }
   }
 
@@ -122,7 +192,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
             data-kt-menu-flip='top-end'
             className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary d-flex align-items-center'
           >
-            <Name>{selectProperty === 'standard' ? 'Standard' : 'ACTUS'}</Name>{' '}
+            <Name>{ArrayProperties(selectProperty)?.name}</Name>{' '}
             <IconDrop className='fa-solid fa-caret-down'></IconDrop>
           </button>
           <div
@@ -132,14 +202,15 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
             <div className='d-flex flex-column'>
               <NameDropdow onClick={() => setSelectProperty('standard')}>Standard</NameDropdow>
               <NameDropdow onClick={() => setSelectProperty('actus')}>ACTUS</NameDropdow>
+              <NameDropdow onClick={() => setSelectProperty('storage')}>Storage</NameDropdow>
             </div>
           </div>
         </div>
         <div className='mt-3'>
-          {(selectProperty === 'standard' ? standardTypes : actusTypes)?.map((t) => (
+          {ArrayProperties(selectProperty)?.data?.map((t) => (
             <Item draggable onDragStart={onDragStart} data-item={JSON.stringify(t)} key={t.id}>
               <IconStar
-                onClick={(e) => !favoriteActive(t) && handleAddFavorite(e, t)}
+                onClick={(e) => handleAddFavorite(e, t)}
                 className={`fa-star ${favoriteActive(t) ? 'fa-solid text-primary' : 'fa-regular'}`}
               ></IconStar>
               {t.name}
@@ -166,6 +237,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
             listFavorite={listFavorite}
             handleRemoveFavorite={handleRemoveFavorite}
             onDragStart={onDragStart}
+            ArrayProperties={ArrayProperties}
           />
         </GroupFavorite>
       ) : (

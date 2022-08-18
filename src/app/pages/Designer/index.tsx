@@ -68,7 +68,7 @@ const EditorPage: React.FC = () => {
       let treeStoreX = []
       for (let x of treeStore) {
         if (x.id === id) {
-          if (!!newName) {
+          if (!!newName || newName === "") {
             x.name = newName
           }
         }

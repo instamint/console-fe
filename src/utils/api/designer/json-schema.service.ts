@@ -42,7 +42,7 @@ const getAllProperty = async (): Promise<JsonSchema[]> => {
 }
 
 const getAllFavourite = async (username: string): Promise<any> => {
-  const response = await axios.get<JsonSchema>(`${API_URL}/properties/user/${username}/favourite/`)
+  const response = await axios.get<JsonSchema>(`${API_URL}/properties/user/${username}/favourite`)
   return response.data
 }
 
@@ -55,7 +55,7 @@ const addFavourite = async (id: string | number, username: string): Promise<any>
 }
 
 const removeFavourite = async (id: string | number, username: string): Promise<any> => {
-  const response = await axios.get(`${API_URL}/properties/user/favourite/delete/${username}/${id}`)
+  const response = await axios.delete(`${API_URL}/properties/user/favourite/delete/${username}/${id}`)
   return response.data
 }
 

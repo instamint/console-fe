@@ -2,14 +2,21 @@ import React from 'react'
 import styled from 'styled-components'
 import IconDelete from '../../../images/delete.png'
 
-export default function Favorite({listFavorite, handleRemoveFavorite, onDragStart}) {
+export default function Favorite({
+  listFavorite,
+  handleRemoveFavorite,
+  onDragStart,
+  ArrayProperties,
+}) {
   return (
-    <StyledJsonSchemaList>
+    <div>
       {listFavorite?.length > 0 && <StyledJsonSchemaTitle>Favorites</StyledJsonSchemaTitle>}
       <UlListJson>
         {listFavorite.map((x, i) => (
           <StyledSchmaLabel key={i}>
             <Name draggable onDragStart={onDragStart} data-item={JSON.stringify(x?.property)}>
+              {ArrayProperties(x?.property?.category?.name)?.name}
+              <b>.</b>
               {x?.property?.name}
             </Name>
             <Button
@@ -20,12 +27,10 @@ export default function Favorite({listFavorite, handleRemoveFavorite, onDragStar
           </StyledSchmaLabel>
         ))}
       </UlListJson>
-    </StyledJsonSchemaList>
+    </div>
   )
 }
 
-const StyledJsonSchemaList = styled.div`
-`
 
 const StyledJsonSchemaTitle = styled.div`
   font-size: 15px;
