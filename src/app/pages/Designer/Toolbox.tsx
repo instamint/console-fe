@@ -82,8 +82,8 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
     switch (name?.toLowerCase()) {
       case 'image url':
         return {
-          type: 'myVideo',
-          name: 'storageImageURL'
+          type: 'storageImageURL',
+          name: 'myVideo',
         }
       case 'text':
         return {
