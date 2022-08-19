@@ -10,6 +10,7 @@ import { ApiKeysWrapper } from '../pages/ApiKeys/ApiKeysWrapper'
 import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
 import AssetsDetail from '../pages/Assets/Detail'
 import { DesignerWrapper } from '../pages/Designer/index'
+import PartiesDetail from '../pages/Parties/Detail'
 import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
 import { PoolsWrapper } from '../pages/Pools/PoolsWrapper'
 import { TransactionsWrapper } from '../pages/Transactions/TransactionsWrapper'
@@ -33,6 +34,7 @@ const PrivateRoutes = () => {
         {/* Pages */}
         <Route path='assets' element={<AssetsWrapper />} />
         <Route path='assets/detail/*' element={<AssetsDetail />} />
+        <Route path='parties/detail/*' element={<PartiesDetail />} />
         <Route path='pools' element={<PoolsWrapper />} />
         <Route path='designer' element={<DesignerWrapper />} />
         <Route path='analytics' element={<AnalyticsWrapper />} />

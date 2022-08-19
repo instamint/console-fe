@@ -64,7 +64,7 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fs-7'>{i + 1}</span>
+                  <Button onClick={(e) => deleteSchema(e, x)} src={IconDelete} alt='edit'></Button>
                 </div>
               </div>
             </td>
@@ -82,13 +82,6 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
                 </div>
               </div>
             </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <Button onClick={(e) => deleteSchema(e, x)} src={IconDelete} alt='edit'></Button>
-                </div>
-              </div>
-            </td>
           </tr>
         )
       }),
@@ -97,7 +90,7 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
 
   return (
     <StyledJsonSchemaList>
-      {schemaList?.length > 0 && <StyledJsonSchemaTitle>My Schema Library</StyledJsonSchemaTitle>}
+      {schemaList?.length > 0 && <StyledJsonSchemaTitle>My Assets Library</StyledJsonSchemaTitle>}
       <div className='table-responsive'>
         {isLoading ? (
           <Loading />
@@ -105,10 +98,9 @@ const JsonSchemaList: React.FC<JsonSchemaListProps> = (props) => {
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
             <thead>
               <tr className='fw-bold text-muted'>
-                <th>#</th>
+                <th></th>
                 <th style={{minWidth: '120px'}}>NAME</th>
                 <th>UPDATED DATE</th>
-                <th>ACTION</th>
               </tr>
             </thead>
             {/* end::Table head */}

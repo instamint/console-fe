@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from 'react';
-import convertTreeToSchema from './convertTreeToSchema';
+import convertTreeToSchema from './helpers/convertTreeToSchema';
 
 export type PropertyType =
   | {
@@ -20,6 +20,7 @@ export type PropertyType =
     };
 
 export type ItemType = {
+  id?: string
   name: string;
   type?: any;
   category?: {
@@ -30,6 +31,7 @@ export type ItemType = {
   value?: any;
   leaf?: boolean; // can have child node or not
   validChildType?: string[];
+  from?: string
 };
 
 
@@ -55,18 +57,19 @@ export type TreeNode = {
 export type TreeStore = TreeNode[]; // store tree in an array
 
 export type ContextType = {
-  treeStore: TreeStore;
-  clear: () => void;
-  append: (node: TreeNode) => void;
-  remove: (node: TreeNode) => void;
-  edit: (id: string, newName: string) => void;
-  setEditing: (id: string, isEditing: boolean) => void;
-  moveUp: (node: TreeNode) => void;
-  moveDown: (node: TreeNode) => void;
+  treeStore: TreeStore
+  clear: () => void
+  append: (node: TreeNode, type: string) => void
+  remove: (node: TreeNode) => void
+  edit: (id: string, newName: string) => void
+  setEditing: (id: string, isEditing: boolean) => void
+  moveUp: (node: TreeNode) => void
+  moveDown: (node: TreeNode) => void
+  duplicateSchema: (node: TreeNode) => void
 
-  schemaList: any[];
-  appendSchema: (schema: any) => void;
-};
+  schemaList: any[]
+  appendSchema: (schema: any) => void
+}
 
 export const Context = createContext<ContextType>(
   null as unknown as ContextType,
@@ -172,4 +175,9 @@ export const useSchemaList = () => {
 export const useAppendSchema = () => {
   const {appendSchema} = useContext(Context);
   return appendSchema;
+}
+
+export const useDuplicate = () => {
+  const {duplicateSchema} = useContext(Context)
+  return duplicateSchema
 }

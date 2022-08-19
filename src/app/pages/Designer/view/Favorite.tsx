@@ -12,20 +12,43 @@ export default function Favorite({
     <div>
       {listFavorite?.length > 0 && <StyledJsonSchemaTitle>Favorites</StyledJsonSchemaTitle>}
       <UlListJson>
-        {listFavorite.map((x, i) => (
-          <StyledSchmaLabel key={i}>
-            <Name draggable onDragStart={onDragStart} data-item={JSON.stringify(x?.property)}>
-              {ArrayProperties(x?.property?.category?.name)?.name}
-              <b>.</b>
-              {x?.property?.name}
-            </Name>
-            <Button
-              onClick={() => handleRemoveFavorite(x?.property)}
-              src={IconDelete}
-              alt='edit'
-            ></Button>
-          </StyledSchmaLabel>
-        ))}
+        <table
+          style={{width: '250px'}}
+          className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-1'
+        >
+          <tbody>
+            {listFavorite.map((x, i) => (
+              <tr key={i}>
+                <td style={{width: '15px'}}>
+                  <div className='d-flex align-items-center'>
+                    <div className='d-flex justify-content-start flex-column'>
+                      <Button
+                        onClick={() => handleRemoveFavorite(x?.property)}
+                        src={IconDelete}
+                        alt='edit'
+                      ></Button>
+                    </div>
+                  </div>
+                </td>
+                <td style={{paddingLeft: '0px'}}>
+                  <div className='d-flex align-items-center'>
+                    <div className='d-flex justify-content-start flex-column'>
+                      <Name
+                        draggable
+                        onDragStart={onDragStart}
+                        data-item={JSON.stringify(x?.property)}
+                      >
+                        {ArrayProperties(x?.property?.category?.name)?.name}
+                        <b>.</b>
+                        {x?.property?.name}
+                      </Name>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </UlListJson>
     </div>
   )

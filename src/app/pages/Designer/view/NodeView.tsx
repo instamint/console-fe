@@ -1,4 +1,4 @@
-import {ItemType, TreeNode, useAppend, useDel, useEdit, useEditing, useMoveDown, useMoveUp} from "../model";
+import {ItemType, TreeNode, useAppend, useDel, useDuplicate, useEdit, useEditing, useMoveDown, useMoveUp} from "../model";
 import {useCallback, useState} from "react";
 import styled from "styled-components";
 import { nanoid } from "nanoid";
@@ -17,28 +17,35 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
     const moveUpHook = useMoveUp();
     const moveDownHook = useMoveDown();
     const appendHook = useAppend();
+    const duplicateHook = useDuplicate()
     // --------------------------------------------------
     const onDrop = useCallback(
         (e: React.DragEvent) => {
             try {
                 const item = JSON.parse(e.dataTransfer.getData('item')) as ItemType;
+                const from = item?.from
                 
-                appendHook({
-                    id: nanoid(),
-                    category: {
-                      id: item.category.id,
-                      name: item.category.name
+                checkAllowDrop(item, JSON.parse((e.target as HTMLElement).dataset.item)) &&
+                  appendHook(
+                    {
+                      id: from === 'nodeview' ? item.id : nanoid(),
+                      category: {
+                        id: item.category.id,
+                        name: item.category.name,
+                      },
+                      type: item.type,
+                      name: item.name,
+                      value: item.value,
+                      isEditing: false,
+                      parent: (e.target as HTMLElement).dataset.nodeId || 'root',
                     },
-                    type: item.type,
-                    name: item.name,
-                    value: item.value,
-                    isEditing: false,
-                    parent: (e.target as HTMLElement).dataset.nodeId || 'root',
-                });
+                    from
+                  )
                 setDragOver(false);
             } catch (e) {
                 //
                 console.error('Exception JSON//')
+                setDragOver(false)
             }
         },
         [appendHook],
@@ -72,6 +79,9 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
     const down = useCallback(() => {
         moveDownHook(node);
     } , [moveDownHook, node]);
+    const duplicate = useCallback(() => {
+        duplicateHook(node)
+    }, [duplicateHook, node])
 
     const setEdit = useCallback((id: string, editing: boolean, name: string) => {
         if (!editing && (!name || name === '')) return
@@ -82,6 +92,13 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
         editHook(id, newName);
     }, [editHook]);
 
+    const checkAllowDrop = (drag, drop) => {
+      if (drag?.id === drop?.id || drag?.id === drop?.parent) {
+        return false
+      }
+      return true
+    }
+
     return (
       <StyledNodeView>
         <Node
@@ -91,7 +108,10 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
           onDragLeave={onDragLeave}
           onDrop={(e) => onDrop(e)}
           onDragStart={onDragStart}
-          data-item={JSON.stringify(node)}
+          data-item={JSON.stringify({
+            ...node, 
+            from: "nodeview"
+          })}
           data-node-id={node.id}
         >
           <ImageLogo src={jsonIcon} alt="Json icon"></ImageLogo>
@@ -106,7 +126,7 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
               {node.id !== "root" && <IconAction onClick={remove} src={IconDelete} alt="edit"></IconAction>}
               {node.id !== "root" && <IconAction onClick={up} src={IconUp} alt="edit"></IconAction>}
               {node.id !== "root" && <IconAction onClick={down} src={IconDown} alt="edit"></IconAction>}
-              {node.id !== "root" && <IconAction src={IconCopy} alt="edit"></IconAction>}
+              {node.id !== "root" && <IconAction onClick={duplicate} src={IconCopy} alt="edit"></IconAction>}
             </GroupButton>}
           </StyledContentNode>
         </Node>

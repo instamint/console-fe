@@ -1,13 +1,14 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import { Context, TreeStore, TreeNode } from './model';
-import Toolbox from './Toolbox';
-import TreeView from './view/TreeView';
-import JsonView from './view/JsonView';
-import { PageTitle } from '../../../_metronic/layout/core';
-import { useIntl } from 'react-intl';
+import React, {FC, useCallback, useMemo, useState} from 'react'
+import styled from 'styled-components'
+import {Context, TreeStore, TreeNode} from './model'
+import Toolbox from './Toolbox'
+import TreeView from './view/TreeView'
+import JsonView from './view/JsonView'
+import {PageTitle} from '../../../_metronic/layout/core'
+import {useIntl} from 'react-intl'
 import {Modal} from 'react-bootstrap'
-import { KTSVG } from '../../../_metronic/helpers';
+import {KTSVG} from '../../../_metronic/helpers'
+import {nanoid} from 'nanoid'
 
 const EditorPage: React.FC = () => {
   // --------------------------------------------------
@@ -18,7 +19,7 @@ const EditorPage: React.FC = () => {
       id: 'root',
       category: {
         id: 'root',
-        name: 'jsonSchema'
+        name: 'assetType',
       },
       isEditing: false,
       name: 'Json Schema',
@@ -31,7 +32,7 @@ const EditorPage: React.FC = () => {
         id: 'root',
         category: {
           id: 'root',
-          name: 'jsonSchema'
+          name: 'assetType',
         },
         isEditing: false,
         name: 'Json Schema',
@@ -39,14 +40,31 @@ const EditorPage: React.FC = () => {
     ])
   }, [])
 
-  const append = useCallback((node: TreeNode) => {
+  const append = useCallback((node: TreeNode, from: string) => {
     console.debug('append', node)
-    setTreeStore((x) => {
-      const numOfChild = x.filter((y) => y.parent === node.parent).length
-      node.orderId = numOfChild + 1
-      node.name = `${node.name} (${numOfChild + 1})`
-      return [...x, node]
-    })
+    if (from === 'nodeview') {
+      // Move Json from node view
+      setTreeStore((x) => {
+        let newTree = [...x]
+        let location
+        newTree.forEach((item, index) => {
+          if (item?.id === node?.id) {
+            location = index
+            return
+          }
+        })
+        newTree[location].parent = node?.parent
+        return newTree
+      })
+    } else {
+      // Add Json from Properties right
+      setTreeStore((x) => {
+        const numOfChild = x.filter((y) => y.parent === node.parent).length
+        node.orderId = numOfChild + 1
+        node.name = `${node.name} (${numOfChild + 1})`
+        return [...x, node]
+      })
+    }
   }, [])
 
   const remove = useCallback(
@@ -68,7 +86,7 @@ const EditorPage: React.FC = () => {
       let treeStoreX = []
       for (let x of treeStore) {
         if (x.id === id) {
-          if (!!newName || newName === "") {
+          if (!!newName || newName === '') {
             x.name = newName
           }
         }
@@ -124,6 +142,41 @@ const EditorPage: React.FC = () => {
     [treeStore]
   )
 
+  const duplicateSchema = useCallback(
+    (node: TreeNode) => {
+      let newNanoId = nanoid()
+      let arrDuplicate = [
+        {
+          ...node,
+          id: newNanoId,
+        },
+      ]
+      let getNewId = {
+        [node.id]: newNanoId,
+      }
+      let check = {}
+      check[node.id] = true
+
+      if (treeStore?.length) {
+        treeStore?.forEach((item) => {
+          if (check[item?.parent] === true) {
+            newNanoId = nanoid()
+            getNewId[item.id] = newNanoId
+            check[item.id] = true
+            arrDuplicate.push({
+              ...item,
+              id: newNanoId,
+              parent: getNewId[item.parent],
+            })
+          }
+        })
+      }
+
+      setTreeStore((preState) => [...preState, ...arrDuplicate])
+    },
+    [treeStore]
+  )
+
   // --------------------------------------------------
   // Schema
   // --------------------------------------------------
@@ -146,11 +199,23 @@ const EditorPage: React.FC = () => {
       setEditing,
       moveUp,
       moveDown,
+      duplicateSchema,
       // Schema
       schemaList,
       appendSchema,
     }
-  }, [append, remove, edit, setEditing, moveUp, moveDown, treeStore, schemaList, appendSchema])
+  }, [
+    append,
+    remove,
+    edit,
+    setEditing,
+    moveUp,
+    moveDown,
+    duplicateSchema,
+    treeStore,
+    schemaList,
+    appendSchema,
+  ])
 
   return (
     <Context.Provider value={contextValue}>
@@ -220,7 +285,7 @@ const DesignerWrapper: FC = () => {
   )
 }
 
-export { DesignerWrapper }
+export {DesignerWrapper}
 
 const Container = styled.div`
   display: grid;
