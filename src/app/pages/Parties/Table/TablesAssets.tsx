@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 import {getListParties} from '../../../../utils/api/parties'
 import { shortAddress } from '../../../../_metronic/helpers/format'
 import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
-import FilterSearch from '../../../components/FilterSearch'
 import { Loading } from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
 
@@ -96,12 +97,15 @@ const TablesParties: React.FC<Props> = ({className}) => {
             </td>
             <td>
               <div className='d-flex justify-content-end flex-shrink-0'>
-                <a
-                  href='#'
+                <Link
+                  to={{
+                    pathname: "detail",
+                    search: `?id=${item?.uuid}`,
+                  }}
                   className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
                 >
                   Details
-                </a>
+                </Link>
                 <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid form-ml-4'>
                   <input
                     className='form-check-input'
@@ -128,7 +132,28 @@ const TablesParties: React.FC<Props> = ({className}) => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Yours Parties</span>
         </h3>
-        <FilterSearch setSearch={setSearch} />
+        <div className='d-flex flex-wrap flex-stack'>
+          <div className='d-flex align-items-center'>
+            <div
+              className='btn btn-primary me-5'
+              data-kt-menu-trigger='click'
+              data-kt-menu-placement='bottom-start'
+              data-kt-menu-flip='top-end'
+            >
+              Action
+              <IconDrop className='fa-solid fa-caret-down'></IconDrop>
+            </div>
+            <div
+              className='menu menu-sub menu-sub-dropdown w-250px w-md-150px p-4'
+              data-kt-menu='true'
+            >
+              <div className='d-flex flex-column'>
+                <NameDropdow>Run</NameDropdow>
+                <NameDropdow>Jump</NameDropdow>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       {/* end::Header */}
       {/* begin::Body */}
@@ -183,3 +208,22 @@ const TablesParties: React.FC<Props> = ({className}) => {
 }
 
 export {TablesParties}
+
+
+const NameDropdow = styled.div`
+  padding: 5px;
+  font-size: 15px;
+  min-width: 100px;
+  display: flex;
+  cursor: pointer;
+  border-radius: 4px;
+  &:hover {
+    color: #fff;
+    background-color: #009ef7;
+    transition: all 0.2s ease;
+  }
+`
+const IconDrop = styled.i`
+  margin-left: 15px;
+  margin-bottom: 2px;
+`

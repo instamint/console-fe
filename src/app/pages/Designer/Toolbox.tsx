@@ -48,6 +48,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       item = JSON.parse(item)
     }
     item.name = setTypeNameStorage(item?.name).name
+    item.from = 'propertie'
     ev.dataTransfer.setData('item', JSON.stringify(item))
   }, [])
 
