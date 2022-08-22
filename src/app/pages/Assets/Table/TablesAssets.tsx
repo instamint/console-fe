@@ -99,20 +99,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.id}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.select}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.b2Bcross_referenceid}</span>
                 </div>
               </div>
@@ -133,20 +119,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.uuid}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.create_at}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.status ? 'P' : ''}</span>
                 </div>
               </div>
@@ -154,42 +126,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.active}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.chainId}</span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.best_bid}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.block_explorerurl}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.ipfs_meta_dataurl}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.metadata}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.mint_completed_status}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.hashId}</span>
                 </div>
               </div>
             </td>
@@ -197,48 +141,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.mint_requestjson}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.tokenid}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.transaction_receiptjson}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.bidder_id}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.client_id}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.contract_id}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.custodian_id}</span>
                 </div>
               </div>
             </td>
@@ -253,13 +155,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.owner_id}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.type_id}</span>
                 </div>
               </div>
             </td>
@@ -297,29 +192,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th></th>
-                  <th>ID</th>
-                  <th>SELECT</th>
-                  <th className='min-w-150px'>CROSS REFERENCE</th>
+                  <th>CROSS REFERENCE</th>
                   <th>ACTION</th>
-                  <th>UUID</th>
-                  <th className='min-w-100px'>CREATE AT</th>
                   <th>STATUS</th>
-                  <th>ACTIVE</th>
-                  <th>ASK</th>
-                  <th className='min-w-80px'>BEST BID</th>
-                  <th className='min-w-150px'>EXPLORER URL</th>
-                  <th className='min-w-150px'>IPFS META DATA URL</th>
-                  <th className='min-w-150px'>META DATA</th>
-                  <th className='min-w-150px'>COMPLETED STATUS</th>
-                  <th className='min-w-150px'>MINT REQUEST JSON</th>
-                  <th className='min-w-150px'>TOKEN ID</th>
-                  <th className='min-w-200px'>TRANSACTION RECEIPT</th>
-                  <th className='min-w-150px'>BIDDER ID</th>
-                  <th className='min-w-150px'>CLIENT ID</th>
-                  <th className='min-w-150px'>CUSTODIAN ID</th>
-                  <th className='min-w-150px'>ISSUER ID</th>
-                  <th className='min-w-150px'>OWNER ID</th>
-                  <th className='min-w-150px'>TYPE ID</th>
+                  <th>CHAIN ID</th>
+                  <th>HASH ID</th>
+                  <th>MINT REQUEST JSON</th>
+                  <th>ISSUER ID</th>
+                  <th>OWNER ID</th>
                 </tr>
               </thead>
               {/* end::Table head */}

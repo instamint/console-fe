@@ -45,20 +45,6 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.id}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{shortAddress(item?.uuid || '')}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.name}</span>
                 </div>
               </div>
@@ -66,56 +52,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.namespace}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>
-                    {shortAddress(item?.currentApiKey || '')}
-                  </span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>
-                    {convertTimeZone(item?.createdAt)}
-                  </span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex justify-content-end flex-shrink-0'>
-                <Link
-                  to={{
-                    pathname: "detail",
-                    search: `?id=${item?.uuid}`,
-                  }}
-                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
-                >
-                  Details
-                </Link>
-                <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid form-ml-4'>
-                  <input
-                    className='form-check-input'
-                    type='checkbox'
-                    value=''
-                    name='notifications'
-                    defaultChecked={disable}
-                    onChange={() => setDisable(!disable)}
-                  />
-                  <label className='form-check-label fw-bold'>Disable</label>
+                  <span className='text-dark fw-bold fs-7'>{item?.hashId}</span>
                 </div>
               </div>
             </td>
@@ -169,14 +106,8 @@ const TablesParties: React.FC<Props> = ({className}) => {
               {/* begin::Table head */}
               <thead>
                 <tr className='fw-bold text-muted'>
-                  <th>ID</th>
-                  <th>UUID</th>
                   <th>NAME</th>
-                  <th>NAME SPACE</th>
-                  <th>CURRENT API KEY</th>
-                  <th>CREATED AT</th>
-                  <th>COSS REFERENCE ID</th>
-                  <th></th>
+                  <th>HASH ID</th>
                 </tr>
               </thead>
               {/* end::Table head */}
