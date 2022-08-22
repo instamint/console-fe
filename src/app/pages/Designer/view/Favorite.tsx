@@ -13,7 +13,7 @@ export default function Favorite({
       {listFavorite?.length > 0 && <StyledJsonSchemaTitle>Favorites</StyledJsonSchemaTitle>}
       <UlListJson>
         <table
-          style={{width: '250px'}}
+          style={{width: '300px'}}
           className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-1'
         >
           <tbody>
