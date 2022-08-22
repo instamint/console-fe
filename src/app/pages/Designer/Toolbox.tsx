@@ -25,6 +25,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   const [standardTypes, setStandardTypes] = useState<Array<any>>([])
   const [actusTypes, setActusTypes] = useState<Array<any>>([])
   const [storageTypes, setStorageTypes] = useState<Array<any>>([])
+  const [supplyChainTypes, setSupplyChainTypes] = useState<Array<any>>([])
   const [listFavorite, setListFavorite] = useState<Array<any>>([])
   const [isLoadFavorite, setIsLoadFavorite] = useState(true)
   const [selectProperty, setSelectProperty] = useState('standard')
@@ -104,15 +105,18 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       let actusTypes = []
       let standardTypes = []
       let storageTypes = []
+      let supplyChainTypes = []
       data?.forEach((item) => {
         // set Type Properties
         if (item?.category?.name === 'Storage') {
           item.type = setTypeNameStorage(item?.name)?.type
         } else item.type = item?.name || ''
-        if (item?.category?.name === 'standard') {
+        if (item?.category?.name === 'Standard') {
           standardTypes.push(item)
         } else if (item?.category?.name === 'ACTUS') {
           actusTypes.push(item)
+        } else if (item?.category?.name === 'Supply Chain') {
+          supplyChainTypes.push(item)
         } else {
           storageTypes.push(item)
         }
@@ -120,6 +124,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       setActusTypes(actusTypes)
       setStandardTypes(standardTypes)
       setStorageTypes(storageTypes)
+      setSupplyChainTypes(supplyChainTypes)
     }
   }
 
@@ -167,6 +172,11 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
           name: 'Storage',
           data: storageTypes,
         }
+      case 'supply chain':
+        return {
+          name: 'Supply Chain',
+          data: supplyChainTypes,
+        }
       default:
         return {
           name: 'Standard',
@@ -204,6 +214,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
               <NameDropdow onClick={() => setSelectProperty('standard')}>Standard</NameDropdow>
               <NameDropdow onClick={() => setSelectProperty('actus')}>ACTUS</NameDropdow>
               <NameDropdow onClick={() => setSelectProperty('storage')}>Storage</NameDropdow>
+              <NameDropdow onClick={() => setSelectProperty('supply chain')}>Supply Chain</NameDropdow>
             </div>
           </div>
         </div>
