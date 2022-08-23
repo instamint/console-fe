@@ -24,7 +24,8 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
             try {
                 const item = JSON.parse(e.dataTransfer.getData('item')) as ItemType;
                 const from = item?.from
-                
+                console.log('item', item)
+                console.log('e.target', e.target)
                 checkAllowDrop(item, JSON.parse((e.target as HTMLElement).dataset.item)) &&
                   appendHook(
                     {

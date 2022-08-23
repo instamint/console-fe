@@ -8,6 +8,8 @@ import useSearch from '../../../hooks/useSearch'
 import { Modal } from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
 import { createPool } from '../../../../utils/api/pools'
+import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
+import ReactTooltip from 'react-tooltip'
 
 type Props = {
   className: string
@@ -99,12 +101,12 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.b2Bcross_referenceid}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
                 </div>
               </div>
             </td>
             <td>
-              <div className='d-flex justify-content-end flex-shrink-0'>
+              <div className='d-flex justify-content-start flex-shrink-0'>
                 <Link
                   to={{
                     pathname: `detail`,
@@ -126,35 +128,40 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.chainId}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.chainName}</span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.hashId}</span>
+                  <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.hashId)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.mint_requestjson}</span>
+                  <span className='text-dark fw-bold fs-7'>
+                    {shortAddressBehind(item?.mintRequestjson)}
+                  </span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.issuer_id}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.issuerName}</span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.owner_id}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.ownerName}</span>
                 </div>
               </div>
             </td>
@@ -195,11 +202,11 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                   <th>CROSS REFERENCE</th>
                   <th>ACTION</th>
                   <th>STATUS</th>
-                  <th>CHAIN ID</th>
+                  <th>CHAIN</th>
                   <th>HASH ID</th>
                   <th>MINT REQUEST JSON</th>
-                  <th>ISSUER ID</th>
-                  <th>OWNER ID</th>
+                  <th>ISSUER</th>
+                  <th>OWNER</th>
                 </tr>
               </thead>
               {/* end::Table head */}

@@ -6,6 +6,7 @@ import {Campaigns} from './components/Campaigns'
 import {Documents} from './components/Documents'
 import {Connections} from './components/Connections'
 import {ProfileHeader} from './ProfileHeader'
+import { ApiKeysWrapper } from './components/ApiKeys/ApiKeysWrapper'
 
 const profileBreadCrumbs: Array<PageLink> = [
   {
@@ -42,6 +43,24 @@ const ProfilePage = () => (
         }
       />
       <Route
+        path='settings'
+        element={
+          <>
+            <PageTitle breadcrumbs={profileBreadCrumbs}>Settings</PageTitle>
+            <Projects />
+          </>
+        }
+      />
+      <Route
+        path='api-keys'
+        element={
+          <>
+            <PageTitle breadcrumbs={profileBreadCrumbs}>API Keys</PageTitle>
+            <ApiKeysWrapper />
+          </>
+        }
+      />
+      {/* <Route
         path='projects'
         element={
           <>
@@ -76,7 +95,7 @@ const ProfilePage = () => (
             <Connections />
           </>
         }
-      />
+      /> */}
       <Route index element={<Navigate to='/crafted/pages/profile/overview' />} />
     </Route>
   </Routes>

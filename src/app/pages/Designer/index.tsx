@@ -1,14 +1,13 @@
-import React, {FC, useCallback, useMemo, useState} from 'react'
+import { nanoid } from 'nanoid'
+import React, { FC, useCallback, useMemo, useState } from 'react'
+import { Modal } from 'react-bootstrap'
+import { useIntl } from 'react-intl'
 import styled from 'styled-components'
-import {Context, TreeStore, TreeNode} from './model'
+import { PageTitle } from '../../../_metronic/layout/core'
+import ModalTreeView from './Modal/treeView'
+import { Context, TreeNode, TreeStore } from './model'
 import Toolbox from './Toolbox'
 import TreeView from './view/TreeView'
-import JsonView from './view/JsonView'
-import {PageTitle} from '../../../_metronic/layout/core'
-import {useIntl} from 'react-intl'
-import {Modal} from 'react-bootstrap'
-import {KTSVG} from '../../../_metronic/helpers'
-import {nanoid} from 'nanoid'
 
 const EditorPage: React.FC = () => {
   // --------------------------------------------------
@@ -231,37 +230,7 @@ const EditorPage: React.FC = () => {
           dialogClassName='modal-ml modal-dialog-700'
           aria-hidden='true'
         >
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h5 className='modal-title' style={{color: '#5a5d72'}}>
-                JSON VIEW
-              </h5>
-              <div
-                className='btn btn-icon btn-sm btn-active-light-primary ms-2'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-                onClick={() => setShowModal(false)}
-              >
-                <KTSVG
-                  path='/media/icons/duotune/arrows/arr061.svg'
-                  className='svg-icon svg-icon-2x'
-                />
-              </div>
-            </div>
-            <div className='modal-body'>
-              <JsonView />
-            </div>
-            <div className='modal-footer'>
-              <button
-                type='button'
-                className='btn btn-light'
-                data-bs-dismiss='modal'
-                onClick={() => setShowModal(false)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
+          <ModalTreeView setShowModal={setShowModal} />
         </Modal>
         <Toolbox
           clear={clear}

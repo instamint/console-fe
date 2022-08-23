@@ -5,8 +5,8 @@ import { getCSSVariableValue } from '../../_metronic/assets/ts/_utils'
 import { WithChildren } from '../../_metronic/helpers'
 import { MasterLayout } from '../../_metronic/layout/MasterLayout'
 import { useAuth } from '../modules/auth'
+import ProfilePage from '../modules/profile/ProfilePage'
 import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
-import { ApiKeysWrapper } from '../pages/ApiKeys/ApiKeysWrapper'
 import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
 import AssetsDetail from '../pages/Assets/Detail'
 import { DesignerWrapper } from '../pages/Designer/index'
@@ -40,7 +40,6 @@ const PrivateRoutes = () => {
         <Route path='analytics' element={<AnalyticsWrapper />} />
         <Route path='parties' element={<PartiesWrapper />} />
         <Route path='transactions' element={<TransactionsWrapper />} />
-        <Route path='api_keys' element={<ApiKeysWrapper />} />
         {currentUser?.role?.length && currentUser?.role?.includes("ADMIN") ? <Route
           path='admin/*'
           element={
@@ -55,7 +54,7 @@ const PrivateRoutes = () => {
         {/* <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} /> */}
-        {/* <Route
+        <Route
           path='crafted/pages/profile/*'
           element={
             <SuspensedView>
@@ -63,6 +62,7 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
+        {/* 
         <Route
           path='crafted/pages/wizards/*'
           element={
