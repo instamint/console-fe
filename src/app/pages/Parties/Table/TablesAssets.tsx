@@ -56,6 +56,30 @@ const TablesParties: React.FC<Props> = ({className}) => {
                 </div>
               </div>
             </td>
+            <td>
+              <div className='d-flex justify-content-start flex-shrink-0'>
+                <Link
+                  to={{
+                    pathname: 'detail',
+                    search: `?id=${item?.uuid}`,
+                  }}
+                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
+                >
+                  Details
+                </Link>
+                <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid form-ml-4'>
+                  <input
+                    className='form-check-input'
+                    type='checkbox'
+                    value=''
+                    name='notifications'
+                    defaultChecked={disable}
+                    onChange={() => setDisable(!disable)}
+                  />
+                  <label className='form-check-label fw-bold'>Disable</label>
+                </div>
+              </div>
+            </td>
           </tr>
         )
       }),
@@ -108,6 +132,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                 <tr className='fw-bold text-muted'>
                   <th>NAME</th>
                   <th>HASH ID</th>
+                  <th>ACTION</th>
                 </tr>
               </thead>
               {/* end::Table head */}

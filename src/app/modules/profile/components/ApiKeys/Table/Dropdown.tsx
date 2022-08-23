@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import IconEdit from '../../../images/edit.png'
-import IconDelete from '../../../images/delete.png'
+import IconEdit from '../../../../../images/edit.png'
+import IconDelete from '../../../../../images/delete.png'
 import styled from 'styled-components'
 
 const Dropdown = () => {

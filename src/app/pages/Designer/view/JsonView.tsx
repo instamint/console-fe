@@ -1,14 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
+import { Loading } from "../../../components/Loading";
 import {useTreeView} from "../model";
+import toJsonSchema from 'to-json-schema'
 
 const JsonView: React.FC = () => {
     const tree = useTreeView();
+    const [dataTree, setDataTree] = useState({})
+    const [isLoading, setIsLoading] = useState(true)
+
+    const options = {
+      objects: {
+        postProcessFnc: (schema, obj, defaultFnc) => ({
+          ...defaultFnc(schema, obj),
+          required: Object.getOwnPropertyNames(obj),
+        }),
+      },
+    }
+
+    const convertTree = async (tree) => {
+      setIsLoading(true)
+      try {
+        const schema = await toJsonSchema(JSON.parse(JSON.stringify(tree)), options)
+        setDataTree({
+          $schema: "http://json-schema.org/draft-04/schema#",
+          ...schema,
+        })
+      } catch (error) {
+        console.error({error})
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    useEffect(() => {
+      convertTree(tree)
+      return () => {
+        setDataTree({})
+      }
+    }, [tree])
+    
     
     return (
-        <StyledJsonView>
-            <pre>{JSON.stringify(tree, null, 2)}</pre>
-        </StyledJsonView>
+      <StyledJsonView>
+        {isLoading ? <Loading /> : <pre>{JSON.stringify(dataTree, null, 3)}</pre>}
+      </StyledJsonView>
     )
 };
 

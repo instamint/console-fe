@@ -34,10 +34,12 @@
     "react-router-dom": "6.3.0",
     "react-scripts": "5.0.1",
     "react-table": "^7.7.0",
+    "react-tooltip": "^4.2.21",
     "react-topbar-progress-indicator": "4.1.1",
     "sass": "1.50.1",
     "socicon": "3.0.5",
     "styled-components": "^5.3.5",
+    "to-json-schema": "^0.2.5",
     "yup": "0.32.11"
   },
   "devDependencies": {
