@@ -1,5 +1,5 @@
 // Address token
-export const shortAddress = (value: string, n = 4, nlast = 4, v = 13) => {
+export const shortAddress = (value: string = "", n = 4, nlast = 4, v = 13) => {
   if (value?.length <= v) {
     return value
   }

@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useState} from 'react'
+import ReactTooltip from 'react-tooltip'
 import { shortAddress } from '../../../../../_metronic/helpers/format'
 import FilterSearch from '../../../../components/FilterSearch'
 import useSearch from '../../../../hooks/useSearch'
@@ -47,7 +48,10 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{shortAddress(item?.chain || '')}</span>
+                  <span data-tip={item?.chain} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.chain || '')}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>

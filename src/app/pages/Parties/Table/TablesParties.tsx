@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
-import {getListParties} from '../../../../utils/api/parties'
+import { getListParties } from '../../../../utils/api/parties'
 import { shortAddress } from '../../../../_metronic/helpers/format'
-import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
 import { Loading } from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
 
@@ -52,7 +52,10 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.hashId}</span>
+                  <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.hashId)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
@@ -163,7 +166,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
   )
 }
 
-export {TablesParties}
+export { TablesParties }
 
 
 const NameDropdow = styled.div`

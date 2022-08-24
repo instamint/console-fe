@@ -3,8 +3,7 @@ import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
 export const GET_LIST_ASSETS = `${API_URL}/asset`
-export const GET_DETAIL_ASSETS = (id) => `${API_URL}/asset/detail1/${id}`
-export const GET_DETAIL_CHAIN = (id) => `${API_URL}/asset/detail2/${id}`
+export const GET_DETAIL_ASSETS = (id) => `${API_URL}/asset/detail/${id}`
 
 // get all list assets
 export function getListAsset() {
@@ -13,8 +12,4 @@ export function getListAsset() {
 
 export function getDetailAsset(id: string | number) {
   return axios.get(GET_DETAIL_ASSETS(id))
-}
-
-export function getDetailChain(id: string | number) {
-  return axios.get(GET_DETAIL_CHAIN(id))
 }

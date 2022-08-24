@@ -193,6 +193,17 @@ const AccountHeader: React.FC = () => {
                 Settings
               </Link>
             </li>
+            <li className='nav-item'>
+              <Link
+                className={
+                  `nav-link text-active-primary me-6 ` +
+                  (location.pathname === '/crafted/account/api-keys' && 'active')
+                }
+                to='/crafted/account/api-keys'
+              >
+                API Keys
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

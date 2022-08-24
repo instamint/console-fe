@@ -4,6 +4,7 @@ import {PageLink, PageTitle} from '../../../_metronic/layout/core'
 import {Overview} from './components/Overview'
 import {Settings} from './components/settings/Settings'
 import {AccountHeader} from './AccountHeader'
+import { ApiKeysWrapper } from './components/ApiKeys/ApiKeysWrapper'
 
 const accountBreadCrumbs: Array<PageLink> = [
   {
@@ -46,6 +47,15 @@ const AccountPage: React.FC = () => {
             <>
               <PageTitle breadcrumbs={accountBreadCrumbs}>Settings</PageTitle>
               <Settings />
+            </>
+          }
+        />
+        <Route
+          path='api-keys'
+          element={
+            <>
+              <PageTitle breadcrumbs={accountBreadCrumbs}>API Keys</PageTitle>
+              <ApiKeysWrapper />
             </>
           }
         />

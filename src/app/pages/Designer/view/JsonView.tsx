@@ -11,11 +11,20 @@ const JsonView: React.FC = () => {
 
     const options = {
       objects: {
-        postProcessFnc: (schema, obj, defaultFnc) => ({
-          ...defaultFnc(schema, obj),
-          required: Object.getOwnPropertyNames(obj),
-        }),
+        postProcessFnc: (schema, obj, defaultFnc) => {
+          let newSchema = {...schema}
+          delete newSchema.properties.isEditing
+          delete newSchema.properties.parent
+          delete newSchema.properties.orderId
+          return {
+            ...defaultFnc(newSchema, obj),
+            required: Object.getOwnPropertyNames(obj).filter(
+              (i) => i !== 'parent' && i !== 'isEditing' && i !== 'orderId'
+            ),
+          }
+        },
       },
+      arrays: {mode: 'tuple'},
     }
 
     const convertTree = async (tree) => {
