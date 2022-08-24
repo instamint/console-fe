@@ -2,7 +2,7 @@
 import {FC} from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import { TablesParties } from './Table/TablesAssets'
+import { TablesParties } from './Table/TablesParties'
 
 const PartiesPage: FC = () => (
   <>

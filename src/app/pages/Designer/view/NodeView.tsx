@@ -20,13 +20,20 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
     const duplicateHook = useDuplicate()
     // --------------------------------------------------
     const onDrop = useCallback(
-        (e: React.DragEvent) => {
+        (e: React.DragEvent | any) => {
             try {
                 const item = JSON.parse(e.dataTransfer.getData('item')) as ItemType;
                 const from = item?.from
-                console.log('item', item)
-                console.log('e.target', e.target)
-                checkAllowDrop(item, JSON.parse((e.target as HTMLElement).dataset.item)) &&
+                checkAllowDrop(
+                  item,
+                  JSON.parse(
+                    (e?.target as HTMLElement)?.dataset?.item ||
+                      (e?.target?.parentElement as HTMLElement)?.dataset?.item ||
+                      (e?.target?.parentElement?.parentElement as HTMLElement)?.dataset?.item ||
+                      (e?.target?.parentElement?.parentElement?.parentElement as HTMLElement)
+                        ?.dataset?.item
+                  )
+                ) &&
                   appendHook(
                     {
                       id: from === 'nodeview' ? item.id : nanoid(),
@@ -38,13 +45,18 @@ const NodeView: React.FC<TreeNode> = (node: TreeNode) => {
                       name: item.name,
                       value: item.value,
                       isEditing: false,
-                      parent: (e.target as HTMLElement).dataset.nodeId || 'root',
+                      parent:
+                        (e?.target as HTMLElement)?.dataset?.nodeId ||
+                        (e?.target?.parentElement as HTMLElement)?.dataset?.nodeId ||
+                        (e?.target?.parentElement?.parentElement as HTMLElement)?.dataset?.nodeId ||
+                        (e?.target?.parentElement?.parentElement?.parentElement as HTMLElement)
+                          ?.dataset?.nodeId ||
+                        'root',
                     },
                     from
                   )
                 setDragOver(false);
             } catch (e) {
-                //
                 console.error('Exception JSON//')
                 setDragOver(false)
             }

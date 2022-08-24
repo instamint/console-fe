@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useState} from 'react'
+import ReactTooltip from 'react-tooltip'
 import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
 import FilterSearch from '../../../components/FilterSearch'
 import useSearch from '../../../hooks/useSearch'
@@ -36,62 +37,63 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
       Array.isArray(listTransactions) &&
       listTransactions?.map((item, index) => {
         return (
-            <tr key={index}>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.id}</span>
-                  </div>
+          <tr key={index}>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.id}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>
-                      {shortAddress(item?.chain || '')}
-                    </span>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span data-tip={item?.chain} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.chain || '')}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
-              </td>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.transaction_type}</span>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.transaction_type}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.from}</span>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.from}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.to}</span>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.to}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <span className='text-dark fw-bold fs-7'>{item?.timestamp}</span>
-                  </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.timestamp}</span>
                 </div>
-              </td>
-              <td>
-                <div className='d-flex justify-content-end flex-shrink-0'>
-                  <a
-                    href='#'
-                    className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
-                  >
-                    Details
-                  </a>
-                </div>
-              </td>
-            </tr>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex justify-content-end flex-shrink-0'>
+                <a
+                  href='#'
+                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
+                >
+                  Details
+                </a>
+              </div>
+            </td>
+          </tr>
         )
       }),
     [listTransactions]

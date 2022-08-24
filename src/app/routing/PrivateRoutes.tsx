@@ -4,6 +4,7 @@ import TopBarProgress from 'react-topbar-progress-indicator'
 import { getCSSVariableValue } from '../../_metronic/assets/ts/_utils'
 import { WithChildren } from '../../_metronic/helpers'
 import { MasterLayout } from '../../_metronic/layout/MasterLayout'
+import AccountPage from '../modules/accounts/AccountPage'
 import { useAuth } from '../modules/auth'
 import ProfilePage from '../modules/profile/ProfilePage'
 import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
@@ -54,11 +55,19 @@ const PrivateRoutes = () => {
         {/* <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} /> */}
-        <Route
+        {/* <Route
           path='crafted/pages/profile/*'
           element={
             <SuspensedView>
               <ProfilePage />
+            </SuspensedView>
+          }
+        /> */}
+        <Route
+          path='crafted/account/*'
+          element={
+            <SuspensedView>
+              <AccountPage />
             </SuspensedView>
           }
         />

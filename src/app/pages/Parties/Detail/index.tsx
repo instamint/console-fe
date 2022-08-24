@@ -1,5 +1,6 @@
 import {useEffect} from 'react'
 import {useNavigate, useSearchParams} from 'react-router-dom'
+import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {PageTitle} from '../../../../_metronic/layout/core'
 
@@ -39,7 +40,16 @@ export default function PartiesDetail() {
                       <tbody>
                         <tr>
                           <td className='text-gray-400 min-w-175px w-175px'>UUID:</td>
-                          <td className='text-gray-800'>902D...fDDD</td>
+                          <td className='text-gray-800'>
+                            <span
+                              data-tip={
+                                '1d7710ee669e95c74fdcf2517e22676216d4e8579eac9746912bfd284cc57a14'
+                              }
+                            >
+                              1d77..7a14
+                            </span>
+                            <ReactTooltip place='top' effect='solid' />
+                          </td>
                         </tr>
                         <tr>
                           <td className='text-gray-400'>Name:</td>
@@ -72,7 +82,16 @@ export default function PartiesDetail() {
                       <tbody>
                         <tr>
                           <td className='text-gray-400 min-w-175px w-175px'>Current API Key:</td>
-                          <td className='text-gray-800 min-w-200px'>02c6...DdD9</td>
+                          <td className='text-gray-800 min-w-200px'>
+                            <span
+                              data-tip={
+                                '1d7710ee669e95c74fdcf2517e22676216d4e8579eac9746912bfd284cc57a14'
+                              }
+                            >
+                              1d77..7a14
+                            </span>
+                            <ReactTooltip place='top' effect='solid' />
+                          </td>
                         </tr>
                         <tr>
                           <td className='text-gray-400'>Created At:</td>
@@ -80,7 +99,16 @@ export default function PartiesDetail() {
                         </tr>
                         <tr>
                           <td className='text-gray-400'>Coss Reference Id:</td>
-                          <td className='text-gray-800'>02c6...DdD9</td>
+                          <td className='text-gray-800'>
+                            <span
+                              data-tip={
+                                '1d7710ee669e95c74fdcf2517e22676216d4e8579eac9746912bfd284cc57a14'
+                              }
+                            >
+                              1d77..7a14
+                            </span>
+                            <ReactTooltip place='top' effect='solid' />
+                          </td>
                         </tr>
                       </tbody>
                     </table>
