@@ -6,6 +6,7 @@ export interface AuthModel {
   issueDate: string
   expireDate: string
   favorite?: Array<any>
+  api_key?: string
 }
 
 export interface UserAddressModel {
@@ -75,4 +76,5 @@ export interface UserModel {
   communication?: UserCommunicationModel
   address?: UserAddressModel
   socialNetworks?: UserSocialNetworksModel
+  api_key?: string
 }

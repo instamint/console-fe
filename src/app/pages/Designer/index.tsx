@@ -86,7 +86,7 @@ const EditorPage: React.FC = () => {
       for (let x of treeStore) {
         if (x.id === id) {
           if (!!newName || newName === '') {
-            x.name = newName
+              x.name = newName    
           }
         }
         treeStoreX.push(x)
@@ -101,6 +101,9 @@ const EditorPage: React.FC = () => {
       let treeStoreX = []
       for (let x of treeStore) {
         if (x.id === id) {
+          if (!isEditing && treeStore.filter(i => i.id !== x.id).some((i) => i.name === x.name)) {
+            x.name = `${x.name} (${x.orderId})`
+          }
           x.isEditing = isEditing
         }
         treeStoreX.push(x)
@@ -148,6 +151,8 @@ const EditorPage: React.FC = () => {
         {
           ...node,
           id: newNanoId,
+          name: `${node.name} (${node.orderId + 1})`,
+          orderId: node?.orderId + 1,
         },
       ]
       let getNewId = {
@@ -165,6 +170,7 @@ const EditorPage: React.FC = () => {
             arrDuplicate.push({
               ...item,
               id: newNanoId,
+              orderId: item.orderId,
               parent: getNewId[item.parent],
             })
           }

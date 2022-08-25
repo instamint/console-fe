@@ -1,15 +1,34 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {FC, useState} from 'react'
+import {FC, useEffect, useState} from 'react'
 import {Modal} from 'react-bootstrap'
 import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {PageTitle} from '../../../../../_metronic/layout/core'
+import { useAuth } from '../../../auth'
 import CreateKey from './Modal/create-key'
 import {TablesApiKeys} from './Table/TablesApiKeys'
 
 const ApiKeysPage: FC = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [showModalKey, setShowModalKey] = useState(false)
+  const {currentUser, setCurrentUser, saveAuth, auth} = useAuth()
+  const [apiKeyUser, setApiKeyUser] = useState(currentUser?.api_key || "")
+
+  useEffect(() => {
+    if (!currentUser?.api_key) {
+      const newCurrentUser = {
+        ...currentUser,
+        api_key: 'zadKLNXDzvOVjQH91TumGL2urPjPQSxUbf67vs0',
+      }
+      const newAuth = {...auth, api_key: 'zadKLNXDzvOVjQH91TumGL2urPjPQSxUbf67vs0'}
+      saveAuth(newAuth)
+      setCurrentUser(newCurrentUser)
+      setApiKeyUser(newCurrentUser?.api_key)
+    } else {
+      setApiKeyUser(currentUser?.api_key)
+    }
+  }, [currentUser])
+  
 
   return (
     <>
@@ -25,9 +44,7 @@ const ApiKeysPage: FC = () => {
             <div className='row mb-2'>
               <div className='col-md-5 pb-10 pb-lg-0'>
                 <h2>Your API Key</h2>
-                <p className='form-control form-control-lg form-control-solid mt-4'>
-                  zadKLNX.DzvOVjQH91TumGL2urPjPQSxUbf67vs0
-                </p>
+                <p className='form-control form-control-lg form-control-solid mt-4'>{apiKeyUser}</p>
                 <button
                   type='button'
                   className='btn btn-light btn-active-light-primary mt-2'
@@ -54,6 +71,10 @@ const ApiKeysPage: FC = () => {
             <CreateKey
               setShowModalCreate={setShowModalCreate}
               setShowModalKey={setShowModalKey}
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+              auth={auth}
+              saveAuth={saveAuth}
             />
           </Modal>
 
@@ -89,9 +110,7 @@ const ApiKeysPage: FC = () => {
                 <p>
                   New Api Key created and <b>it will be displayed only now</b>,
                 </p>
-                <p className='form-control form-control-lg form-control-solid'>
-                  zadKLNX.DzvOVjQH91TumGL2urPjPQSxUbf67vs0
-                </p>
+                <p className='form-control form-control-lg form-control-solid'>{apiKeyUser}</p>
                 <p>
                   Please store it somewhere safe because as soon as you navigate away from this page
                   , we will not be able to retrieve or restore this generated token.

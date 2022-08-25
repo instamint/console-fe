@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Loading } from "../../../components/Loading";
 import {useTreeView} from "../model";
 import toJsonSchema from 'to-json-schema'
+import { convertTreeToSchemaV4 } from "../helpers/convertTreeToSchema";
 
 const JsonView: React.FC = () => {
     const tree = useTreeView();
@@ -12,17 +13,15 @@ const JsonView: React.FC = () => {
     const options = {
       objects: {
         postProcessFnc: (schema, obj, defaultFnc) => {
-          let newSchema = {...schema}
-          delete newSchema.properties.isEditing
-          delete newSchema.properties.parent
-          delete newSchema.properties.orderId
-          return {
-            ...defaultFnc(newSchema, obj),
-            required: Object.getOwnPropertyNames(obj).filter(
-              (i) => i !== 'parent' && i !== 'isEditing' && i !== 'orderId'
-            ),
+            let newSchema = {...schema}
+            Object.keys(obj)?.length && Object.keys(obj).forEach((item) => {
+              newSchema.properties[item].type = obj[item]?.toLowerCase()
+            })
+            return {
+              ...defaultFnc(schema, obj),
+              required: Object.getOwnPropertyNames(obj),
+            }
           }
-        },
       },
       arrays: {mode: 'tuple'},
     }
@@ -30,7 +29,8 @@ const JsonView: React.FC = () => {
     const convertTree = async (tree) => {
       setIsLoading(true)
       try {
-        const schema = await toJsonSchema(JSON.parse(JSON.stringify(tree)), options)
+        const newTree = convertTreeToSchemaV4(JSON.parse(JSON.stringify(tree)))
+        const schema = await toJsonSchema(JSON.parse(JSON.stringify(newTree)), options)
         setDataTree({
           $schema: "http://json-schema.org/draft-04/schema#",
           ...schema,
@@ -52,7 +52,7 @@ const JsonView: React.FC = () => {
     
     return (
       <StyledJsonView>
-        {isLoading ? <Loading /> : <pre>{JSON.stringify(dataTree, null, 3)}</pre>}
+        {isLoading ? <Loading /> : <pre>{JSON.stringify(dataTree, null, 4)}</pre>}
       </StyledJsonView>
     )
 };

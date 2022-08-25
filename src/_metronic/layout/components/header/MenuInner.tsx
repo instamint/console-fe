@@ -9,7 +9,7 @@ export function MenuInner() {
   return (
     <>
       <MenuItem title={intl.formatMessage({id: 'MENU.ASEETS'})} to='/assets' />
-      <MenuItem title={intl.formatMessage({id: 'MENU.POOLS'})} to='/pools' />
+      <MenuItem title={intl.formatMessage({id: 'MENU.PORTFOLIOS'})} to='/portfolios' />
       <MenuItem title={intl.formatMessage({id: 'MENU.DESIGNER'})} to='/designer' />
       <MenuItem title={intl.formatMessage({id: 'MENU.ANALYTICS'})} to='/analytics' />
       <MenuItem title={intl.formatMessage({id: 'MENU.PARTIES'})} to='/parties' />

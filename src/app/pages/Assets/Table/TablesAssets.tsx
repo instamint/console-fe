@@ -21,6 +21,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
   const [modalPool, setModalPool] = useState(false)
+  const [error, setError] = useState(null)
   const navigate = useNavigate()
 
   const fetchListAssets = async () => {
@@ -55,14 +56,15 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     setModalPool(true)
   }
 
-  const handlePool = async (values) =>{
+  const handleAddPool = async (values) => {
     try {
-      const list_assets_id = selectAsset?.map(i => i.id) || []
+      const list_assets_id = selectAsset?.map((i) => i.id) || []
       const reps = await createPool(values?.poolname, list_assets_id)
       if (reps) {
-        navigate('/pools')
+        navigate('/portfolios')
       }
     } catch (error) {
+      setError('Portfolio Name already exists, please try again')
       console.error({error})
     }
   }
@@ -78,7 +80,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         return (
           <tr key={index}>
             <td>
-              {!item?.status ? (
+              {!item?.portfolioId ? (
                 <div className='d-flex align-items-center'>
                   <div className='d-flex justify-content-start flex-column'>
                     <div className='form-check form-check-sm form-check-custom form-check-solid'>
@@ -121,7 +123,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.status ? 'P' : ''}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.portfolioId ? 'P' : ''}</span>
                 </div>
               </div>
             </td>
@@ -243,7 +245,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         dialogClassName='modal-ml modal-dialog-500'
         aria-hidden='true'
       >
-        <ModalPool modalPool={modalPool} setModalPool={setModalPool} handlePool={handlePool} />
+        <ModalPool
+          modalPool={modalPool}
+          setModalPool={setModalPool}
+          handlePool={handleAddPool}
+          error={error}
+          setError={setError}
+        />
       </Modal>
     </div>
   )

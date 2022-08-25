@@ -36,7 +36,7 @@ const PrivateRoutes = () => {
         <Route path='assets' element={<AssetsWrapper />} />
         <Route path='assets/detail/*' element={<AssetsDetail />} />
         <Route path='parties/detail/*' element={<PartiesDetail />} />
-        <Route path='pools' element={<PoolsWrapper />} />
+        <Route path='portfolios' element={<PoolsWrapper />} />
         <Route path='designer' element={<DesignerWrapper />} />
         <Route path='analytics' element={<AnalyticsWrapper />} />
         <Route path='parties' element={<PartiesWrapper />} />

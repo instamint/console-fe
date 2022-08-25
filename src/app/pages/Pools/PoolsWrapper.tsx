@@ -20,7 +20,7 @@ const PoolsWrapper: FC = () => {
   const intl = useIntl()
   return (
     <>
-      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.POOLS'})}</PageTitle>
+      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.PORTFOLIOS'})}</PageTitle>
       <PoolsPage />
     </>
   )

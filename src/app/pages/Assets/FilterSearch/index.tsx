@@ -32,12 +32,12 @@ const FilterSearch = ({setSearch, openModalPool, selectAsset}: FilterSearchProps
             <IconDrop className='fa-solid fa-caret-down'></IconDrop>
           </div>
           <div
-            className='menu menu-sub menu-sub-dropdown w-250px w-md-150px p-4'
+            className='menu menu-sub menu-sub-dropdown w-180px p-4'
             data-kt-menu='true'
           >
             <div className='d-flex flex-column'>
               <NameDropdow onClick={() => selectAsset?.length > 0 && openModalPool()}>
-                Pool
+                Create Portfolio
               </NameDropdow>
               <NameDropdow>Run</NameDropdow>
               <NameDropdow>Jump</NameDropdow>
@@ -65,6 +65,6 @@ const NameDropdow = styled.div`
   }
 `
 const IconDrop = styled.i`
-  margin-left: 15px;
+  margin-left: 35px;
   margin-bottom: 2px;
 `

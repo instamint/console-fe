@@ -75,7 +75,7 @@ export default function AssetsDetail() {
                               <tr>
                                 <td className='text-gray-400'>STATUS:</td>
                                 <td className='text-gray-800'>
-                                  {dataDetail?.asset?.status ? 'P' : ''}
+                                  {dataDetail?.asset?.portfolioId ? 'P' : ''}
                                 </td>
                               </tr>
                               <tr>

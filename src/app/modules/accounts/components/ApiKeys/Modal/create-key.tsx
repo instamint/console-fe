@@ -1,20 +1,107 @@
-import { Formik } from 'formik'
-import { Form } from 'react-bootstrap'
+import {Formik} from 'formik'
+import {Form} from 'react-bootstrap'
 import styled from 'styled-components'
-import { KTSVG } from '../../../../../../_metronic/helpers'
+import {KTSVG} from '../../../../../../_metronic/helpers'
 import * as Yup from 'yup'
+import {useState} from 'react'
+import {nanoid} from 'nanoid'
 
 const validateSchema = Yup.object().shape({
-  name: Yup.string().min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('Name is required'),
 })
 
-export default function CreateKey({setShowModalCreate, setShowModalKey}) {
+export default function CreateKey({
+  setShowModalCreate,
+  setShowModalKey,
+  currentUser,
+  setCurrentUser,
+  auth,
+  saveAuth,
+}) {
+  const [scopes, setScopes] = useState({
+    apis: [
+      {
+        id: 1,
+        name: 'Meta',
+        key: 'assets_meta',
+        checked: false,
+      },
+      {
+        id: 2,
+        name: 'Disburse',
+        key: 'assets_disburse',
+        checked: false,
+      },
+      {
+        id: 3,
+        name: 'Yield',
+        key: 'assets_yield',
+        checked: false,
+      },
+    ],
+    data: [
+      {
+        id: 4,
+        name: 'Websocket',
+        key: 'websockets',
+        checked: false,
+      },
+      {
+        id: 5,
+        name: 'Tableau',
+        key: 'tableau',
+        checked: false,
+      },
+    ],
+  })
 
   const handleSubmit = (values) => {
-    setShowModalCreate(false)
-    setShowModalKey(true)
+    try {
+      let chooseScopes = {}
+      Object.keys(values?.scopes)?.forEach((item) => {
+        values?.scopes[item]?.length > 0 &&
+          values?.scopes[item]?.forEach((i) => {
+            chooseScopes[item] = {...chooseScopes?.[item]} || {}
+            chooseScopes[item][i.key] = i?.checked
+          })
+      })
+      const uuid = nanoid()
+      const newCurrentUser = {
+        ...currentUser,
+        api_key: uuid,
+      }
+      setCurrentUser(newCurrentUser)
+      const newAuth = {
+        ...auth,
+        api_key: uuid,
+      }
+      saveAuth(newAuth)
+    } catch (error) {
+      console.error({error})
+    } finally {
+      setShowModalCreate(false)
+      setShowModalKey(true)
+    }
+  }
+
+  const handleChecked = (scope, type, values, setFieldValue) => {
+    let tmpScopes = {...values.scopes}
+    tmpScopes?.[type]?.forEach((item, index) => {
+      if (item?.id === scope?.id) {
+        tmpScopes[type][index].checked = !tmpScopes[type][index].checked
+      }
+    })
+    setFieldValue('scopes', tmpScopes)
+  }
+
+  const switchNameScopes = (item) => {
+    switch (item) {
+      case 'apis':
+        return 'APIs'
+      case 'data':
+        return 'Data'
+      default:
+        return 'APIs'
+    }
   }
 
   return (
@@ -22,10 +109,15 @@ export default function CreateKey({setShowModalCreate, setShowModalKey}) {
       <Formik
         enableReinitialize
         initialValues={{
-          name: '',
-          billing_apis: '',
-          email_apis: '',
-          user_apis: '',
+          scopes: scopes,
+        }}
+        validate={(values) => {
+          let errors = {}
+          let arrScope = values.scopes.apis.concat(values.scopes.data)
+          if (!arrScope?.some((item) => item?.checked === true)) {
+            errors['scopes'] = 'Please choose at least one scope!'
+          }
+          return errors
         }}
         validationSchema={validateSchema}
         onSubmit={handleSubmit}
@@ -50,135 +142,39 @@ export default function CreateKey({setShowModalCreate, setShowModalKey}) {
                 </div>
               </div>
               <div className='modal-body'>
-                <div className='d-flex align-items-center'>
-                  <TitelModalKey>Name</TitelModalKey>
-                  <InputName
-                    value={values.name}
-                    name='name'
-                    onChange={(e) => setFieldValue('name', e.target.value)}
-                  ></InputName>
-                </div>
-                {touched?.name && errors?.name && (
-                  <DivError className='fv-plugins-message-container'>
-                    <div className='fv-help-block'>
-                      <span role='alert'>{errors?.name as string}</span>
-                    </div>
-                  </DivError>
-                )}
                 <p className='fw-bold mt-3 fs-6'>Choose scopes:</p>
-                <div className='d-flex align-items-center mt-4'>
-                  <TitelModalKey>Billing Apis</TitelModalKey>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    <input
-                      className='form-check-input'
-                      type='checkbox'
-                      value='1'
-                      data-kt-check='true'
-                      data-kt-check-target='.widget-9-check'
-                    />
-                  </div>
-                  <TextInput className=''>billing.quota.read</TextInput>
-                </div>
-                {touched?.name && errors?.name && (
+                {Object.keys(values?.scopes)?.length > 0 &&
+                  Object.keys(values?.scopes)?.map((item, index) => {
+                    return (
+                      <div key={index} className='d-flex mt-4'>
+                        <TitelModalKey>{switchNameScopes(item)}</TitelModalKey>
+                        <div className='flex-column'>
+                          {values.scopes[item]?.length &&
+                            values.scopes[item]?.map((i, idx) => {
+                              return (
+                                <div key={idx} className='d-flex' style={{marginBottom: '10px'}}>
+                                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                                    <input
+                                      className='form-check-input'
+                                      type='checkbox'
+                                      value='1'
+                                      checked={i.checked}
+                                      data-kt-check-target='.widget-9-check'
+                                      onChange={() => handleChecked(i, item, values, setFieldValue)}
+                                    />
+                                  </div>
+                                  <TextInput className=''>{i.name}</TextInput>
+                                </div>
+                              )
+                            })}
+                        </div>
+                      </div>
+                    )
+                  })}
+                {touched?.scopes && errors?.scopes && (
                   <DivError className='fv-plugins-message-container'>
                     <div className='fv-help-block'>
-                      <span role='alert'>{errors?.billing_apis as string}</span>
-                    </div>
-                  </DivError>
-                )}
-                <div className='d-flex align-items-start mt-5'>
-                  <TitelModalKey>Email Apis</TitelModalKey>
-                  <div className='d-flex flex-column'>
-                    <div className='d-flex'>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          value='1'
-                          data-kt-check='true'
-                          data-kt-check-target='.widget-9-check'
-                        />
-                      </div>
-                      <TextInput className=''>emails.manage (manage emails)</TextInput>
-                    </div>
-                    <div className='d-flex mt-3'>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          value='1'
-                          data-kt-check='true'
-                          data-kt-check-target='.widget-9-check'
-                        />
-                      </div>
-                      <TextInput className=''>emails.read</TextInput>
-                    </div>
-                    <div className='d-flex mt-3'>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          value='1'
-                          data-kt-check='true'
-                          data-kt-check-target='.widget-9-check'
-                        />
-                      </div>
-                      <TextInput className=''>emails.send</TextInput>
-                    </div>
-                    <div className='d-flex mt-3'>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          value='1'
-                          data-kt-check='true'
-                          data-kt-check-target='.widget-9-check'
-                        />
-                      </div>
-                      <TextInput className=''>emails.delete</TextInput>
-                    </div>
-                  </div>
-                </div>
-                {touched?.name && errors?.name && (
-                  <DivError className='fv-plugins-message-container'>
-                    <div className='fv-help-block'>
-                      <span role='alert'>{errors?.email_apis as string}</span>
-                    </div>
-                  </DivError>
-                )}
-                <div className='d-flex align-items-start mt-5'>
-                  <TitelModalKey>User Apis</TitelModalKey>
-                  <div className='d-flex flex-column'>
-                    <div className='d-flex'>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          value='1'
-                          data-kt-check='true'
-                          data-kt-check-target='.widget-9-check'
-                        />
-                      </div>
-                      <TextInput className=''>users.manage</TextInput>
-                    </div>
-                    <div className='d-flex mt-3'>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          value='1'
-                          data-kt-check='true'
-                          data-kt-check-target='.widget-9-check'
-                        />
-                      </div>
-                      <TextInput className=''>users.read</TextInput>
-                    </div>
-                  </div>
-                </div>
-                {touched?.name && errors?.name && (
-                  <DivError className='fv-plugins-message-container'>
-                    <div className='fv-help-block'>
-                      <span role='alert'>{errors?.user_apis as string}</span>
+                      <span role='alert'>{errors?.scopes as string}</span>
                     </div>
                   </DivError>
                 )}
@@ -204,7 +200,6 @@ export default function CreateKey({setShowModalCreate, setShowModalKey}) {
   )
 }
 
-
 const TitelModalKey = styled.span`
   min-width: 120px;
   text-align: end;
@@ -212,21 +207,11 @@ const TitelModalKey = styled.span`
   margin-right: 17px;
 `
 
-const InputName = styled.input`
-  height: 34px;
-  width: 345px;
-  padding: 0px 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  &:hover {
-    border: 1px solid #009ef7 !important;
-  }
-`
 
 const TextInput = styled.span`
   margin-left: 7px;
 `
 
 const DivError = styled.div`
-  margin-left: 137px
+  margin-left: 137px;
 `
