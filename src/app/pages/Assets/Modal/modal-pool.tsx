@@ -1,23 +1,31 @@
 import { Form, Formik } from 'formik'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { KTSVG } from '../../../../_metronic/helpers'
 
 const PoolSchema = Yup.object().shape({
-  poolname: Yup.string().max(50, 'Maximum 50 symbols').required('Pool Name is required'),
+  poolname: Yup.string().max(50, 'Maximum 50 symbols').required('Portfolio Name is required'),
 })
 
 interface MyFormValues {
   poolname: string
 }
 
-export default function ModalPool({modalPool, setModalPool, handlePool}) {
+export default function ModalPool({modalPool, setModalPool, handlePool, error, setError}) {
   const handleSubmit = (values, {setSubmitting}) => {
     setSubmitting(true)
     handlePool(values)
   }
 
   const initialValues: MyFormValues = {poolname: ''}
+
+  useEffect(() => {
+    return () => {
+      setError(null)
+    }
+  }, [])
+  
 
   return (
     <Formik
@@ -34,7 +42,7 @@ export default function ModalPool({modalPool, setModalPool, handlePool}) {
           <div className='modal-content'>
             <div className='modal-header'>
               <h5 className='modal-title' style={{color: '#5a5d72'}}>
-                Add Pool
+                Add Portfolio
               </h5>
               <div
                 className='btn btn-icon btn-sm btn-active-light-primary ms-2'
@@ -50,11 +58,14 @@ export default function ModalPool({modalPool, setModalPool, handlePool}) {
             </div>
             <div className='modal-body'>
               <div className='flex-column align-items-center'>
-                <Title>Pool Name:</Title>
+                <Title>Portfolio Name:</Title>
                 <InputName
                   name='poolname'
                   value={values?.poolname}
-                  onChange={(e) => setFieldValue('poolname', e?.target?.value)}
+                  onChange={(e) => {
+                    setError(null)
+                    setFieldValue('poolname', e?.target?.value)
+                  }}
                 ></InputName>
               </div>
               {touched?.poolname && errors?.poolname ? (
@@ -65,6 +76,13 @@ export default function ModalPool({modalPool, setModalPool, handlePool}) {
                 </div>
               ) : (
                 ''
+              )}
+              {error && (
+                <div className='fv-plugins-message-container'>
+                  <div className='fv-help-block'>
+                    <span role='alert'>{error}</span>
+                  </div>
+                </div>
               )}
             </div>
             <div className='modal-footer'>

@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
+import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {getListPools} from '../../../../utils/api/pools'
+import { shortAddress } from '../../../../_metronic/helpers/format'
 import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
 import FilterSearch from '../../../components/FilterSearch'
 import {Loading} from '../../../components/Loading'
@@ -77,14 +79,24 @@ const TablesPools: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{convertTimeZone(item?.createAt)}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{convertTimeZone(item?.createdAt)}</span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start'>
-                  {listAssetsInPool(item?.assets)}
+                  <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.hashId)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
@@ -99,7 +111,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Yours Pools</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Yours Portfolios</span>
         </h3>
         <FilterSearch setSearch={setSearch} />
       </div>
@@ -117,9 +129,10 @@ const TablesPools: React.FC<Props> = ({className}) => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='min-w-60px'>#</th>
-                  <th className='min-w-150px'>POOL NAME</th>
-                  <th className='min-w-150px'>POOL CREATE TIMESTAMP</th>
-                  <th className='min-w-100px'>OF ASSETS IN THE POOL</th>
+                  <th className='min-w-150px'>PORTFOLIO NAME</th>
+                  <th className='min-w-150px'>CROSS REFERENCE</th>
+                  <th className='min-w-150px'>PORTFOLIO CREATE TIMESTAMP</th>
+                  <th className='min-w-150px'>HASH ID</th>
                 </tr>
               </thead>
               {/* end::Table head */}

@@ -2,8 +2,8 @@ import axios from 'axios'
 
 const API_URL = process.env.REACT_APP_API_URL
 
-export const GET_LIST_POOLS = `${API_URL}/pool`
-export const ADD_POOL = `${API_URL}/pool/add`
+export const GET_LIST_POOLS = `${API_URL}/portfolio`
+export const ADD_POOL = `${API_URL}/portfolio/add`
 
 export const getListPools = async (): Promise<any> => {
   const response = await axios.get<any>(GET_LIST_POOLS)

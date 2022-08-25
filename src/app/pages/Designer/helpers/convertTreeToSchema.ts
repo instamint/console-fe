@@ -261,3 +261,12 @@ export function convertTreeToSchema (tree) {
 }
 
 export default convertTreeToSchema
+
+export const convertTreeToSchemaV4 = (tree) => {
+  let newTree = {}
+  tree?.children?.length &&
+    tree?.children?.forEach((item) => {
+      newTree[item.name] = item.type
+    })
+  return newTree
+}
