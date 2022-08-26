@@ -145,13 +145,13 @@ export default function AssetsDetail() {
                                   <td className='text-gray-800'>{dataDetail?.ethereumAsset?.uuid}</td>
                                 </tr>
                                 <tr>
-                                  <td className='text-gray-400'>Create At:</td>
+                                  <td className='text-gray-400'>CREATE AT:</td>
                                   <td className='text-gray-800'>
                                     {convertTimeZone(dataDetail?.ethereumAsset?.createdAt)}
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td className='text-gray-400'>Hash ID:</td>
+                                  <td className='text-gray-400'>HASH ID:</td>
                                   <td
                                     data-tip={dataDetail?.ethereumAsset?.hashId}
                                     data-offset="{'top': -10,'left': 340}"
@@ -161,7 +161,7 @@ export default function AssetsDetail() {
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td className='text-gray-400'>Token ID:</td>
+                                  <td className='text-gray-400'>TOKEN ID:</td>
                                   <td className='text-gray-800'>
                                     {dataDetail?.ethereumAsset?.tokenId}
                                   </td>
@@ -195,13 +195,13 @@ export default function AssetsDetail() {
                                   <td className='text-gray-800'>{dataDetail?.algorandAsset?.uuid}</td>
                                 </tr>
                                 <tr>
-                                  <td className='text-gray-400'>Create At:</td>
+                                  <td className='text-gray-400'>CREATE AT:</td>
                                   <td className='text-gray-800'>
                                     {convertTimeZone(dataDetail?.algorandAsset?.createdAt)}
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td className='text-gray-400'>Hash ID:</td>
+                                  <td className='text-gray-400'>HASH ID:</td>
                                   <td
                                     data-tip={dataDetail?.algorandAsset?.hashId}
                                     data-offset="{'top': -10,'left': 340}"
