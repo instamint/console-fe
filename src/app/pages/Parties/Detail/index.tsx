@@ -3,6 +3,7 @@ import {useNavigate, useParams, } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { getPartieDetail } from '../../../../utils/api/parties'
+import { shortAddress } from '../../../../_metronic/helpers/format'
 import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
 import {PageTitle} from '../../../../_metronic/layout/core'
 import { Loading } from '../../../components/Loading'
@@ -65,8 +66,7 @@ export default function PartiesDetail() {
                               <tr>
                                 <td className='text-gray-400 min-w-175px w-175px'>UUID:</td>
                                 <td className='text-gray-800'>
-                                  <span data-tip={dataDetail?.uuid}>{dataDetail?.uuid}</span>
-                                  <ReactTooltip place='top' effect='solid' />
+                                  <span>{dataDetail?.uuid}</span>
                                 </td>
                               </tr>
                               <tr>
@@ -101,7 +101,9 @@ export default function PartiesDetail() {
                               <tr>
                                 <td className='text-gray-400 min-w-175px w-175px'>Hash ID:</td>
                                 <td className='text-gray-800 min-w-200px'>
-                                  <span data-tip={dataDetail?.hashId}>{dataDetail?.hashId}</span>
+                                  <span data-tip={dataDetail?.hashId}>
+                                    {shortAddress(dataDetail?.hashId)}
+                                  </span>
                                   <ReactTooltip place='top' effect='solid' />
                                 </td>
                               </tr>
@@ -114,9 +116,7 @@ export default function PartiesDetail() {
                               <tr>
                                 <td className='text-gray-400'>Coss Reference Id:</td>
                                 <td className='text-gray-800'>
-                                  <span>
-                                    {dataDetail?.b2BcrossReferenceId}
-                                  </span>
+                                  <span>{dataDetail?.b2BcrossReferenceId}</span>
                                 </td>
                               </tr>
                             </tbody>
