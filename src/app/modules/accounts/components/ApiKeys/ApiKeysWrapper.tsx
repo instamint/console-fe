@@ -110,7 +110,12 @@ const ApiKeysPage: FC = () => {
                 <p>
                   New Api Key created and <b>it will be displayed only now</b>,
                 </p>
-                <p className='form-control form-control-lg form-control-solid'>{apiKeyUser}</p>
+                <p
+                  style={{wordBreak: 'break-all'}}
+                  className='form-control form-control-lg form-control-solid'
+                >
+                  {apiKeyUser}
+                </p>
                 <p>
                   Please store it somewhere safe because as soon as you navigate away from this page
                   , we will not be able to retrieve or restore this generated token.

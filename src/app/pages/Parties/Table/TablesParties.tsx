@@ -63,8 +63,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
               <div className='d-flex justify-content-start flex-shrink-0'>
                 <Link
                   to={{
-                    pathname: 'detail',
-                    search: `?id=${item?.uuid}`,
+                    pathname: `detail/${item?.id}`,
                   }}
                   className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
                 >

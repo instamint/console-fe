@@ -26,6 +26,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   const [actusTypes, setActusTypes] = useState<Array<any>>([])
   const [storageTypes, setStorageTypes] = useState<Array<any>>([])
   const [supplyChainTypes, setSupplyChainTypes] = useState<Array<any>>([])
+  const [listCategory, setListCategory] = useState([])
   const [listFavorite, setListFavorite] = useState<Array<any>>([])
   const [isLoadFavorite, setIsLoadFavorite] = useState(true)
   const [selectProperty, setSelectProperty] = useState('standard')
@@ -107,10 +108,11 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       let storageTypes = []
       let supplyChainTypes = []
       data?.forEach((item) => {
-        // set Type Properties
+        // convert type Storage
         if (item?.category?.name === 'Storage') {
           item.type = setTypeNameStorage(item?.name)?.type
         } else item.type = item?.name || ''
+        // set Type Properties
         if (item?.category?.name === 'Standard') {
           standardTypes.push(item)
         } else if (item?.category?.name === 'ACTUS') {
@@ -125,6 +127,15 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       setStandardTypes(standardTypes)
       setStorageTypes(storageTypes)
       setSupplyChainTypes(supplyChainTypes)
+    }
+  }
+
+  const fetchListCategory = async () => {
+    try {
+      const reps = await JsonSchemaService.getAllCategory()
+      setListCategory(reps || [])
+    } catch (error) {
+      console.error({error})
     }
   }
 
@@ -156,6 +167,12 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   }
 
   const ArrayProperties = (type) => {
+    if (!type) {
+      return {
+        name: 'Category',
+        data: [],
+      }
+    }
     switch (type?.toLowerCase()) {
       case 'standard':
         return {
@@ -186,6 +203,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   }
 
   useEffect(() => {
+    fetchListCategory()
     fetchListProperties()
   }, [])
 
@@ -203,7 +221,9 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
             data-kt-menu-flip='top-end'
             className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary d-flex align-items-center'
           >
-            <Name>{ArrayProperties(selectProperty)?.name}</Name>{' '}
+            <Name>
+              {listCategory?.length > 0 ? ArrayProperties(selectProperty)?.name : 'Categories'}
+            </Name>{' '}
             <IconDrop className='fa-solid fa-caret-down'></IconDrop>
           </button>
           <div
@@ -211,15 +231,24 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
             data-kt-menu='true'
           >
             <div className='d-flex flex-column'>
-              <NameDropdow onClick={() => setSelectProperty('standard')}>Standard</NameDropdow>
-              <NameDropdow onClick={() => setSelectProperty('actus')}>ACTUS</NameDropdow>
-              <NameDropdow onClick={() => setSelectProperty('storage')}>Storage</NameDropdow>
-              <NameDropdow onClick={() => setSelectProperty('supply chain')}>Supply Chain</NameDropdow>
+              {listCategory?.length > 0 ? (
+                <>
+                  {listCategory?.map((item, index) => {
+                    return (
+                      <NameDropdow onClick={() => setSelectProperty(item?.name?.toLowerCase())}>
+                        {item?.name}
+                      </NameDropdow>
+                    )
+                  })}
+                </>
+              ) : (
+                <div>There are currently no categories</div>
+              )}
             </div>
           </div>
         </div>
         <div className='mt-3'>
-          {ArrayProperties(selectProperty)?.data?.map((t) => (
+          {listCategory?.length > 0 && ArrayProperties(selectProperty)?.data?.map((t) => (
             <Item draggable onDragStart={onDragStart} data-item={JSON.stringify(t)} key={t.id}>
               <IconStar
                 onClick={(e) => handleAddFavorite(e, t)}

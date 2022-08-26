@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { getDetailAsset } from '../../../../utils/api/assets'
@@ -10,17 +10,21 @@ import { Loading } from '../../../components/Loading'
 
 
 export default function AssetsDetail() {
-  const [searchParams] = useSearchParams()
+  const params = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [dataDetail, setDataDetail] = useState<any>(null)
   const navigate = useNavigate()
-  const id: string | number = searchParams.get('id')
+  const id = params?.[Object.keys(params)?.[0]] || null
 
   const fetchDetailAsset = async (id) => {
     setIsLoading(true)
     try {
       const reps = await getDetailAsset(id)
-      setDataDetail(reps?.data)
+      setDataDetail({
+        ...reps?.data,
+        ethereumAsset: reps?.data?.ethereumAsset || null,
+        algorandAsset: reps?.data?.algorandAsset || null,
+      })
     } catch (error) {
       console.error({error})
     } finally {
@@ -30,7 +34,7 @@ export default function AssetsDetail() {
   
   useEffect(() => {
     if (!id) {
-      navigate("/assets")
+      navigate('/assets')
     } else {
       fetchDetailAsset(id)
     }
@@ -120,53 +124,97 @@ export default function AssetsDetail() {
                         </div>
                       </div>
 
-                      <div className='card-title mt-4'>
-                        <h2 className='fw-bold'>
-                          {dataDetail?.isEtherium ? 'Ethereum' : 'Algorand'}
-                        </h2>
-                      </div>
-                      <div className='flex-equal mt-4'>
-                        <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                          <tbody>
-                            <tr>
-                              <td className='text-gray-400 min-w-175px w-175px'>
-                                CROSS REFERENCE:
-                              </td>
-                              <td className='text-gray-800 min-w-200px'>
-                                {dataDetail?.b2BcrossReferenceId}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className='text-gray-400'>UUID:</td>
-                              <td className='text-gray-800'>{dataDetail?.uuid}</td>
-                            </tr>
-                            <tr>
-                              <td className='text-gray-400'>Create At:</td>
-                              <td className='text-gray-800'>
-                                {convertTimeZone(dataDetail?.createdAt)}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className='text-gray-400'>Hash ID:</td>
-                              <td
-                                data-tip={dataDetail.hashId}
-                                data-offset="{'top': -10,'left': 340}"
-                                className='text-gray-800'
-                              >
-                                {shortAddress(dataDetail.hashId)}
-                              </td>
-                            </tr>
-                            {dataDetail?.isEtherium ? (
-                              <tr>
-                                <td className='text-gray-400'>Token ID:</td>
-                                <td className='text-gray-800'>{dataDetail?.tokenId}</td>
-                              </tr>
-                            ) : (
-                              ''
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
+                      {dataDetail?.ethereumAsset && (
+                        <>
+                          <div className='card-title mt-4'>
+                            <h2 className='fw-bold'>Ethereum</h2>
+                          </div>
+                          <div className='flex-equal mt-4'>
+                            <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
+                              <tbody>
+                                <tr>
+                                  <td className='text-gray-400 min-w-175px w-175px'>
+                                    CROSS REFERENCE:
+                                  </td>
+                                  <td className='text-gray-800 min-w-200px'>
+                                    {dataDetail?.ethereumAsset?.b2BcrossReferenceId}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className='text-gray-400'>UUID:</td>
+                                  <td className='text-gray-800'>{dataDetail?.ethereumAsset?.uuid}</td>
+                                </tr>
+                                <tr>
+                                  <td className='text-gray-400'>Create At:</td>
+                                  <td className='text-gray-800'>
+                                    {convertTimeZone(dataDetail?.ethereumAsset?.createdAt)}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className='text-gray-400'>Hash ID:</td>
+                                  <td
+                                    data-tip={dataDetail?.ethereumAsset?.hashId}
+                                    data-offset="{'top': -10,'left': 340}"
+                                    className='text-gray-800'
+                                  >
+                                    {shortAddress(dataDetail?.ethereumAsset?.hashId)}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className='text-gray-400'>Token ID:</td>
+                                  <td className='text-gray-800'>
+                                    {dataDetail?.ethereumAsset?.tokenId}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </>
+                      )}
+
+                      {dataDetail?.algorandAsset && (
+                        <>
+                          <div className='card-title mt-4'>
+                            <h2 className='fw-bold'>
+                              Algorand
+                            </h2>
+                          </div>
+                          <div className='flex-equal mt-4'>
+                            <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
+                              <tbody>
+                                <tr>
+                                  <td className='text-gray-400 min-w-175px w-175px'>
+                                    CROSS REFERENCE:
+                                  </td>
+                                  <td className='text-gray-800 min-w-200px'>
+                                    {dataDetail?.algorandAsset?.b2BcrossReferenceId}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className='text-gray-400'>UUID:</td>
+                                  <td className='text-gray-800'>{dataDetail?.algorandAsset?.uuid}</td>
+                                </tr>
+                                <tr>
+                                  <td className='text-gray-400'>Create At:</td>
+                                  <td className='text-gray-800'>
+                                    {convertTimeZone(dataDetail?.algorandAsset?.createdAt)}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className='text-gray-400'>Hash ID:</td>
+                                  <td
+                                    data-tip={dataDetail?.algorandAsset?.hashId}
+                                    data-offset="{'top': -10,'left': 340}"
+                                    className='text-gray-800'
+                                  >
+                                    {shortAddress(dataDetail?.algorandAsset?.hashId)}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </>

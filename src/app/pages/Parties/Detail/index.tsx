@@ -1,17 +1,36 @@
-import {useEffect} from 'react'
-import {useNavigate, useSearchParams} from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {useNavigate, useParams, } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
+import { getPartieDetail } from '../../../../utils/api/parties'
+import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
 import {PageTitle} from '../../../../_metronic/layout/core'
+import { Loading } from '../../../components/Loading'
 
 export default function PartiesDetail() {
-  const [searchParams] = useSearchParams()
+  const params = useParams()
   const navigate = useNavigate()
-  const id: string | number = searchParams.get('id')
+  const id = params?.[Object.keys(params)?.[0]] || null
+  const [dataDetail, setDataDetail] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const fetchPartieDetail = async (id) => {
+    setIsLoading(true)
+    try {
+      const reps = await getPartieDetail(id)
+      setDataDetail(reps?.data)
+    } catch (error) {
+      console.error({error})
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (!id) {
       navigate('/parties')
+    } else {
+      fetchPartieDetail(id)
     }
   }, [id])
 
@@ -27,97 +46,94 @@ export default function PartiesDetail() {
           </div>
         </div>
 
-        <DivContainer className='row mt-2'>
-          <DivContent className={`card card-xxl-stretch mb-5 mb-xl-8`}>
-            <div className='card-title'>
-              <h2 className='fw-bold'>Parties Details</h2>
-            </div>
-            <div className=''>
-              <div className='mb-10'>
-                <div className='d-flex flex-wrap py-5'>
-                  <div className='flex-equal me-5'>
-                    <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                      <tbody>
-                        <tr>
-                          <td className='text-gray-400 min-w-175px w-175px'>UUID:</td>
-                          <td className='text-gray-800'>
-                            <span
-                              data-tip={
-                                '1d7710ee669e95c74fdcf2517e22676216d4e8579eac9746912bfd284cc57a14'
-                              }
-                            >
-                              1d77..7a14
-                            </span>
-                            <ReactTooltip place='top' effect='solid' />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className='text-gray-400'>Name:</td>
-                          <td className='text-gray-800'>Instamint</td>
-                        </tr>
-                        <tr>
-                          <td className='text-gray-400'>Name Space</td>
-                          <td className='text-gray-800'>instamint.com</td>
-                        </tr>
-                        <tr>
-                          <td className='text-gray-400'>Disable</td>
-                          <td>
-                            <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid'>
-                              <input
-                                className='form-check-input'
-                                type='checkbox'
-                                value=''
-                                name='notifications'
-                                // defaultChecked={disable}
-                                // onChange={() => setDisable(!disable)}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <DivContainer className='row mt-2'>
+            <DivContent className={`card card-xxl-stretch mb-5 mb-xl-8`}>
+              {dataDetail ? (
+                <>
+                  <div className='card-title'>
+                    <h2 className='fw-bold'>Parties Details</h2>
                   </div>
-                  <div className='flex-equal'>
-                    <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                      <tbody>
-                        <tr>
-                          <td className='text-gray-400 min-w-175px w-175px'>Current API Key:</td>
-                          <td className='text-gray-800 min-w-200px'>
-                            <span
-                              data-tip={
-                                '1d7710ee669e95c74fdcf2517e22676216d4e8579eac9746912bfd284cc57a14'
-                              }
-                            >
-                              1d77..7a14
-                            </span>
-                            <ReactTooltip place='top' effect='solid' />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className='text-gray-400'>Created At:</td>
-                          <td className='text-gray-800'>August 14, 2022 at 1:00 PM</td>
-                        </tr>
-                        <tr>
-                          <td className='text-gray-400'>Coss Reference Id:</td>
-                          <td className='text-gray-800'>
-                            <span
-                              data-tip={
-                                '1d7710ee669e95c74fdcf2517e22676216d4e8579eac9746912bfd284cc57a14'
-                              }
-                            >
-                              1d77..7a14
-                            </span>
-                            <ReactTooltip place='top' effect='solid' />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div className=''>
+                    <div className='mb-10'>
+                      <div className='d-flex flex-wrap py-5'>
+                        <div className='flex-equal me-5'>
+                          <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
+                            <tbody>
+                              <tr>
+                                <td className='text-gray-400 min-w-175px w-175px'>UUID:</td>
+                                <td className='text-gray-800'>
+                                  <span data-tip={dataDetail?.uuid}>{dataDetail?.uuid}</span>
+                                  <ReactTooltip place='top' effect='solid' />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className='text-gray-400'>Name:</td>
+                                <td className='text-gray-800'>{dataDetail?.name}</td>
+                              </tr>
+                              <tr>
+                                <td className='text-gray-400'>Name Space</td>
+                                <td className='text-gray-800'>{dataDetail?.namespace}</td>
+                              </tr>
+                              <tr>
+                                <td className='text-gray-400'>Disable</td>
+                                <td>
+                                  <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid'>
+                                    <input
+                                      className='form-check-input'
+                                      type='checkbox'
+                                      value=''
+                                      name='notifications'
+                                      // defaultChecked={disable}
+                                      // onChange={() => setDisable(!disable)}
+                                    />
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className='flex-equal'>
+                          <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
+                            <tbody>
+                              <tr>
+                                <td className='text-gray-400 min-w-175px w-175px'>Hash ID:</td>
+                                <td className='text-gray-800 min-w-200px'>
+                                  <span data-tip={dataDetail?.hashId}>{dataDetail?.hashId}</span>
+                                  <ReactTooltip place='top' effect='solid' />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className='text-gray-400'>Created At:</td>
+                                <td className='text-gray-800'>
+                                  {convertTimeZone(dataDetail?.createdAt)}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className='text-gray-400'>Coss Reference Id:</td>
+                                <td className='text-gray-800'>
+                                  <span>
+                                    {dataDetail?.b2BcrossReferenceId}
+                                  </span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </DivContent>
-        </DivContainer>
+                </>
+              ) : (
+                <h4 className='d-flex justify-content-center'>
+                  This asset does not exist. Please try again
+                </h4>
+              )}
+            </DivContent>
+          </DivContainer>
+        )}
       </div>
     </>
   )
