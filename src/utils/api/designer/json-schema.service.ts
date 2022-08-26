@@ -36,6 +36,11 @@ const deleteSchema = async (id: string): Promise<void> => {
   await axios.delete(`${API_URL}/json-schemas/${id}`)
 }
 
+const getAllCategory = async (): Promise<JsonSchema[]> => {
+  const response = await axios.get<JsonSchema[]>(`${API_URL}/properties/category/all`)
+  return response.data
+}
+
 const getAllProperty = async (): Promise<JsonSchema[]> => {
   const response = await axios.get<JsonSchema[]>(`${API_URL}/properties`)
   return response.data
@@ -65,6 +70,7 @@ export default {
   createSchema,
   updateSchema,
   deleteSchema,
+  getAllCategory,
   getAllProperty,
   getAllFavourite,
   addFavourite,

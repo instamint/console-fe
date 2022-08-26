@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import * as Yup from 'yup'
 import {useState} from 'react'
-import {nanoid} from 'nanoid'
+import { generateApiKey } from '../../../../../../utils/api/api-keys'
 
 const validateSchema = Yup.object().shape({
 })
@@ -17,24 +17,25 @@ export default function CreateKey({
   auth,
   saveAuth,
 }) {
+  const [isLoading, setIsLoading] = useState(false)
   const [scopes, setScopes] = useState({
     apis: [
       {
         id: 1,
         name: 'Meta',
-        key: 'assets_meta',
+        key: 'accessMeta',
         checked: false,
       },
       {
         id: 2,
         name: 'Disburse',
-        key: 'assets_disburse',
+        key: 'accessDisburse',
         checked: false,
       },
       {
         id: 3,
         name: 'Yield',
-        key: 'assets_yield',
+        key: 'accessYield',
         checked: false,
       },
     ],
@@ -54,32 +55,35 @@ export default function CreateKey({
     ],
   })
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
+    setIsLoading(true)
     try {
       let chooseScopes = {}
       Object.keys(values?.scopes)?.forEach((item) => {
         values?.scopes[item]?.length > 0 &&
           values?.scopes[item]?.forEach((i) => {
-            chooseScopes[item] = {...chooseScopes?.[item]} || {}
-            chooseScopes[item][i.key] = i?.checked
+            chooseScopes[i.key] = i?.checked
           })
       })
-      const uuid = nanoid()
-      const newCurrentUser = {
-        ...currentUser,
-        api_key: uuid,
+      const reps = await generateApiKey(chooseScopes)
+      if (reps?.key) {
+        const newCurrentUser = {
+          ...currentUser,
+          api_key: reps?.key,
+        }
+        setCurrentUser(newCurrentUser)
+        const newAuth = {
+          ...auth,
+          api_key: reps?.key,
+        }
+        saveAuth(newAuth)
       }
-      setCurrentUser(newCurrentUser)
-      const newAuth = {
-        ...auth,
-        api_key: uuid,
-      }
-      saveAuth(newAuth)
     } catch (error) {
       console.error({error})
     } finally {
       setShowModalCreate(false)
       setShowModalKey(true)
+      setIsLoading(false)
     }
   }
 
@@ -188,7 +192,12 @@ export default function CreateKey({
                 >
                   Close
                 </button>
-                <button type='submit' className='btn btn-success' data-bs-dismiss='modal'>
+                <button
+                  type='submit'
+                  className='btn btn-success'
+                  data-bs-dismiss='modal'
+                  disabled={isLoading}
+                >
                   Create Api Key
                 </button>
               </div>
