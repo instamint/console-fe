@@ -1,14 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
-import {KTSVG, toAbsoluteUrl} from '../../../../_metronic/helpers'
-import {Link} from 'react-router-dom'
-import {Dropdown1} from '../../../../_metronic/partials'
-import {useLocation} from 'react-router'
-import { shortAddress, showIconChain } from '../../../../_metronic/helpers/format'
-import ReactTooltip from 'react-tooltip'
 import { Modal } from 'react-bootstrap'
-import ModalAddNote from '../Modal/modal-add-note'
+import { useLocation } from 'react-router'
+import ReactTooltip from 'react-tooltip'
 import { AddNote } from '../../../../utils/api/assets'
+import { KTSVG } from '../../../../_metronic/helpers'
+import { shortAddress } from '../../../../_metronic/helpers/format'
+import { Dropdown1 } from '../../../../_metronic/partials'
+import ModalAddNote from '../Modal/modal-add-note'
 
 type Props = {
   id: string
@@ -39,11 +38,11 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
             <div className='d-flex justify-content-between align-items-start flex-wrap mb-2'>
               <div className='d-flex flex-column'>
                 <div className='d-flex align-items-center mb-2'>
-                  <a
-                    data-tip={dataDetail?.asset?.hashId}
-                    className='text-gray-800 text-hover-primary fs-2 fw-bolder me-1'
-                  >
-                    {shortAddress(dataDetail?.asset?.hashId)}
+                  <a className='text-gray-800 fs-2 fw-bolder me-1'>
+                    Asset ID:{' '}
+                    <span className='text-hover-primary' data-tip={dataDetail?.asset?.hashId}>
+                      {shortAddress(dataDetail?.asset?.hashId)}
+                    </span>
                   </a>
                   <ReactTooltip place='top' effect='solid' />
                   <a>
@@ -70,20 +69,15 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
                     href='#'
                     className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'
                   >
-                    {showIconChain(dataDetail?.asset?.chainName)}
                     <span style={{paddingLeft: '3px'}}>
                       {dataDetail?.asset?.chainName?.charAt(0)?.toUpperCase() +
                         dataDetail?.asset?.chainName?.slice(1)}
                     </span>
                   </a>
-                  <a
-                    className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'
-                  >
+                  <a className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'>
                     {dataDetail?.asset?.assetTypeName}
                   </a>
-                  <a
-                    className='d-flex align-items-center text-gray-400 text-hover-primary mb-2'
-                  >
+                  <a className='d-flex align-items-center text-gray-400 text-hover-primary mb-2'>
                     {dataDetail?.asset?.issuerName}
                   </a>
                 </div>
@@ -185,15 +179,15 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
         <div className='d-flex overflow-auto h-55px'>
           <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
             <li className='nav-item'>
-              <Link
+              <span
                 className={
-                  `nav-link text-active-primary me-6 ` +
+                  `nav-link text-active-primary me-6 cursor-pointer ` +
                   (location.pathname === `/assets/detail/overview/${id}` && 'active')
                 }
-                to='/crafted/account/overview'
+                // to={`/assets/detail/overview/${id}`}
               >
                 Overview
-              </Link>
+              </span>
             </li>
           </ul>
         </div>
@@ -218,4 +212,4 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
   )
 }
 
-export {AccountHeader}
+export { AccountHeader }

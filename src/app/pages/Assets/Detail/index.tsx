@@ -58,12 +58,8 @@ export default function AssetsDetail() {
                   </h1>
                   <ul className='breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1'>
                     <li className='breadcrumb-item text-muted'>
-                      <span className='text-muted'>Home</span>
+                      <span className='text-muted'>Console</span>
                     </li>
-                    <li className='breadcrumb-item'>
-                      <span className='bullet bg-gray-400 w-5px h-2px'></span>
-                    </li>
-                    <li className='breadcrumb-item text-muted'>Account changes to Console</li>
                     <li className='breadcrumb-item'>
                       <span className='bullet bg-gray-400 w-5px h-2px'></span>
                     </li>

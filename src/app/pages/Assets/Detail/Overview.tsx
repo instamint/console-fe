@@ -108,7 +108,7 @@ export default function Overview({dataDetail, loadingNote}) {
                 <h3 className='text-gray-800'>Notes</h3>
               </div>
             </div>
-            <div className='card-body'>
+            <div className='card-body' style={{height: "300px", overflowY: "auto"}}>
               <div className='table-responsive'>
                 <table className='table table-flush align-middle table-row-bordered table-row-solid gy-4'>
                   <thead className='border-gray-200 fs-5 fw-semibold bg-lighten'>
