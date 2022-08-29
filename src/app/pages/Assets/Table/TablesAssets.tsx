@@ -132,6 +132,15 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.mintCompletedStatus ? 'TRUE' : 'FALSE'}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{showIconChain(item?.chainName)}</span>
                 </div>
               </div>
@@ -199,6 +208,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                   <th>ASSET ID</th>
                   <th>CROSS REFERENCE</th>
                   <th>STATUS</th>
+                  <th>MINT COMPLETED</th>
                   <th>CHAIN</th>
                   <th>ISSUER</th>
                   <th>OWNER</th>
