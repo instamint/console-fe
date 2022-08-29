@@ -1,29 +1,27 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useCallback, useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
+import React, { useCallback, useEffect, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
-import {getListPools} from '../../../../utils/api/pools'
-import { shortAddress } from '../../../../_metronic/helpers/format'
-import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
+import { getListContracts } from '../../../../utils/api/contracts'
+import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
 import FilterSearch from '../../../components/FilterSearch'
-import {Loading} from '../../../components/Loading'
+import { Loading } from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
   className: string
 }
 
-const TablesPools: React.FC<Props> = ({className}) => {
-  const [listPools, setListPools] = useState([])
+const TablesContracts: React.FC<Props> = ({className}) => {
+  const [listContracts, setListContracts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const {searched, setSearch, results} = useSearch(listPools, ['name', 'namespace'])
+  const {searched, setSearch, results} = useSearch(listContracts, ['name', 'namespace'])
 
-  const fetchListPools = async () => {
+  const fetchListContracts = async () => {
     setIsLoading(true)
     try {
-      const reps = await getListPools()
-      reps && setListPools(reps)
+      const reps = await getListContracts()
+      reps && setListContracts(reps)
     } catch (error) {
       console.error({error})
     } finally {
@@ -31,79 +29,85 @@ const TablesPools: React.FC<Props> = ({className}) => {
     }
   }
 
-  const listAssetsInPool = (list_assets) => {
-    if (list_assets?.length > 0) {
-      return list_assets?.map((item, index) => {
-        return (
-          <Link
-            key={index}
-            to={{
-              pathname: '/assets/detail',
-              search: `?id=${item?.id}`,
-            }}
-            className='text-dark fw-bold fs-7'
-            style={{marginRight: '4px'}}
-          >
-            <NameAssets>{item?.id}</NameAssets>
-            {index + 1 === list_assets?.length ? '' : ', '}
-          </Link>
-        )
-      })
-    } else return ''
+  const openTab = (url) => {
+    window.open(url)
   }
 
   useEffect(() => {
-    fetchListPools()
+    fetchListContracts()
   }, [])
 
   const renderList = useCallback(
     () =>
-      Array.isArray(listPools) &&
-      listPools?.map((item, index) => {
+      Array.isArray(listContracts) &&
+      listContracts?.map((item: any, index) => {
         return (
           <tr key={index}>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{index + 1}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{convertTimeZone(item?.createdAt)}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start'>
-                  <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
-                    {shortAddress(item?.hashId)}
+                  <span data-tip={item?.address} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.address)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.description}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span
+                    data-tip={item?.etherscanUrl}
+                    className='text-dark fw-bold fs-7 text-hover-primary cursor-pointer'
+                    onClick={() => openTab(item?.etherscanUrl)}
+                  >
+                    {shortAddressBehind(item?.etherscanUrl)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.shortName}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.chainName}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.lastUsedTokenId}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.contractTypeResponseDto?.type}
+                  </span>
                 </div>
               </div>
             </td>
           </tr>
         )
       }),
-    [listPools]
+    [listContracts]
   )
 
   return (
@@ -111,7 +115,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Yours Portfolios</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Yours Contracts</span>
         </h3>
         <FilterSearch setSearch={setSearch} />
       </div>
@@ -128,21 +132,23 @@ const TablesPools: React.FC<Props> = ({className}) => {
               {/* begin::Table head */}
               <thead>
                 <tr className='fw-bold text-muted'>
-                  <th className='min-w-60px'>#</th>
-                  <th className='min-w-150px'>PORTFOLIO NAME</th>
-                  <th className='min-w-150px'>CROSS REFERENCE</th>
-                  <th className='min-w-150px'>PORTFOLIO CREATE TIMESTAMP</th>
-                  <th className='min-w-150px'>HASH ID</th>
+                  <th className='min-w-150px'>ADDRESS</th>
+                  <th className='min-w-150px'>DESCRIPTION</th>
+                  <th className='min-w-150px'>ETHERSCAN URL</th>
+                  <th className='min-w-150px'>SHORT NAME</th>
+                  <th className='min-w-150px'>CHAIN</th>
+                  <th className='min-w-150px'>LAST USED TOKEN ID</th>
+                  <th className='min-w-150px'>CONTRACT TYPE</th>
                 </tr>
               </thead>
               {/* end::Table head */}
               {/* begin::Table body */}
               <tbody>
-                {listPools?.length > 0 ? (
+                {listContracts?.length > 0 ? (
                   renderList()
                 ) : (
                   <tr>
-                    <td colSpan={5} className='text-center'>
+                    <td colSpan={7} className='text-center'>
                       <h4 className='mt-5 d-flex justify-content-center'>
                         There is currently no data available
                       </h4>
@@ -162,7 +168,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
   )
 }
 
-export {TablesPools}
+export { TablesContracts }
 
 
 

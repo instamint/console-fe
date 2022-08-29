@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useState} from 'react'
 import ReactTooltip from 'react-tooltip'
-import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
+import { shortAddress } from '../../../../_metronic/helpers/format'
 import FilterSearch from '../../../components/FilterSearch'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
-  className: string
+  className?: string
 }
 
 const fakeData = () => {
@@ -104,7 +104,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Yours Transactions</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Transactions</span>
         </h3>
         <FilterSearch setSearch={setSearch} />
       </div>

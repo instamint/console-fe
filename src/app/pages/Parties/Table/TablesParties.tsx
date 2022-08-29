@@ -69,17 +69,6 @@ const TablesParties: React.FC<Props> = ({className}) => {
                 >
                   Details
                 </Link>
-                <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid form-ml-4'>
-                  <input
-                    className='form-check-input'
-                    type='checkbox'
-                    value=''
-                    name='notifications'
-                    defaultChecked={disable}
-                    onChange={() => setDisable(!disable)}
-                  />
-                  <label className='form-check-label fw-bold'>Disable</label>
-                </div>
               </div>
             </td>
           </tr>

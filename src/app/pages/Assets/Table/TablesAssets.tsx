@@ -8,15 +8,18 @@ import useSearch from '../../../hooks/useSearch'
 import { Modal } from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
 import { createPool } from '../../../../utils/api/pools'
-import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
+import { shortAddress, showIconChain } from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
+import styled from 'styled-components'
 
 type Props = {
   className: string
 }
 
 const TablesAssets: React.FC<Props> = ({className}) => {
-  const [listAssets, setListAssets] = useState<Array<any>>([])
+  const [listAssets, setListAssets] = useState<Array<any>>([
+    {id: 1}
+  ])
   const {searched, setSearch, results} = useSearch(listAssets, ['name', 'namespace'])
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
@@ -80,7 +83,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         return (
           <tr key={index}>
             <td>
-              {!item?.portfolioId ? (
+              {!item?.portfolioName ? (
                 <div className='d-flex align-items-center'>
                   <div className='d-flex justify-content-start flex-column'>
                     <div className='form-check form-check-sm form-check-custom form-check-solid'>
@@ -103,39 +106,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex justify-content-start flex-shrink-0'>
-                <Link
-                  to={{
-                    pathname: `detail/${item?.id}`,
-                  }}
-                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
-                >
-                  Details
-                </Link>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.portfolioId ? 'P' : ''}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.chainName}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
                     {shortAddress(item?.hashId)}
                   </span>
@@ -146,9 +116,23 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>
-                    {shortAddressBehind(item?.mintRequestjson)}
+                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='badge py-3 px-4 fs-7 badge-light-primary'>
+                    {item?.portfolioName}
                   </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{showIconChain(item?.chainName)}</span>
                 </div>
               </div>
             </td>
@@ -164,6 +148,18 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.ownerName}</span>
                 </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex justify-content-start flex-shrink-0'>
+                <Link
+                  to={{
+                    pathname: `detail/overview/${item?.id}`,
+                  }}
+                  className='btn btn-sm fw-bold btn-primary'
+                >
+                  Details
+                </Link>
               </div>
             </td>
           </tr>
@@ -200,14 +196,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th></th>
+                  <th>ASSET ID</th>
                   <th>CROSS REFERENCE</th>
-                  <th>ACTION</th>
                   <th>STATUS</th>
                   <th>CHAIN</th>
-                  <th>HASH ID</th>
-                  <th>MINT REQUEST JSON</th>
                   <th>ISSUER</th>
                   <th>OWNER</th>
+                  <th>ACTION</th>
                 </tr>
               </thead>
               {/* end::Table head */}
@@ -257,4 +252,3 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 }
 
 export { TablesAssets }
-

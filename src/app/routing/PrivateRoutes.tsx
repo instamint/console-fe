@@ -6,10 +6,10 @@ import { WithChildren } from '../../_metronic/helpers'
 import { MasterLayout } from '../../_metronic/layout/MasterLayout'
 import AccountPage from '../modules/accounts/AccountPage'
 import { useAuth } from '../modules/auth'
-import ProfilePage from '../modules/profile/ProfilePage'
 import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
 import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
 import AssetsDetail from '../pages/Assets/Detail'
+import { ContractsWrapper } from '../pages/Contracts/ContractsWrapper'
 import { DesignerWrapper } from '../pages/Designer/index'
 import PartiesDetail from '../pages/Parties/Detail'
 import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
@@ -34,23 +34,35 @@ const PrivateRoutes = () => {
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
         <Route path='assets' element={<AssetsWrapper />} />
-        <Route path='assets/detail/*' element={<AssetsDetail />} />
+        <Route
+          path='assets/detail/*'
+          element={
+            <SuspensedView>
+              <AssetsDetail />
+            </SuspensedView>
+          }
+        />
         <Route path='parties/detail/*' element={<PartiesDetail />} />
         <Route path='portfolios' element={<PoolsWrapper />} />
         <Route path='designer' element={<DesignerWrapper />} />
         <Route path='analytics' element={<AnalyticsWrapper />} />
         <Route path='parties' element={<PartiesWrapper />} />
         <Route path='transactions' element={<TransactionsWrapper />} />
-        {currentUser?.role?.length && currentUser?.role?.includes("ADMIN") ? <Route
-          path='admin/*'
-          element={
-            <SuspensedView>
-              <UsersPage />
-              <LoginsPage />
-              <TransactionsPage />
-            </SuspensedView>
-          }
-        /> : ""}
+        <Route path='contracts' element={<ContractsWrapper />} />
+        {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
+          <Route
+            path='admin/*'
+            element={
+              <SuspensedView>
+                <UsersPage />
+                <LoginsPage />
+                <TransactionsPage />
+              </SuspensedView>
+            }
+          />
+        ) : (
+          ''
+        )}
 
         {/* <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
