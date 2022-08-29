@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import ReactTooltip from 'react-tooltip'
-import styled from 'styled-components'
+import { Navigate, Outlet, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { getDetailAsset } from '../../../../utils/api/assets'
-import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
-import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
-import { PageTitle } from '../../../../_metronic/layout/core'
 import { Loading } from '../../../components/Loading'
-
+import { AccountHeader } from './AccountHeader'
+import Overview from './Overview'
 
 export default function AssetsDetail() {
   const params = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [dataDetail, setDataDetail] = useState<any>(null)
+  const [loadingNote, setLoadingNote] = useState(true)
   const navigate = useNavigate()
-  const id = params?.[Object.keys(params)?.[0]] || null
+  const paramUrl = params?.[Object.keys(params)?.[0]]?.split('/')
+  const id = paramUrl?.[paramUrl?.length - 1] || null
 
   const fetchDetailAsset = async (id) => {
     setIsLoading(true)
@@ -27,11 +25,12 @@ export default function AssetsDetail() {
       })
     } catch (error) {
       console.error({error})
+      navigate('/error/404')
     } finally {
       setIsLoading(false)
     }
   }
-  
+
   useEffect(() => {
     if (!id) {
       navigate('/assets')
@@ -39,202 +38,72 @@ export default function AssetsDetail() {
       fetchDetailAsset(id)
     }
   }, [id])
-  
+
   return (
     <>
-      <PageTitle>Asset Details</PageTitle>
       <div>
-        <div>
-          <div className='d-flex align-items-center'>
-            <button onClick={() => navigate(-1)} className='btn btn-primary me-5'>
-              <i className='fa-solid fa-arrow-left'></i> Back
-            </button>
-          </div>
-        </div>
-
         {isLoading ? (
           <Loading />
         ) : (
-          <DivContainer className='row mt-2'>
-            <DivContent className={`card card-xxl-stretch mb-5 mb-xl-8`}>
-              {dataDetail ? (
-                <>
-                  <div className='card-title'>
-                    <h2 className='fw-bold'>Asset Details</h2>
-                  </div>
-                  <div className=''>
-                    <div className='mb-10'>
-                      <div className='d-flex flex-wrap py-5'>
-                        <div className='flex-equal me-5'>
-                          <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                            <tbody>
-                              <tr>
-                                <td className='text-gray-400 min-w-175px w-175px'>
-                                  CROSS REFERENCE:
-                                </td>
-                                <td className='text-gray-800'>
-                                  {dataDetail?.asset?.b2BcrossReferenceId}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className='text-gray-400'>STATUS:</td>
-                                <td className='text-gray-800'>
-                                  {dataDetail?.asset?.portfolioId ? 'P' : ''}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className='text-gray-400'>CHAIN</td>
-                                <td className='text-gray-800'>{dataDetail?.asset?.chainName}</td>
-                              </tr>
-                              <tr>
-                                <td className='text-gray-400'>HASH ID</td>
-                                <td
-                                  data-tip={dataDetail?.asset?.hashId}
-                                  data-offset="{'top': -10,'left': 100}"
-                                  className='text-gray-800'
-                                >
-                                  {shortAddress(dataDetail?.asset?.hashId)}
-                                  <ReactTooltip place='top' effect='solid' />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div className='flex-equal'>
-                          <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                            <tbody>
-                              <tr>
-                                <td className='text-gray-400 min-w-175px w-175px'>
-                                  MINT REQUEST JSON:
-                                </td>
-                                <td className='text-gray-800 min-w-200px'>
-                                  {shortAddressBehind(dataDetail?.asset?.mintRequestjson)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className='text-gray-400'>ISSUER:</td>
-                                <td className='text-gray-800'>{dataDetail?.asset?.issuerName}</td>
-                              </tr>
-                              <tr>
-                                <td className='text-gray-400'>OWNER:</td>
-                                <td className='text-gray-800'>{dataDetail?.asset?.ownerName}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                      {dataDetail?.ethereumAsset && (
-                        <>
-                          <div className='card-title mt-4'>
-                            <h2 className='fw-bold'>Ethereum</h2>
-                          </div>
-                          <div className='flex-equal mt-4'>
-                            <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                              <tbody>
-                                <tr>
-                                  <td className='text-gray-400 min-w-175px w-175px'>
-                                    CROSS REFERENCE:
-                                  </td>
-                                  <td className='text-gray-800 min-w-200px'>
-                                    {dataDetail?.ethereumAsset?.b2BcrossReferenceId}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className='text-gray-400'>UUID:</td>
-                                  <td className='text-gray-800'>{dataDetail?.ethereumAsset?.uuid}</td>
-                                </tr>
-                                <tr>
-                                  <td className='text-gray-400'>CREATE AT:</td>
-                                  <td className='text-gray-800'>
-                                    {convertTimeZone(dataDetail?.ethereumAsset?.createdAt)}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className='text-gray-400'>HASH ID:</td>
-                                  <td
-                                    data-tip={dataDetail?.ethereumAsset?.hashId}
-                                    data-offset="{'top': -10,'left': 340}"
-                                    className='text-gray-800'
-                                  >
-                                    {shortAddress(dataDetail?.ethereumAsset?.hashId)}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className='text-gray-400'>TOKEN ID:</td>
-                                  <td className='text-gray-800'>
-                                    {dataDetail?.ethereumAsset?.tokenId}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </>
-                      )}
-
-                      {dataDetail?.algorandAsset && (
-                        <>
-                          <div className='card-title mt-4'>
-                            <h2 className='fw-bold'>
-                              Algorand
-                            </h2>
-                          </div>
-                          <div className='flex-equal mt-4'>
-                            <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                              <tbody>
-                                <tr>
-                                  <td className='text-gray-400 min-w-175px w-175px'>
-                                    CROSS REFERENCE:
-                                  </td>
-                                  <td className='text-gray-800 min-w-200px'>
-                                    {dataDetail?.algorandAsset?.b2BcrossReferenceId}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className='text-gray-400'>UUID:</td>
-                                  <td className='text-gray-800'>{dataDetail?.algorandAsset?.uuid}</td>
-                                </tr>
-                                <tr>
-                                  <td className='text-gray-400'>CREATE AT:</td>
-                                  <td className='text-gray-800'>
-                                    {convertTimeZone(dataDetail?.algorandAsset?.createdAt)}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className='text-gray-400'>HASH ID:</td>
-                                  <td
-                                    data-tip={dataDetail?.algorandAsset?.hashId}
-                                    data-offset="{'top': -10,'left': 340}"
-                                    className='text-gray-800'
-                                  >
-                                    {shortAddress(dataDetail?.algorandAsset?.hashId)}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <h4 className='d-flex justify-content-center'>
-                  This asset does not exist. Please try again
-                </h4>
-              )}
-            </DivContent>
-          </DivContainer>
+          <div>
+            <div
+              id='kt_app_toolbar'
+              className='app-toolbar mb-5 d-flex align-items-center'
+              style={{justifyContent: 'space-between'}}
+            >
+              <div id='kt_app_toolbar_container' className='app-container d-flex flex-stack'>
+                <div className='page-title d-flex flex-column justify-content-center flex-wrap me-3'>
+                  <h1 className='page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0'>
+                    Asset Detail View
+                  </h1>
+                  <ul className='breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1'>
+                    <li className='breadcrumb-item text-muted'>
+                      <span className='text-muted'>Home</span>
+                    </li>
+                    <li className='breadcrumb-item'>
+                      <span className='bullet bg-gray-400 w-5px h-2px'></span>
+                    </li>
+                    <li className='breadcrumb-item text-muted'>Account changes to Console</li>
+                    <li className='breadcrumb-item'>
+                      <span className='bullet bg-gray-400 w-5px h-2px'></span>
+                    </li>
+                    <li className='breadcrumb-item text-muted'>Asset Detail View</li>
+                  </ul>
+                </div>
+              </div>
+              <div className='d-flex align-items-center'>
+                <button onClick={() => navigate(-1)} className='btn btn-primary me-5'>
+                  <i className='fa-solid fa-arrow-left'></i> Back
+                </button>
+              </div>
+            </div>
+            <Routes>
+              <Route
+                element={
+                  <>
+                    <AccountHeader
+                      id={id}
+                      dataDetail={dataDetail}
+                      setLoadingNote={setLoadingNote}
+                    />
+                    <Outlet />
+                  </>
+                }
+              >
+                <Route
+                  path='overview/:id'
+                  element={
+                    <>
+                      <Overview dataDetail={dataDetail} loadingNote={loadingNote} />
+                    </>
+                  }
+                />
+                <Route index element={<Navigate to={`/assets/detail/overview/${id}`} />} />
+              </Route>
+            </Routes>
+          </div>
         )}
       </div>
     </>
   )
 }
-
-const DivContainer = styled.div`
-  width: 1000px;
-  margin: auto;
-`
-const DivContent = styled.div`
-  padding: 30px 30px;
-`

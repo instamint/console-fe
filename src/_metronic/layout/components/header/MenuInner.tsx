@@ -14,6 +14,7 @@ export function MenuInner() {
       <MenuItem title={intl.formatMessage({id: 'MENU.ANALYTICS'})} to='/analytics' />
       <MenuItem title={intl.formatMessage({id: 'MENU.PARTIES'})} to='/parties' />
       <MenuItem title={intl.formatMessage({id: 'MENU.TRANSACTIONS'})} to='/transactions' />
+      <MenuItem title={intl.formatMessage({id: 'MENU.CONTRACTS'})} to='/contracts' />
       {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
         <MenuInnerWithSub
           title='Admin'

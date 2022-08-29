@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = process.env.REACT_APP_API_URL_DESIGNER
+const API_URL = `${process.env.REACT_APP_API_URL}/designer`
 export interface JsonSchema {
   id: string
   document: string

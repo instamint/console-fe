@@ -1,0 +1,221 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useState } from 'react'
+import {KTSVG, toAbsoluteUrl} from '../../../../_metronic/helpers'
+import {Link} from 'react-router-dom'
+import {Dropdown1} from '../../../../_metronic/partials'
+import {useLocation} from 'react-router'
+import { shortAddress, showIconChain } from '../../../../_metronic/helpers/format'
+import ReactTooltip from 'react-tooltip'
+import { Modal } from 'react-bootstrap'
+import ModalAddNote from '../Modal/modal-add-note'
+import { AddNote } from '../../../../utils/api/assets'
+
+type Props = {
+  id: string
+  dataDetail: any
+  setLoadingNote: any
+}
+
+const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
+  const location = useLocation()
+  const [modalAddNote, setModalAddNote] = useState(false)
+
+  const handleAddNote = async (note: string) => {
+    try {
+      await AddNote(note, dataDetail?.asset?.id)
+      setLoadingNote((preState) => !preState)
+    } catch (error) {
+      console.error({error})
+    } finally {
+      setModalAddNote(false)
+    }
+  }
+
+  return (
+    <div className='card mb-5 mb-xl-10'>
+      <div className='card-body pt-9 pb-0'>
+        <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
+          <div className='flex-grow-1'>
+            <div className='d-flex justify-content-between align-items-start flex-wrap mb-2'>
+              <div className='d-flex flex-column'>
+                <div className='d-flex align-items-center mb-2'>
+                  <a
+                    data-tip={dataDetail?.asset?.hashId}
+                    className='text-gray-800 text-hover-primary fs-2 fw-bolder me-1'
+                  >
+                    {shortAddress(dataDetail?.asset?.hashId)}
+                  </a>
+                  <ReactTooltip place='top' effect='solid' />
+                  <a>
+                    <KTSVG
+                      path='/media/icons/duotune/general/gen026.svg'
+                      className='svg-icon-1 svg-icon-primary'
+                    />
+                  </a>
+                  {dataDetail?.asset?.portfolioName ? (
+                    <a
+                      className='btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3'
+                      data-bs-toggle='modal'
+                      data-bs-target='#kt_modal_upgrade_plan'
+                    >
+                      {dataDetail?.asset?.portfolioName}
+                    </a>
+                  ) : (
+                    ''
+                  )}
+                </div>
+
+                <div className='d-flex flex-wrap fw-bold fs-6 mb-4 pe-2'>
+                  <a
+                    href='#'
+                    className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'
+                  >
+                    {showIconChain(dataDetail?.asset?.chainName)}
+                    <span style={{paddingLeft: '3px'}}>
+                      {dataDetail?.asset?.chainName?.charAt(0)?.toUpperCase() +
+                        dataDetail?.asset?.chainName?.slice(1)}
+                    </span>
+                  </a>
+                  <a
+                    className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'
+                  >
+                    {dataDetail?.asset?.assetTypeName}
+                  </a>
+                  <a
+                    className='d-flex align-items-center text-gray-400 text-hover-primary mb-2'
+                  >
+                    {dataDetail?.asset?.issuerName}
+                  </a>
+                </div>
+              </div>
+
+              <div className='d-flex my-4'>
+                <a className='btn btn-sm btn-light me-2' id='kt_user_follow_button'>
+                  <KTSVG
+                    path='/media/icons/duotune/arrows/arr012.svg'
+                    className='svg-icon-3 d-none'
+                  />
+
+                  <span className='indicator-label'>Follow</span>
+                  <span className='indicator-progress'>
+                    Please wait...
+                    <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
+                  </span>
+                </a>
+                <a
+                  className='btn btn-sm btn-primary me-3'
+                  data-bs-toggle='modal'
+                  data-bs-target='#kt_modal_offer_a_deal'
+                  onClick={() => setModalAddNote(true)}
+                >
+                  Add Note
+                </a>
+                <div className='me-0'>
+                  <button
+                    className='btn btn-sm btn-icon btn-bg-light btn-active-color-primary'
+                    data-kt-menu-trigger='click'
+                    data-kt-menu-placement='bottom-end'
+                    data-kt-menu-flip='top-end'
+                  >
+                    <i className='bi bi-three-dots fs-3'></i>
+                  </button>
+                  <Dropdown1 />
+                </div>
+              </div>
+            </div>
+
+            <div className='d-flex flex-wrap flex-stack'>
+              <div className='d-flex flex-column flex-grow-1 pe-8'>
+                <div className='d-flex flex-wrap'>
+                  <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                    <div className='d-flex align-items-center'>
+                      <KTSVG
+                        path='/media/icons/duotune/arrows/arr066.svg'
+                        className='svg-icon-3 svg-icon-success me-2'
+                      />
+                      <div className='fs-2 fw-bolder'>4500$</div>
+                    </div>
+
+                    <div className='fw-bold fs-6 text-gray-400'>Earnings</div>
+                  </div>
+
+                  <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                    <div className='d-flex align-items-center'>
+                      <KTSVG
+                        path='/media/icons/duotune/arrows/arr065.svg'
+                        className='svg-icon-3 svg-icon-danger me-2'
+                      />
+                      <div className='fs-2 fw-bolder'>75</div>
+                    </div>
+
+                    <div className='fw-bold fs-6 text-gray-400'>Projects</div>
+                  </div>
+
+                  <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                    <div className='d-flex align-items-center'>
+                      <KTSVG
+                        path='/media/icons/duotune/arrows/arr066.svg'
+                        className='svg-icon-3 svg-icon-success me-2'
+                      />
+                      <div className='fs-2 fw-bolder'>60%</div>
+                    </div>
+
+                    <div className='fw-bold fs-6 text-gray-400'>Success Rate</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className='d-flex align-items-center w-200px w-sm-300px flex-column mt-3'>
+                <div className='d-flex justify-content-between w-100 mt-auto mb-2'>
+                  <span className='fw-bold fs-6 text-gray-400'>Profile Compleation</span>
+                  <span className='fw-bolder fs-6'>50%</span>
+                </div>
+                <div className='h-5px mx-3 w-100 bg-light mb-3'>
+                  <div
+                    className='bg-success rounded h-5px'
+                    role='progressbar'
+                    style={{width: '50%'}}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='d-flex overflow-auto h-55px'>
+          <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
+            <li className='nav-item'>
+              <Link
+                className={
+                  `nav-link text-active-primary me-6 ` +
+                  (location.pathname === `/assets/detail/overview/${id}` && 'active')
+                }
+                to='/crafted/account/overview'
+              >
+                Overview
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <Modal
+        className='modal fade'
+        id='kt_modal_select_location'
+        data-backdrop='static'
+        tabIndex={-1}
+        role='dialog'
+        show={modalAddNote}
+        dialogClassName='modal-ml modal-dialog-600'
+        aria-hidden='true'
+      >
+        <ModalAddNote
+          modalAddNote={modalAddNote}
+          setModalAddNote={setModalAddNote}
+          handleAddNote={handleAddNote}
+        />
+      </Modal>
+    </div>
+  )
+}
+
+export {AccountHeader}
