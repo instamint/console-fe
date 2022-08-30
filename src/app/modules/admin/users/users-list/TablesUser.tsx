@@ -56,11 +56,7 @@ const TablesUsers: React.FC<Props> = ({className}) => {
             </td>
             <td>
               <div className='d-flex justify-content-end flex-shrink-0'>
-                <span
-                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
-                >
-                  Revoke
-                </span>
+                <span className='btn btn-sm fw-bold btn-primary'>Revoke</span>
               </div>
             </td>
           </tr>

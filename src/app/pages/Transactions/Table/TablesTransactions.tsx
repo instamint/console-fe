@@ -85,10 +85,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
             </td>
             <td>
               <div className='d-flex justify-content-end flex-shrink-0'>
-                <a
-                  href='#'
-                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
-                >
+                <a href='#' className='btn btn-sm fw-bold btn-primary'>
                   Details
                 </a>
               </div>
