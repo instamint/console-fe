@@ -24,36 +24,6 @@ export function HeaderWrapper() {
           'd-flex align-items-stretch justify-content-between'
         )}
       >
-        {/* begin::Aside mobile toggle */}
-        {aside.display && (
-          <div className='d-flex align-items-center d-lg-none ms-n3 me-1' title='Show aside menu'>
-            <div
-              className='btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px'
-              id='kt_aside_mobile_toggle'
-            >
-              <KTSVG path='/media/icons/duotune/abstract/abs015.svg' className='svg-icon-2x mt-1' />
-            </div>
-          </div>
-        )}
-        {/* end::Aside mobile toggle */}
-        {/* begin::Logo */}
-        {!aside.display && (
-          <div className='d-flex align-items-center flex-grow-1 flex-lg-grow-0'>
-            <Link to='/dashboard' className='d-lg-none'>
-              <img alt='Logo' src={toAbsoluteUrl('/media/logos/default-small.svg')} className='h-30px' />
-            </Link>
-          </div>
-        )}
-        {/* end::Logo */}
-
-        {aside.display && (
-          <div className='d-flex align-items-center flex-grow-1 flex-lg-grow-0'>
-            <Link to='/' className='d-lg-none'>
-              <img alt='Logo' src={toAbsoluteUrl('/media/logos/default-small.svg')} className='h-30px' />
-            </Link>
-          </div>
-        )}
-
         <Link to='/' className='d-flex align-items-center mr-2 me-4'>
             <img
               alt='Logo'

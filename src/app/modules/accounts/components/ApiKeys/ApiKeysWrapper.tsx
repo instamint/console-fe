@@ -47,7 +47,7 @@ const ApiKeysPage: FC = () => {
                 <p className='form-control form-control-lg form-control-solid mt-4'>{apiKeyUser}</p>
                 <button
                   type='button'
-                  className='btn btn-light btn-active-light-primary mt-2'
+                  className='btn btn-sm fw-bold btn-primary mt-2'
                   data-bs-toggle='modal'
                   data-bs-target='#kt_modal_1'
                   onClick={() => setShowModalCreate(true)}
