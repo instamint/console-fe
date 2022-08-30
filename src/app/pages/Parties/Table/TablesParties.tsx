@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, {useCallback, useEffect, useState} from 'react'
+import {Link} from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
-import { getListParties } from '../../../../utils/api/parties'
-import { shortAddress } from '../../../../_metronic/helpers/format'
-import { Loading } from '../../../components/Loading'
+import {getListParties} from '../../../../utils/api/parties'
+import {shortAddress} from '../../../../_metronic/helpers/format'
+import {Loading} from '../../../components/Loading'
+import ICSort from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
@@ -18,12 +19,17 @@ const TablesParties: React.FC<Props> = ({className}) => {
   const [listParties, setListParties] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listParties, ['name', 'namespace'])
   const [isLoading, setIsLoading] = useState(true)
-  const [disable, setDisable] = useState<Disable>(false)
+  const [sort_name, set_sort_name] = useState('')
+  const [sort_type, set_sort_type] = useState('')
+  const [params, setParams] = useState({
+    sort_name: '',
+    sort_type: '',
+  })
 
-  const fetchListParties = async () => {
+  const fetchListParties = async (params) => {
     try {
-      setIsLoading(true)
-      const responsive = await getListParties()
+      // setIsLoading(true)
+      const responsive = await getListParties(params)
       setListParties(responsive?.data || [])
     } catch (error) {
       console.error({error})
@@ -32,9 +38,23 @@ const TablesParties: React.FC<Props> = ({className}) => {
     }
   }
 
+  const handleSort = (name) => {
+    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort_name !== name) {
+      sortTypeNow = 'ASC'
+    }
+    setParams({
+      ...params,
+      sort_name: name,
+      sort_type: sortTypeNow,
+    })
+    set_sort_name(name)
+    set_sort_type(sortTypeNow)
+  }
+
   useEffect(() => {
-    fetchListParties()
-  }, [])
+    fetchListParties(params)
+  }, [params])
 
   const renderList = useCallback(
     () =>
@@ -65,7 +85,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                   to={{
                     pathname: `detail/${item?.id}`,
                   }}
-                  className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary'
+                  className='btn btn-sm fw-bold btn-primary'
                 >
                   Details
                 </Link>
@@ -82,7 +102,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Yours Parties</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Parties</span>
         </h3>
         <div className='d-flex flex-wrap flex-stack'>
           <div className='d-flex align-items-center'>
@@ -111,42 +131,51 @@ const TablesParties: React.FC<Props> = ({className}) => {
       {/* begin::Body */}
       <div className='card-body py-4'>
         {/* begin::Table container */}
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <div className='table-responsive'>
-            {/* begin::Table */}
+        <div className='table-responsive'>
+          {/* begin::Table */}
 
-            <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-              {/* begin::Table head */}
-              <thead>
-                <tr className='fw-bold text-muted'>
-                  <th>NAME</th>
-                  <th>HASH ID</th>
-                  <th>ACTION</th>
+          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+            {/* begin::Table head */}
+            <thead>
+              <tr className='fw-bold text-muted'>
+                <th>
+                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('name')}>
+                    NAME <ICSort type={sort_name === 'name' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('hashId')}
+                  >
+                    HASH ID <ICSort type={sort_name === 'hashId' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            {/* end::Table head */}
+            {/* begin::Table body */}
+            <tbody>
+              {isLoading ? (
+                <Loading />
+              ) : listParties?.length > 0 ? (
+                renderList()
+              ) : (
+                <tr>
+                  <td colSpan={7} className='text-left'>
+                    <h4 className='mt-5 d-flex justify-content-center'>
+                      There is currently no data available
+                    </h4>
+                  </td>
                 </tr>
-              </thead>
-              {/* end::Table head */}
-              {/* begin::Table body */}
-              <tbody>
-                {listParties?.length > 0 ? (
-                  renderList()
-                ) : (
-                  <tr>
-                    <td colSpan={7} className='text-left'>
-                      <h4 className='mt-5 d-flex justify-content-center'>
-                        There is currently no data available
-                      </h4>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-              {/* end::Table body */}
-            </table>
+              )}
+            </tbody>
+            {/* end::Table body */}
+          </table>
 
-            {/* end::Table */}
-          </div>
-        )}
+          {/* end::Table */}
+        </div>
         {/* end::Table container */}
       </div>
       {/* begin::Body */}
@@ -154,8 +183,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
   )
 }
 
-export { TablesParties }
-
+export {TablesParties}
 
 const NameDropdow = styled.div`
   padding: 5px;

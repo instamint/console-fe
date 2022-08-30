@@ -54,6 +54,15 @@ export function HeaderWrapper() {
           </div>
         )}
 
+        <Link to='/' className='d-flex align-items-center mr-2 me-4'>
+            <img
+              alt='Logo'
+              src={toAbsoluteUrl('/media/logos/instamint_logo.png')}
+              width={150}
+              height={40}
+            />
+        </Link>
+
         {/* begin::Wrapper */}
         <div className='d-flex align-items-stretch justify-content-between flex-lg-grow-1'>
           {/* begin::Navbar */}

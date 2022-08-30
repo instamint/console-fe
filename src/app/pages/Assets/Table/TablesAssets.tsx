@@ -1,46 +1,50 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { getListAsset } from '../../../../utils/api/assets'
+import React, {useCallback, useEffect, useState} from 'react'
+import {Link, useNavigate} from 'react-router-dom'
+import {getListAsset} from '../../../../utils/api/assets'
 import FilterSearch from '../FilterSearch/index'
-import { Loading } from '../../../components/Loading'
+import {Loading} from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
-import { Modal } from 'react-bootstrap'
+import {Modal} from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
-import { createPool } from '../../../../utils/api/pools'
-import { shortAddress, showIconChain } from '../../../../_metronic/helpers/format'
+import {createPool} from '../../../../utils/api/pools'
+import {shortAddress, showIconChain} from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
-import styled from 'styled-components'
+import ICSort from '../../../components/Sort'
 
 type Props = {
   className: string
 }
 
 const TablesAssets: React.FC<Props> = ({className}) => {
-  const [listAssets, setListAssets] = useState<Array<any>>([
-    {id: 1}
-  ])
+  const [listAssets, setListAssets] = useState<Array<any>>([{id: 1}])
   const {searched, setSearch, results} = useSearch(listAssets, ['name', 'namespace'])
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
   const [modalPool, setModalPool] = useState(false)
+  const [sort_name, set_sort_name] = useState('')
+  const [sort_type, set_sort_type] = useState('')
+  const [params, setParams] = useState({
+    sort_name: '',
+    sort_type: '',
+  })
   const [error, setError] = useState(null)
   const navigate = useNavigate()
 
-  const fetchListAssets = async () => {
-    setIsLoading(true)
+  const fetchListAssets = async (params) => {
+    // setIsLoading(true)
     try {
-      const responsive = await getListAsset()
+      const responsive = await getListAsset(params)
       setListAssets(responsive?.data || [])
     } catch (error) {
       console.error({error})
     } finally {
-       setIsLoading(false)
+      setIsLoading(false)
     }
   }
 
   const isCheckerAsset = (item: any) => {
-    return selectAsset?.some(i => i?.id === item?.id)
+    return selectAsset?.some((i) => i?.id === item?.id)
   }
 
   const handleSelectAsset = (item: any) => {
@@ -72,9 +76,23 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     }
   }
 
+  const handleSort = (name) => {
+    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort_name !== name) {
+      sortTypeNow = 'ASC'
+    }
+    setParams({
+      ...params,
+      sort_name: name,
+      sort_type: sortTypeNow,
+    })
+    set_sort_name(name)
+    set_sort_type(sortTypeNow)
+  }
+
   useEffect(() => {
-    fetchListAssets()
-  }, [])
+    fetchListAssets(params)
+  }, [params])
 
   const renderList = useCallback(
     () =>
@@ -194,51 +212,94 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       {/* begin::Body */}
       <div className='card-body py-4'>
         {/* begin::Table container */}
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <div className='table-responsive'>
-            {/* begin::Table */}
+        <div className='table-responsive'>
+          {/* begin::Table */}
 
-            <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-              {/* begin::Table head */}
-              <thead>
-                <tr className='fw-bold text-muted'>
-                  <th></th>
-                  <th>ASSET ID</th>
-                  <th>CROSS REFERENCE</th>
-                  <th>STATUS</th>
-                  <th>MINT COMPLETED</th>
-                  <th>CHAIN</th>
-                  <th>ISSUER</th>
-                  <th>OWNER</th>
-                  <th>ACTION</th>
+          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+            <thead>
+              <tr className='fw-bold text-muted'>
+                <th></th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('hashId')}
+                  >
+                    ASSET ID <ICSort type={sort_name === 'hashId' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('b2BcrossReferenceId')}
+                  >
+                    CROSS REFERENCE
+                    <ICSort type={sort_name === 'b2BcrossReferenceId' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('portfolioName')}
+                  >
+                    STATUS <ICSort type={sort_name === 'portfolioName' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('mintCompletedStatus')}
+                  >
+                    MINT COMPLETED
+                    <ICSort type={sort_name === 'mintCompletedStatus' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('chainName')}
+                  >
+                    CHAIN <ICSort type={sort_name === 'chainName' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('issuerName')}
+                  >
+                    ISSUER
+                    <ICSort type={sort_name === 'issuerName' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('ownerName')}
+                  >
+                    OWNER
+                    <ICSort type={sort_name === 'ownerName' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <Loading />
+              ) : listAssets?.length > 0 ? (
+                renderList()
+              ) : (
+                <tr>
+                  <td colSpan={21} className='text-center'>
+                    <h4 className='mt-5 d-flex justify-content-center'>
+                      There is currently no data available
+                    </h4>
+                  </td>
                 </tr>
-              </thead>
-              {/* end::Table head */}
-              {/* begin::Table body */}
-              <tbody>
-                {listAssets?.length > 0 ? (
-                  renderList()
-                ) : (
-                  <tr>
-                    <td colSpan={21} className='text-center'>
-                      <h4 className='mt-5 d-flex justify-content-center'>
-                        There is currently no data available
-                      </h4>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-              {/* end::Table body */}
-            </table>
-
-            {/* end::Table */}
-          </div>
-        )}
-        {/* end::Table container */}
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-      {/* begin::Body */}
       <Modal
         className='modal fade'
         id='kt_modal_select_location'
@@ -261,4 +322,4 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   )
 }
 
-export { TablesAssets }
+export {TablesAssets}
