@@ -8,9 +8,17 @@ type Props = {
   className: string
   chartColor: string
   chartHeight: string
+  dataChart?: Array<number>
+  categories?: Array<string>
 }
 
-const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) => {
+const MixedWidget10: React.FC<Props> = ({
+  className,
+  chartColor,
+  chartHeight,
+  dataChart,
+  categories,
+}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const {mode} = useThemeMode()
   const refreshChart = () => {
@@ -18,7 +26,10 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
       return
     }
 
-    const chart = new ApexCharts(chartRef.current, chartOptions(chartColor, chartHeight))
+    const chart = new ApexCharts(
+      chartRef.current,
+      chartOptions(chartColor, chartHeight, dataChart, categories)
+    )
     if (chart) {
       chart.render()
     }
@@ -42,19 +53,6 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
       {/* begin::Body */}
       <div className='card-body d-flex flex-column p-0'>
         {/* begin::Stats */}
-        <div className='flex-grow-1 card-p pb-0'>
-          <div className='d-flex flex-stack flex-wrap'>
-            <div className='me-2'>
-              <a href='#' className='text-dark text-hover-primary fw-bold fs-3'>
-                Generate Reports
-              </a>
-
-              <div className='text-muted fs-7 fw-semobold'>Finance and accounting reports</div>
-            </div>
-
-            <div className={`fw-bold fs-3 text-${chartColor}`}>$24,500</div>
-          </div>
-        </div>
         {/* end::Stats */}
 
         {/* begin::Chart */}
@@ -66,7 +64,12 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
   )
 }
 
-const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
+const chartOptions = (
+  chartColor: string,
+  chartHeight: string,
+  dataChart: Array<any>,
+  categories: Array<string>
+): ApexOptions => {
   const labelColor = getCSSVariableValue('--kt-gray-800')
   const strokeColor = getCSSVariableValue('--kt-gray-300')
   const baseColor = getCSSVariableValue('--kt-' + chartColor)
@@ -75,8 +78,8 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
   return {
     series: [
       {
-        name: 'Net Profit',
-        data: [15, 25, 15, 40, 20, 50],
+        name: 'Sales',
+        data: dataChart,
       },
     ],
     chart: {
@@ -111,7 +114,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       colors: [baseColor],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: categories,
       axisBorder: {
         show: false,
       },
@@ -122,7 +125,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
         show: false,
         style: {
           colors: labelColor,
-          fontSize: '12px',
+          fontSize: '10px',
         },
       },
       crosshairs: {
@@ -140,7 +143,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
     },
     yaxis: {
       min: 0,
-      max: 60,
+      max: 70,
       labels: {
         show: false,
         style: {
@@ -176,7 +179,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       },
       y: {
         formatter: function (val) {
-          return '$' + val + ' thousands'
+          return val + 'k'
         },
       },
     },

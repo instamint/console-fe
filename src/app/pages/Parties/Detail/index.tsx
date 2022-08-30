@@ -55,7 +55,7 @@ export default function PartiesDetail() {
               {dataDetail ? (
                 <>
                   <div className='card-title'>
-                    <h2 className='fw-bold'>Parties Details</h2>
+                    <h2 className='fw-bold'>Party’s Details</h2>
                   </div>
                   <div className=''>
                     <div className='mb-10'>
@@ -66,7 +66,10 @@ export default function PartiesDetail() {
                               <tr>
                                 <td className='text-gray-400 min-w-175px w-175px'>UUID:</td>
                                 <td className='text-gray-800'>
-                                  <span>{dataDetail?.uuid}</span>
+                                  <span data-tip={dataDetail?.uuid}>
+                                    {shortAddress(dataDetail?.uuid)}
+                                  </span>
+                                  <ReactTooltip place='top' effect='solid' />
                                 </td>
                               </tr>
                               <tr>
@@ -76,21 +79,6 @@ export default function PartiesDetail() {
                               <tr>
                                 <td className='text-gray-400'>Name Space</td>
                                 <td className='text-gray-800'>{dataDetail?.namespace}</td>
-                              </tr>
-                              <tr>
-                                <td className='text-gray-400'>Disable</td>
-                                <td>
-                                  <div className='form-check form-switch form-switch-sm form-check-custom form-check-solid'>
-                                    <input
-                                      className='form-check-input'
-                                      type='checkbox'
-                                      value=''
-                                      name='notifications'
-                                      // defaultChecked={disable}
-                                      // onChange={() => setDisable(!disable)}
-                                    />
-                                  </div>
-                                </td>
                               </tr>
                             </tbody>
                           </table>

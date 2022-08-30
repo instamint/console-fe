@@ -40,51 +40,8 @@ const MixedWidget7: React.FC<Props> = ({className, chartColor, chartHeight}) => 
   }, [chartRef, mode])
 
   return (
-    <div className={`card ${className}`}>
-      {/* begin::Beader */}
-      <div className='card-header border-0 py-5'>
-        <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Action Needed</span>
-          <span className='text-muted fw-semobold fs-7'>Complete your profile setup</span>
-        </h3>
-
-        <div className='card-toolbar'>
-          {/* begin::Menu */}
-          <button
-            type='button'
-            className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
-            data-kt-menu-trigger='click'
-            data-kt-menu-placement='bottom-end'
-            data-kt-menu-flip='top-end'
-          >
-            <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
-          </button>
-          <Dropdown1 />
-          {/* end::Menu */}
-        </div>
-      </div>
-      {/* end::Header */}
-
-      {/* begin::Body */}
-      <div className='card-body d-flex flex-column'>
-        <div className='flex-grow-1'>
+    <div className={`card ${className}`} style={{width: "150px", height: "150px"}}>
           <div ref={chartRef} className='mixed-widget-4-chart'></div>
-        </div>
-
-        <div className='pt-5'>
-          <p className='text-center fs-6 pb-5 '>
-            <span className='badge badge-light-danger fs-8'>Notes:</span>&nbsp; Current sprint
-            requires stakeholders
-            <br />
-            to approve newly amended policies
-          </p>
-
-          <a href='#' className={`btn btn-${chartColor} w-100 py-3`}>
-            Take Action
-          </a>
-        </div>
-      </div>
-      {/* end::Body */}
     </div>
   )
 }
@@ -95,7 +52,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
   const labelColor = getCSSVariableValue('--kt-gray-700')
 
   return {
-    series: [74],
+    series: [45, 21, 34],
     chart: {
       fontFamily: 'inherit',
       height: chartHeight,
@@ -105,7 +62,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       radialBar: {
         hollow: {
           margin: 0,
-          size: '65%',
+          size: '35%',
         },
         dataLabels: {
           name: {
@@ -114,9 +71,9 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
           },
           value: {
             color: labelColor,
-            fontSize: '30px',
+            fontSize: '20px',
             fontWeight: '700',
-            offsetY: 12,
+            offsetY: 6,
             show: true,
             formatter: function (val) {
               return val + '%'

@@ -26,8 +26,7 @@ const Topbar: FC = () => {
       </div>
 
       {/* CHAT */}
-      <div className={clsx('d-flex align-items-center', toolbarButtonMarginClass)}>
-        {/* begin::Menu wrapper */}
+      {/* <div className={clsx('d-flex align-items-center', toolbarButtonMarginClass)}>
         <div
           className={clsx(
             'btn btn-icon btn-active-light-primary btn-custom position-relative',
@@ -42,8 +41,7 @@ const Topbar: FC = () => {
 
           <span className='bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink'></span>
         </div>
-        {/* end::Menu wrapper */}
-      </div>
+      </div> */}
 
       {/* NOTIFICATIONS */}
       <div className={clsx('d-flex align-items-center', toolbarButtonMarginClass)}>

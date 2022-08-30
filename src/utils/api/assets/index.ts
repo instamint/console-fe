@@ -8,8 +8,14 @@ export const ADD_NOTE = `${API_URL}/note/add`
 export const GET_LIST_NOTE = (id) => `${API_URL}/note/${id}`
 
 // get all list assets
-export function getListAsset() {
-  return axios.get(GET_LIST_ASSETS)
+export function getListAsset(params) {
+  let url = `${GET_LIST_ASSETS}?`
+  if (params) {
+    Object.keys(params).map((key) => {
+      url += key + '=' + params[key] + '&'
+    })
+  }
+  return axios.get(url)
 }
 
 export function getDetailAsset(id: string | number) {
