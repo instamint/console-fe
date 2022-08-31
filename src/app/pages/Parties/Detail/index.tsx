@@ -80,31 +80,10 @@ export default function PartiesDetail() {
                                 <td className='text-gray-400'>Name Space</td>
                                 <td className='text-gray-800'>{dataDetail?.namespace}</td>
                               </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div className='flex-equal'>
-                          <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
-                            <tbody>
-                              <tr>
-                                <td className='text-gray-400 min-w-175px w-175px'>Hash ID:</td>
-                                <td className='text-gray-800 min-w-200px'>
-                                  <span data-tip={dataDetail?.hashId}>
-                                    {shortAddress(dataDetail?.hashId)}
-                                  </span>
-                                  <ReactTooltip place='top' effect='solid' />
-                                </td>
-                              </tr>
                               <tr>
                                 <td className='text-gray-400'>Created At:</td>
                                 <td className='text-gray-800'>
                                   {convertTimeZone(dataDetail?.createdAt)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className='text-gray-400'>Coss Reference Id:</td>
-                                <td className='text-gray-800'>
-                                  <span>{dataDetail?.b2BcrossReferenceId}</span>
                                 </td>
                               </tr>
                             </tbody>

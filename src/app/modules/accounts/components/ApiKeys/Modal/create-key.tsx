@@ -52,6 +52,12 @@ export default function CreateKey({
         key: 'tableau',
         checked: false,
       },
+      {
+        id: 6,
+        name: 'GraphQL',
+        key: 'graphQL',
+        checked: false,
+      },
     ],
   })
 

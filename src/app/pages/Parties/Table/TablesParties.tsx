@@ -5,6 +5,7 @@ import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {getListParties} from '../../../../utils/api/parties'
 import {shortAddress} from '../../../../_metronic/helpers/format'
+import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
 import {Loading} from '../../../components/Loading'
 import ICSort from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
@@ -72,10 +73,17 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
-                    {shortAddress(item?.hashId)}
+                  <span data-tip={item?.uuid} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.uuid)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{convertTimeZone(item?.createdAt)}</span>
                 </div>
               </div>
             </td>
@@ -144,11 +152,13 @@ const TablesParties: React.FC<Props> = ({className}) => {
                   </span>
                 </th>
                 <th>
-                  <span
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('hashId')}
-                  >
-                    HASH ID <ICSort type={sort_name === 'hashId' ? sort_type : 'default'} />
+                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('uuid')}>
+                    UUID <ICSort type={sort_name === 'uuid' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('createdAt')}>
+                    TIMESTAMP <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
                   </span>
                 </th>
                 <th>ACTION</th>

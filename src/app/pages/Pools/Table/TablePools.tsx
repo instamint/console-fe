@@ -72,14 +72,17 @@ const TablesPools: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
+                  <span data-tip={item?.uuid} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.uuid)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
                 </div>
               </div>
             </td>
@@ -129,10 +132,9 @@ const TablesPools: React.FC<Props> = ({className}) => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='min-w-60px'>#</th>
+                  <th className='min-w-60px'>UUID</th>
                   <th className='min-w-150px'>PORTFOLIO NAME</th>
-                  <th className='min-w-150px'>CROSS REFERENCE</th>
                   <th className='min-w-150px'>PORTFOLIO CREATE TIMESTAMP</th>
-                  <th className='min-w-150px'>HASH ID</th>
                 </tr>
               </thead>
               {/* end::Table head */}

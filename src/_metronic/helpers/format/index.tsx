@@ -27,9 +27,9 @@ export const showIconChain = (chain: string) => {
     height: 20px;
   `
   switch (chain?.toLowerCase()) {
-    case 'ethereum':
+    case 'ethereum-goerli':
       return <ImgChain src={IconEthereum}></ImgChain>
-    case 'algorand':
+    case 'algorand-testnet':
       return <ImgChain src={IconAlgorand}></ImgChain>
     default:
       return <ImgChain src={IconEthereum}></ImgChain>

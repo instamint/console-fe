@@ -17,7 +17,7 @@ type Props = {
 }
 
 const TablesAssets: React.FC<Props> = ({className}) => {
-  const [listAssets, setListAssets] = useState<Array<any>>([{id: 1}])
+  const [listAssets, setListAssets] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listAssets, ['name', 'namespace'])
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
@@ -134,7 +134,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.b2BcrossReferenceId}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.xref}</span>
                 </div>
               </div>
             </td>
@@ -230,10 +230,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 <th>
                   <span
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('b2BcrossReferenceId')}
+                    onClick={() => !isLoading && handleSort('xref')}
                   >
                     CROSS REFERENCE
-                    <ICSort type={sort_name === 'b2BcrossReferenceId' ? sort_type : 'default'} />
+                    <ICSort type={sort_name === 'xref' ? sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
