@@ -2,9 +2,10 @@
 import {FC, useEffect, useState} from 'react'
 import {Modal} from 'react-bootstrap'
 import {useIntl} from 'react-intl'
+import {generateApiKey} from '../../../../../utils/api/api-keys'
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {PageTitle} from '../../../../../_metronic/layout/core'
-import { useAuth } from '../../../auth'
+import {useAuth} from '../../../auth'
 import CreateKey from './Modal/create-key'
 import {TablesApiKeys} from './Table/TablesApiKeys'
 
@@ -12,18 +13,29 @@ const ApiKeysPage: FC = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [showModalKey, setShowModalKey] = useState(false)
   const {currentUser, setCurrentUser, saveAuth, auth} = useAuth()
-  const [apiKeyUser, setApiKeyUser] = useState(currentUser?.api_key || "")
+  const [apiKeyUser, setApiKeyUser] = useState(currentUser?.api_key || '')
+
+  const fetchFirstApiKey = async () => {
+    try {
+      const reps = await generateApiKey({})
+      if (reps?.key) {
+        const newCurrentUser = {
+          ...currentUser,
+          api_key: reps?.key,
+        }
+        const newAuth = {...auth, api_key: reps?.key}
+        saveAuth(newAuth)
+        setCurrentUser(newCurrentUser)
+        setApiKeyUser(newCurrentUser?.api_key)
+      }
+    } catch (error) {
+      console.error({error})
+    }
+  }
 
   useEffect(() => {
     if (!currentUser?.api_key) {
-      const newCurrentUser = {
-        ...currentUser,
-        api_key: 'zadKLNXDzvOVjQH91TumGL2urPjPQSxUbf67vs0',
-      }
-      const newAuth = {...auth, api_key: 'zadKLNXDzvOVjQH91TumGL2urPjPQSxUbf67vs0'}
-      saveAuth(newAuth)
-      setCurrentUser(newCurrentUser)
-      setApiKeyUser(newCurrentUser?.api_key)
+      fetchFirstApiKey()
     } else {
       setApiKeyUser(currentUser?.api_key)
     }
