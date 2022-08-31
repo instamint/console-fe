@@ -45,7 +45,7 @@ const ApiKeysPage: FC = () => {
   return (
     <>
       {/* begin::Row */}
-      <div className='row gy-5 gx-xl-8'>
+      <div className='gy-5 gx-xl-8'>
         <div className='card mb-5 mb-xxl-8'>
           <div className='card-header'>
             <div className='card-title'>
