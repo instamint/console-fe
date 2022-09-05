@@ -1,35 +1,42 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
-import {getListAsset} from '../../../../utils/api/assets'
+import {createAuction, endAuction, getListAsset} from '../../../../utils/api/assets'
 import FilterSearch from '../FilterSearch/index'
 import {Loading} from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
 import {Modal} from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
 import {createPool} from '../../../../utils/api/pools'
-import {shortAddress, showIconChain} from '../../../../_metronic/helpers/format'
+import {shortAddress, shortAddressBehind, showIconChain} from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
 import ICSort from '../../../components/Sort'
+import ModalAuction from '../Modal/modal-auction'
+import {useAlert} from 'react-alert'
 
 type Props = {
   className: string
 }
 
 const TablesAssets: React.FC<Props> = ({className}) => {
-  const [listAssets, setListAssets] = useState<Array<any>>([])
+  const [listAssets, setListAssets] = useState<Array<any>>([{id: 1}])
   const {searched, setSearch, results} = useSearch(listAssets, ['name', 'namespace'])
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
-  const [modalPool, setModalPool] = useState(false)
+  const [modalShow, setModalShow] = useState(false)
+  const [idAssetAuction, setIdAssetAuction] = useState(null)
+  const [typeModal, setTypeModal] = useState('portfolio')
   const [sort_name, set_sort_name] = useState('')
   const [sort_type, set_sort_type] = useState('')
+  const [reloadList, setReloadList] = useState(false)
+  const [minted, setMinted] = useState(false)
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
   })
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const alert = useAlert()
 
   const fetchListAssets = async (params) => {
     // setIsLoading(true)
@@ -60,7 +67,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   }
 
   const openModalPool = () => {
-    setModalPool(true)
+    setTypeModal('portfolio')
+    setModalShow(true)
+  }
+
+  const openModalAuction = (id) => {
+    setIdAssetAuction(id)
+    setTypeModal('auction')
+    setModalShow(true)
   }
 
   const handleAddPool = async (values) => {
@@ -72,6 +86,34 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       }
     } catch (error) {
       setError('Portfolio Name already exists, please try again')
+      console.error({error})
+    }
+  }
+
+  const handleAuction = async (values) => {
+    try {
+      const reps = await createAuction({
+        id: idAssetAuction,
+        reserve: values?.reserve_price,
+        buyNow: values?.buy_now_price,
+        auctionType: values?.auction_type,
+      })
+      alert.success('Auction successful!')
+      setModalShow(false)
+      setReloadList((preState) => !preState)
+    } catch (error) {
+      setError('Price should be a decimal with maximum two digits after comma')
+      console.error({error})
+    }
+  }
+
+  const handleEndAuction = async (id) => {
+    try {
+      await endAuction(id)
+      alert.success('End Auction successful!')
+      setReloadList((preState) => !preState)
+    } catch (error) {
+      alert.error('End Auction failed, please try again!')
       console.error({error})
     }
   }
@@ -90,36 +132,38 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     set_sort_type(sortTypeNow)
   }
 
+  const filterMintedAssetList = (listAssets) => {
+    if (minted) {
+      return listAssets?.filter((item) => item?.mintCompletedStatus === true)
+    } else return listAssets
+  }
+
   useEffect(() => {
     fetchListAssets(params)
-  }, [params])
+  }, [params, reloadList])
 
   const renderList = useCallback(
     () =>
-      Array.isArray(listAssets) &&
-      listAssets?.map((item, index) => {
+      Array.isArray(filterMintedAssetList(listAssets)) &&
+      filterMintedAssetList(listAssets)?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
-              {!item?.portfolioName ? (
-                <div className='d-flex align-items-center'>
-                  <div className='d-flex justify-content-start flex-column'>
-                    <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                      <input
-                        className='form-check-input'
-                        type='checkbox'
-                        value='1'
-                        data-kt-check='true'
-                        data-kt-check-target='.widget-9-check'
-                        checked={isCheckerAsset(item)}
-                        onChange={() => handleSelectAsset(item)}
-                      />
-                    </div>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                    <input
+                      className='form-check-input'
+                      type='checkbox'
+                      value='1'
+                      data-kt-check='true'
+                      data-kt-check-target='.widget-9-check'
+                      checked={isCheckerAsset(item)}
+                      onChange={() => handleSelectAsset(item)}
+                    />
                   </div>
                 </div>
-              ) : (
-                ''
-              )}
+              </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
@@ -159,7 +203,31 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.bestBid ? 'TRUE' : 'FALSE'}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.auction ? 'TRUE' : 'FALSE'}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{showIconChain(item?.chainName)}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span data-tip={item?.assetTypeName} className='text-dark fw-bold fs-7'>
+                    {shortAddressBehind(item?.assetTypeName, 10)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
@@ -187,6 +255,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 >
                   Details
                 </Link>
+                <button
+                  onClick={() =>
+                    item?.auction ? handleEndAuction(item?.id) : openModalAuction(item?.id)
+                  }
+                  className='btn btn-sm fw-bold btn-primary ms-3'
+                >
+                  {item?.auction ? 'End Auction' : 'Auction'}
+                </button>
               </div>
             </td>
           </tr>
@@ -206,6 +282,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           setSearch={setSearch}
           openModalPool={openModalPool}
           selectAsset={selectAsset}
+          setMinted={setMinted}
+          minted={minted}
         />
       </div>
       {/* end::Header */}
@@ -228,10 +306,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                   </span>
                 </th>
                 <th>
-                  <span
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('xref')}
-                  >
+                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('xref')}>
                     CROSS REFERENCE
                     <ICSort type={sort_name === 'xref' ? sort_type : 'default'} />
                   </span>
@@ -241,7 +316,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('portfolioName')}
                   >
-                    STATUS <ICSort type={sort_name === 'portfolioName' ? sort_type : 'default'} />
+                    PORTFOLIO{' '}
+                    <ICSort type={sort_name === 'portfolioName' ? sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
@@ -256,9 +332,36 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 <th>
                   <span
                     className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('bestBid')}
+                  >
+                    BEST BID
+                    <ICSort type={sort_name === 'bestBid' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('auction')}
+                  >
+                    AUCTION
+                    <ICSort type={sort_name === 'auction' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('chainName')}
                   >
                     CHAIN <ICSort type={sort_name === 'chainName' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('assetTypeName')}
+                  >
+                    ASSET TYPE{' '}
+                    <ICSort type={sort_name === 'assetTypeName' ? sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
@@ -285,7 +388,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <tbody>
               {isLoading ? (
                 <Loading />
-              ) : listAssets?.length > 0 ? (
+              ) : filterMintedAssetList(listAssets)?.length > 0 ? (
                 renderList()
               ) : (
                 <tr>
@@ -306,17 +409,28 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         data-backdrop='static'
         tabIndex={-1}
         role='dialog'
-        show={modalPool}
+        show={modalShow}
         dialogClassName='modal-ml modal-dialog-500'
         aria-hidden='true'
       >
-        <ModalPool
-          modalPool={modalPool}
-          setModalPool={setModalPool}
-          handlePool={handleAddPool}
-          error={error}
-          setError={setError}
-        />
+        {typeModal === 'portfolio' ? (
+          <ModalPool
+            modalShow={modalShow}
+            setModalShow={setModalShow}
+            handlePool={handleAddPool}
+            error={error}
+            setError={setError}
+          />
+        ) : (
+          <ModalAuction
+            modalShow={modalShow}
+            setModalShow={setModalShow}
+            handleAuction={handleAuction}
+            setIdAssetAuction={setIdAssetAuction}
+            error={error}
+            setError={setError}
+          />
+        )}
       </Modal>
     </div>
   )

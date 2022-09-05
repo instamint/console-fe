@@ -5,8 +5,16 @@ export type FilterSearchProps = {
   setSearch: (value: string | null) => void
   openModalPool: () => void
   selectAsset: Array<any>
+  setMinted: (value: any) => void
+  minted: boolean
 }
-const FilterSearch = ({setSearch, openModalPool, selectAsset}: FilterSearchProps) => {
+const FilterSearch = ({
+  setSearch,
+  openModalPool,
+  selectAsset,
+  setMinted,
+  minted,
+}: FilterSearchProps) => {
   const [term, setTerm] = useState<string>('')
 
   const handleSubmit = useCallback(
@@ -22,6 +30,18 @@ const FilterSearch = ({setSearch, openModalPool, selectAsset}: FilterSearchProps
     <form action='#' onSubmit={handleSubmit}>
       <div className='d-flex flex-wrap flex-stack'>
         <div className='d-flex align-items-center'>
+          <div className='form-check form-check-sm form-check-custom form-check-solid d-flex align-items-center'>
+            <input
+              className='form-check-input'
+              type='checkbox'
+              value='1'
+              data-kt-check='true'
+              data-kt-check-target='.widget-9-check'
+              checked={minted}
+              onChange={() => setMinted((preState) => !preState)}
+            />
+            <span className='ms-2 me-5 card-label fw-bold fs-5'>Minted</span>
+          </div>
           <div
             className='btn btn-primary me-5'
             data-kt-menu-trigger='click'
@@ -31,16 +51,12 @@ const FilterSearch = ({setSearch, openModalPool, selectAsset}: FilterSearchProps
             Action
             <IconDrop className='fa-solid fa-caret-down'></IconDrop>
           </div>
-          <div
-            className='menu menu-sub menu-sub-dropdown w-180px p-4'
-            data-kt-menu='true'
-          >
+          <div className='menu menu-sub menu-sub-dropdown w-180px p-4' data-kt-menu='true'>
             <div className='d-flex flex-column'>
               <NameDropdow onClick={() => selectAsset?.length > 0 && openModalPool()}>
                 Create Portfolio
               </NameDropdow>
-              <NameDropdow>Run</NameDropdow>
-              <NameDropdow>Jump</NameDropdow>
+              <NameDropdow>Enable Auction</NameDropdow>
             </div>
           </div>
         </div>

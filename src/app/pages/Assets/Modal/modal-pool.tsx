@@ -16,7 +16,7 @@ interface MyFormValues {
   poolname: string
 }
 
-export default function ModalPool({modalPool, setModalPool, handlePool, error, setError}) {
+export default function ModalPool({modalShow, setModalShow, handlePool, error, setError}) {
   const handleSubmit = (values, {setSubmitting}) => {
     setSubmitting(true)
     handlePool(values)
@@ -52,7 +52,7 @@ export default function ModalPool({modalPool, setModalPool, handlePool, error, s
                 className='btn btn-icon btn-sm btn-active-light-primary ms-2'
                 data-bs-dismiss='modal'
                 aria-label='Close'
-                onClick={() => setModalPool(false)}
+                onClick={() => setModalShow(false)}
               >
                 <KTSVG
                   path='/media/icons/duotune/arrows/arr061.svg'
@@ -95,11 +95,11 @@ export default function ModalPool({modalPool, setModalPool, handlePool, error, s
                   type='button'
                   className='btn btn-light'
                   data-bs-dismiss='modal'
-                  onClick={() => setModalPool(false)}
+                  onClick={() => setModalShow(false)}
                 >
                   Cancel
                 </button>
-                <button type='submit' className='btn btn-success'>
+                <button type='submit' className='btn btn-primary'>
                   OK
                 </button>
               </GroupBtn>
