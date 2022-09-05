@@ -19,7 +19,7 @@ type Props = {
 }
 
 const TablesAssets: React.FC<Props> = ({className}) => {
-  const [listAssets, setListAssets] = useState<Array<any>>([{id: 1}])
+  const [listAssets, setListAssets] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listAssets, ['name', 'namespace'])
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
@@ -185,6 +185,16 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
+                  <span data-tip={item?.assetTypeName} className='text-dark fw-bold fs-7'>
+                    {shortAddressBehind(item?.assetTypeName, 10)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
                   <span className='badge py-3 px-4 fs-7 badge-light-primary'>
                     {item?.portfolioName}
                   </span>
@@ -224,16 +234,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.assetTypeName} className='text-dark fw-bold fs-7'>
-                    {shortAddressBehind(item?.assetTypeName, 10)}
-                  </span>
-                  <ReactTooltip place='top' effect='solid' />
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.issuerName}</span>
                 </div>
               </div>
@@ -246,7 +246,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               </div>
             </td>
             <td>
-              <div className='d-flex justify-content-start flex-shrink-0'>
+              <div className='d-flex justify-content-start flex-shrink-0 align-items-center'>
                 <Link
                   to={{
                     pathname: `detail/overview/${item?.id}`,
@@ -260,6 +260,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     item?.auction ? handleEndAuction(item?.id) : openModalAuction(item?.id)
                   }
                   className='btn btn-sm fw-bold btn-primary ms-3'
+                  style={{minWidth: '108px'}}
                 >
                   {item?.auction ? 'End Auction' : 'Auction'}
                 </button>
@@ -294,7 +295,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           {/* begin::Table */}
 
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-            <thead>
+            <thead style={{verticalAlign: 'top'}}>
               <tr className='fw-bold text-muted'>
                 <th></th>
                 <th>
@@ -305,10 +306,19 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     ASSET ID <ICSort type={sort_name === 'hashId' ? sort_type : 'default'} />
                   </span>
                 </th>
-                <th>
+                <th className='min-w-150px'>
                   <span className='cursor-pointer' onClick={() => !isLoading && handleSort('xref')}>
                     CROSS REFERENCE
                     <ICSort type={sort_name === 'xref' ? sort_type : 'default'} />
+                  </span>
+                </th>
+                <th className='min-w-100px'>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('assetTypeName')}
+                  >
+                    ASSET TYPE{' '}
+                    <ICSort type={sort_name === 'assetTypeName' ? sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
@@ -320,7 +330,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     <ICSort type={sort_name === 'portfolioName' ? sort_type : 'default'} />
                   </span>
                 </th>
-                <th>
+                <th className='min-w-150px'>
                   <span
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('mintCompletedStatus')}
@@ -329,7 +339,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     <ICSort type={sort_name === 'mintCompletedStatus' ? sort_type : 'default'} />
                   </span>
                 </th>
-                <th>
+                <th className='min-w-100px'>
                   <span
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('bestBid')}
@@ -353,15 +363,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('chainName')}
                   >
                     CHAIN <ICSort type={sort_name === 'chainName' ? sort_type : 'default'} />
-                  </span>
-                </th>
-                <th>
-                  <span
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('assetTypeName')}
-                  >
-                    ASSET TYPE{' '}
-                    <ICSort type={sort_name === 'assetTypeName' ? sort_type : 'default'} />
                   </span>
                 </th>
                 <th>

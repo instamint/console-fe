@@ -5,22 +5,47 @@ import * as Yup from 'yup'
 import {getListAuctionType} from '../../../../utils/api/assets'
 import {KTSVG} from '../../../../_metronic/helpers'
 import useOnClickOutside from '../../../hooks/useOnClickOutside'
+import BigNumber from 'bignumber.js'
+
+function toFixed(x) {
+  try {
+    if (Math.abs(x) < 1.0) {
+      var e = parseInt(x.toString().split('e-')[1])
+      if (e) {
+        x *= Math.pow(10, e - 1)
+        x = '0.' + new Array(e).join('0') + x.toString().substring(2)
+      }
+    } else {
+      var e = parseInt(x.toString().split('+')[1])
+      if (e > 20) {
+        e -= 20
+        x /= Math.pow(10, e)
+        x += new Array(e + 1).join('0')
+      }
+    }
+    return x
+  } catch (error) {
+    console.error({error})
+    return x
+  }
+}
 
 const patternTwoDigisAfterComma = /^(\d*\.{0,1}\d{0,2}$)/
 const AuctionSchema = Yup.object().shape({
+  auction_type: Yup.string().trim().nullable(null).required('Auction Type is required'),
   reserve_price: Yup.number()
     .test(
       'is-decimal',
       'Price should be a decimal with maximum two digits after comma',
       (val: any) => {
         if (val !== undefined) {
-          return patternTwoDigisAfterComma.test(val)
+        let x = new BigNumber(val).toFixed(2)
+          return patternTwoDigisAfterComma.test(toFixed(val))
         }
         return true
       }
     )
     .max(99999999999999999999, 'Maximum 20 digits')
-    .required('Reserve Price is required')
     .typeError('Price should be a decimal with maximum two digits after comma'),
   buy_now_price: Yup.number()
     .test(
@@ -28,14 +53,12 @@ const AuctionSchema = Yup.object().shape({
       'Price should be a decimal with maximum two digits after comma',
       (val: any) => {
         if (val !== undefined) {
-
-          return patternTwoDigisAfterComma.test(Math.abs(val).toString())
+          return patternTwoDigisAfterComma.test(Math.abs(toFixed(val)).toString())
         }
         return true
       }
     )
     .max(99999999999999999999, 'Maximum 20 digits')
-    .required('Buy Now Price is required')
     .typeError('Price should be a decimal with maximum two digits after comma'),
 })
 
@@ -162,6 +185,15 @@ export default function ModalAuction({
                     </div>
                   </div>
                 </div>
+                {touched?.auction_type && errors?.auction_type ? (
+                  <div className='fv-plugins-message-container'>
+                    <div className='fv-help-block'>
+                      <span role='alert'>{errors?.auction_type as string}</span>
+                    </div>
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
               <div className='mt-2'>
                 <div className='d-flex align-items-center'>
