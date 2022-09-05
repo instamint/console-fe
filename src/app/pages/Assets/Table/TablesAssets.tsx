@@ -268,7 +268,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [listAssets, selectAsset]
+    [listAssets, selectAsset, minted]
   )
 
   return (
