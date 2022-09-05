@@ -16,6 +16,8 @@ import './_metronic/assets/sass/plugins.scss'
 import './_metronic/assets/sass/style.react.scss'
 import {AppRoutes} from './app/routing/AppRoutes'
 import {AuthProvider, setupAxios} from './app/modules/auth'
+import {positions, Provider} from 'react-alert'
+import AlertTemplate from 'react-alert-template-basic'
 /**
  * Creates `axios-mock-adapter` instance for provided `axios` instance, add
  * basic Metronic mocks and returns it.
@@ -30,6 +32,11 @@ import {AuthProvider, setupAxios} from './app/modules/auth'
 setupAxios(axios)
 Chart.register(...registerables)
 
+const optionsAlert = {
+  timeout: 3000,
+  position: positions.TOP_RIGHT,
+}
+
 const queryClient = new QueryClient()
 const container = document.getElementById('root')
 if (container) {
@@ -37,7 +44,9 @@ if (container) {
     <QueryClientProvider client={queryClient}>
       <MetronicI18nProvider>
         <AuthProvider>
-          <AppRoutes />
+          <Provider template={AlertTemplate} {...optionsAlert}>
+            <AppRoutes />
+          </Provider>
         </AuthProvider>
       </MetronicI18nProvider>
     </QueryClientProvider>

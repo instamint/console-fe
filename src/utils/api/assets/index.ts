@@ -6,6 +6,9 @@ export const GET_LIST_ASSETS = `${API_URL}/asset`
 export const GET_DETAIL_ASSETS = (id) => `${API_URL}/asset/detail/${id}`
 export const ADD_NOTE = `${API_URL}/note/add`
 export const GET_LIST_NOTE = (id) => `${API_URL}/note/${id}`
+export const GET_LIST_AUCTION_TYPE = `${API_URL}/auction_type`
+export const CREATE_AUCTION = (id) => `${API_URL}/asset/auction/${id}`
+export const END_AUCTION = (id) => `${API_URL}/asset/reset-auction/${id}`
 
 // get all list assets
 export function getListAsset(params) {
@@ -31,4 +34,18 @@ export function AddNote(note: string, assetId: string | number) {
 
 export function getListNote(id: string | number) {
   return axios.get(GET_LIST_NOTE(id))
+}
+
+export function getListAuctionType() {
+  return axios.get(GET_LIST_AUCTION_TYPE)
+}
+
+export const createAuction = async (params): Promise<any> => {
+  const response = await axios.post<any>(CREATE_AUCTION(params?.id), params)
+  return response.data
+}
+
+export const endAuction = async (id: string | number): Promise<any> => {
+  const response = await axios.patch<any>(END_AUCTION(id))
+  return response.data
 }
