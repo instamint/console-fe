@@ -7,7 +7,7 @@ import {Loading} from '../../../components/Loading'
 import useSearch from '../../../hooks/useSearch'
 import {Modal} from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
-import {createPool} from '../../../../utils/api/pools'
+import {createPool, updatePool} from '../../../../utils/api/pools'
 import {shortAddress, shortAddressBehind, showIconChain} from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
 import ICSort from '../../../components/Sort'
@@ -42,7 +42,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     // setIsLoading(true)
     try {
       const responsive = await getListAsset(params)
-      setListAssets(responsive?.data || [])
+      responsive && setListAssets(responsive?.data || [])
     } catch (error) {
       console.error({error})
     } finally {
@@ -80,7 +80,12 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const handleAddPool = async (values) => {
     try {
       const list_assets_id = selectAsset?.map((i) => i.id) || []
-      const reps = await createPool(values?.poolname, list_assets_id)
+      let reps = null
+      if (values?.poolname && values?.poolname?.trim() !== "") {
+        reps = await createPool(values?.poolname, list_assets_id)
+      } else {
+        reps = await updatePool(values?.portfolio?.id, list_assets_id)
+      }
       if (reps) {
         navigate('/portfolios')
       }
@@ -178,7 +183,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.xref}</span>
+                  <span data-tip={item?.xref} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.xref)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
@@ -213,7 +221,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.bestBid ? 'TRUE' : 'FALSE'}</span>
+                  <span className='text-dark fw-bold fs-7'>{parseInt(item?.bestBid)}</span>
                 </div>
               </div>
             </td>

@@ -33,6 +33,7 @@ setupAxios(axios)
 Chart.register(...registerables)
 
 const optionsAlert = {
+  offset: '25px',
   timeout: 3000,
   position: positions.TOP_RIGHT,
 }
