@@ -13,6 +13,7 @@ import ReactTooltip from 'react-tooltip'
 import ICSort from '../../../components/Sort'
 import ModalAuction from '../Modal/modal-auction'
 import {useAlert} from 'react-alert'
+import styled from 'styled-components'
 
 type Props = {
   className: string
@@ -99,8 +100,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     try {
       const reps = await createAuction({
         id: idAssetAuction,
-        reserve: values?.reserve_price,
-        buyNow: values?.buy_now_price,
+        reserve: values?.reserve_price && values?.reserve_price !== "" ? values?.reserve_price : 0,
+        buyNow: values?.buy_now_price && values?.buy_now_price !== "" ? values?.buy_now_price : 0,
         auctionType: values?.auction_type,
       })
       alert.success('Auction successful!')
@@ -221,7 +222,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{parseInt(item?.bestBid)}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.bestBid}</span>
                 </div>
               </div>
             </td>
@@ -307,89 +308,92 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <tr className='fw-bold text-muted'>
                 <th></th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('hashId')}
                   >
                     ASSET ID <ICSort type={sort_name === 'hashId' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th className='min-w-150px'>
-                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('xref')}>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('xref')}
+                  >
                     CROSS REFERENCE
                     <ICSort type={sort_name === 'xref' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th className='min-w-100px'>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('assetTypeName')}
                   >
                     ASSET TYPE{' '}
                     <ICSort type={sort_name === 'assetTypeName' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('portfolioName')}
                   >
                     PORTFOLIO{' '}
                     <ICSort type={sort_name === 'portfolioName' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th className='min-w-150px'>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('mintCompletedStatus')}
                   >
                     MINT COMPLETED
                     <ICSort type={sort_name === 'mintCompletedStatus' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th className='min-w-100px'>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('bestBid')}
                   >
                     BEST BID
                     <ICSort type={sort_name === 'bestBid' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('auction')}
                   >
                     AUCTION
                     <ICSort type={sort_name === 'auction' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('chainName')}
                   >
                     CHAIN <ICSort type={sort_name === 'chainName' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('issuerName')}
                   >
                     ISSUER
                     <ICSort type={sort_name === 'issuerName' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('ownerName')}
                   >
                     OWNER
                     <ICSort type={sort_name === 'ownerName' ? sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>ACTION</th>
               </tr>
@@ -446,3 +450,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 }
 
 export {TablesAssets}
+
+const SpanThTable = styled.span`
+  width: max-content;
+  display: flex;
+`

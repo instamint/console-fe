@@ -1,8 +1,9 @@
-import {Form, Formik} from 'formik'
-import {useEffect, useRef, useState} from 'react'
+import { Form, Formik } from 'formik'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import {getListPools} from '../../../../utils/api/pools'
-import {KTSVG} from '../../../../_metronic/helpers'
+import * as Yup from 'yup'
+import { getListPools } from '../../../../utils/api/pools'
+import { KTSVG } from '../../../../_metronic/helpers'
 import useOnClickOutside from '../../../hooks/useOnClickOutside'
 
 interface MyFormValues {
@@ -10,13 +11,15 @@ interface MyFormValues {
   portfolio: Object
 }
 
+const PoolSchema = Yup.object().shape({
+  poolname: Yup.string()
+    .max(50, 'Maximum 50 symbols')
+})
+
 export default function ModalPool({modalShow, setModalShow, handlePool, error, setError}) {
   const refDropDown = useRef()
   useOnClickOutside(refDropDown, () => setDropDown(false))
-  const [listPortfolio, setListPortfolio] = useState([
-    {id: 1, name: 'abc 1'},
-    {id: 2, name: 'abc 2'},
-  ])
+  const [listPortfolio, setListPortfolio] = useState([])
   const [dropDown, setDropDown] = useState(false)
   const handleSubmit = (values, {setSubmitting}) => {
     setSubmitting(true)
@@ -47,11 +50,12 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={PoolSchema}
       validate={(values) => {
         let errors = {
           portfolio: null,
         }
-        if ((!values?.poolname || values?.poolname === '') && !values?.portfolio?.name) {
+        if ((!values?.poolname || values?.poolname?.trim() === '') && !values?.portfolio?.name) {
           errors.portfolio =
             'Please enter a Portfolio name or select an existing Portfolio to continue'
         } else delete errors.portfolio
@@ -79,7 +83,7 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
               </div>
             </div>
             <div className='modal-body'>
-              <div className='flex-column align-items-center'>
+              <div className='d-flex align-items-center'>
                 <Title>Portfolio Name:</Title>
                 <InputName
                   name='poolname'
@@ -90,22 +94,50 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
                   }}
                 ></InputName>
               </div>
-              {listPortfolio?.length > 0 && (!values?.poolname || values?.poolname?.trim() === '') ? (
-                <div className='flex-column align-items-center mt-5'>
+              {touched?.poolname && errors?.poolname ? (
+                <div className='fv-plugins-message-container'>
+                  <div className='fv-help-block'>
+                    <span role='alert'>{errors?.poolname as string}</span>
+                  </div>
+                </div>
+              ) : (
+                ''
+              )}
+              {listPortfolio?.length > 0 ? (
+                <div className='d-flex align-items-center mt-6'>
                   <Title>Existing Portfolio:</Title>
                   <DivDropDown>
                     <button
-                      onClick={() => setDropDown((preState) => !preState)}
+                      onClick={() =>
+                        (!values?.poolname || values?.poolname?.trim() === '') &&
+                        setDropDown((preState) => !preState)
+                      }
                       type='button'
                       data-kt-menu-trigger='click'
                       data-kt-menu-placement='bottom-start'
                       data-kt-menu-flip='top-end'
                       className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary d-flex align-items-center'
+                      style={{
+                        opacity: !values?.poolname || values?.poolname?.trim() === '' ? '1' : '0.7',
+                        cursor:
+                          !values?.poolname || values?.poolname?.trim() === ''
+                            ? 'pointer'
+                            : 'not-allowed',
+                      }}
                     >
-                      <Name>{values?.portfolio?.name || 'Options'}</Name>{' '}
-                      <IconDrop className='fa-solid fa-caret-down'></IconDrop>
+                      <Name>
+                        {/* {shortAddressMaxLength(values?.portfolio?.name || '', 34) || 'Options'} */}
+                        <SpanName>{values?.portfolio?.name || 'Options'}</SpanName>
+                      </Name>{' '}
+                      <IconDrop
+                        className={
+                          !values?.poolname || values?.poolname?.trim() === ''
+                            ? 'fa-solid fa-caret-down'
+                            : 'fa-solid fa-ban'
+                        }
+                      ></IconDrop>
                     </button>
-                    <div
+                    <DivDropDownItem
                       ref={refDropDown}
                       className='menu menu-sub menu-sub-dropdown p-4'
                       data-kt-menu='true'
@@ -128,7 +160,7 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
                           })}
                         </>
                       </div>
-                    </div>
+                    </DivDropDownItem>
                   </DivDropDown>
                 </div>
               ) : (
@@ -176,8 +208,9 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
 }
 
 const Title = styled.span`
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
+  min-width: 127px;
 `
 
 const InputName = styled.input`
@@ -200,6 +233,7 @@ const GroupBtn = styled.div`
   width: 100%;
 `
 const NameDropdow = styled.div`
+  word-break: break-all;
   padding: 5px;
   min-width: 100px;
   display: flex;
@@ -213,15 +247,31 @@ const NameDropdow = styled.div`
 `
 
 const Name = styled.div`
-  min-width: 150px;
+  width: 293px;
   display: flex;
 `
 const IconDrop = styled.i`
-  margin-left: 5px;
-  margin-bottom: 2px;
+  position: absolute;
+  right: 10px;
 `
 
 const DivDropDown = styled.div`
-  margin-top: 7px;
-  margin-bottom: 5px;
+  position: relative;
 ` 
+
+const DivDropDownItem = styled.div`
+  width: 328px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
+` 
+
+const SpanName = styled.span`
+  width: 270px;
+  overflow: hidden;
+  display: inline-block;
+  text-align: left;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`

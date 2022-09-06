@@ -152,12 +152,14 @@ export default function ModalAuction({
                       data-kt-menu-flip='top-end'
                       className='btn btn-sm fw-bold btn-bg-light btn-color-gray-700 btn-active-color-primary d-flex align-items-center'
                     >
-                      <Name>{values.auction_type || 'Types'}</Name>{' '}
+                      <Name>
+                        <SpanName>{values.auction_type || 'Types'}</SpanName>
+                      </Name>{' '}
                       <IconDrop className='fa-solid fa-caret-down'></IconDrop>
                     </button>
-                    <div
+                    <DivDropDownItem
                       ref={refDropDown}
-                      className='menu menu-sub menu-sub-dropdown w-250px w-md-150px p-4'
+                      className='menu menu-sub menu-sub-dropdown p-4'
                       data-kt-menu='true'
                       style={{display: dropDown ? 'block' : 'none', position: 'absolute'}}
                     >
@@ -182,7 +184,7 @@ export default function ModalAuction({
                           <div>There are currently no categories</div>
                         )}
                       </div>
-                    </div>
+                    </DivDropDownItem>
                   </div>
                 </div>
                 {touched?.auction_type && errors?.auction_type ? (
@@ -296,6 +298,7 @@ const GroupBtn = styled.div`
 `
 
 const NameDropdow = styled.div`
+  word-break: break-all;
   padding: 5px;
   min-width: 100px;
   display: flex;
@@ -309,10 +312,26 @@ const NameDropdow = styled.div`
 `
 
 const Name = styled.div`
-  min-width: 100px;
+  width: 277px;
   display: flex;
 `
 const IconDrop = styled.i`
   margin-left: 5px;
   margin-bottom: 2px;
+`
+const DivDropDownItem = styled.div`
+  width: 328px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
+` 
+
+const SpanName = styled.span`
+  width: 270px;
+  overflow: hidden;
+  display: inline-block;
+  text-align: left;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
