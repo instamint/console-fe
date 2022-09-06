@@ -1,34 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react'
-import { Modal } from 'react-bootstrap'
+import React from 'react'
 import { useLocation } from 'react-router'
 import ReactTooltip from 'react-tooltip'
-import { AddNote } from '../../../../utils/api/assets'
 import { KTSVG } from '../../../../_metronic/helpers'
 import { shortAddress } from '../../../../_metronic/helpers/format'
 import { Dropdown1 } from '../../../../_metronic/partials'
-import ModalAddNote from '../Modal/modal-add-note'
 
 type Props = {
   id: string
   dataDetail: any
-  setLoadingNote: any
 }
 
-const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
+const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
   const location = useLocation()
-  const [modalAddNote, setModalAddNote] = useState(false)
-
-  const handleAddNote = async (note: string) => {
-    try {
-      await AddNote(note, dataDetail?.asset?.id)
-      setLoadingNote((preState) => !preState)
-    } catch (error) {
-      console.error({error})
-    } finally {
-      setModalAddNote(false)
-    }
-  }
 
   return (
     <div className='card mb-5 mb-xl-10'>
@@ -96,14 +80,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
                     <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
                   </span>
                 </a>
-                <a
-                  className='btn btn-sm btn-primary me-3'
-                  data-bs-toggle='modal'
-                  data-bs-target='#kt_modal_offer_a_deal'
-                  onClick={() => setModalAddNote(true)}
-                >
-                  Add Note
-                </a>
+                
                 <div className='me-0'>
                   <button
                     className='btn btn-sm btn-icon btn-bg-light btn-active-color-primary'
@@ -158,20 +135,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
                   </div>
                 </div>
               </div>
-
-              <div className='d-flex align-items-center w-200px w-sm-300px flex-column mt-3'>
-                <div className='d-flex justify-content-between w-100 mt-auto mb-2'>
-                  <span className='fw-bold fs-6 text-gray-400'>Profile Compleation</span>
-                  <span className='fw-bolder fs-6'>50%</span>
-                </div>
-                <div className='h-5px mx-3 w-100 bg-light mb-3'>
-                  <div
-                    className='bg-success rounded h-5px'
-                    role='progressbar'
-                    style={{width: '50%'}}
-                  ></div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -192,22 +155,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail, setLoadingNote}) => {
           </ul>
         </div>
       </div>
-      <Modal
-        className='modal fade'
-        id='kt_modal_select_location'
-        data-backdrop='static'
-        tabIndex={-1}
-        role='dialog'
-        show={modalAddNote}
-        dialogClassName='modal-ml modal-dialog-600'
-        aria-hidden='true'
-      >
-        <ModalAddNote
-          modalAddNote={modalAddNote}
-          setModalAddNote={setModalAddNote}
-          handleAddNote={handleAddNote}
-        />
-      </Modal>
     </div>
   )
 }

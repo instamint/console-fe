@@ -8,7 +8,7 @@ export const ADD_NOTE = `${API_URL}/note/add`
 export const GET_LIST_NOTE = (id) => `${API_URL}/note/${id}`
 export const GET_LIST_AUCTION_TYPE = `${API_URL}/auction_type`
 export const CREATE_AUCTION = (id) => `${API_URL}/asset/auction/${id}`
-export const END_AUCTION = (id) => `${API_URL}/asset/reset-auction/${id}`
+export const END_AUCTION = (id) => `${API_URL}/asset/end-auction/${id}`
 
 // get all list assets
 export function getListAsset(params) {

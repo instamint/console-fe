@@ -1,9 +1,10 @@
 import {FormEvent, useCallback, useState} from 'react'
 import styled from 'styled-components'
+import {useAlert} from 'react-alert'
 
 export type FilterSearchProps = {
   setSearch: (value: string | null) => void
-  openModalPool: () => void
+  openModalPool: (value: boolean) => void
   selectAsset: Array<any>
   setMinted: (value: any) => void
   minted: boolean
@@ -16,6 +17,7 @@ const FilterSearch = ({
   minted,
 }: FilterSearchProps) => {
   const [term, setTerm] = useState<string>('')
+  const alert = useAlert()
 
   const handleSubmit = useCallback(
     (evt: FormEvent<HTMLFormElement>) => {
@@ -26,6 +28,13 @@ const FilterSearch = ({
     },
     [term, setSearch]
   )
+
+  const handleOpenModalPool = (selectAsset) => {
+    if (selectAsset?.some((item) => item?.portfolioName)) {
+      alert.error('Please select Assets not already in a Portfolio!')
+    } else openModalPool(true)
+  }
+
   return (
     <form action='#' onSubmit={handleSubmit}>
       <div className='d-flex flex-wrap flex-stack'>
@@ -53,8 +62,10 @@ const FilterSearch = ({
           </div>
           <div className='menu menu-sub menu-sub-dropdown w-180px p-4' data-kt-menu='true'>
             <div className='d-flex flex-column'>
-              <NameDropdow onClick={() => selectAsset?.length > 0 && openModalPool()}>
-                Create Portfolio
+              <NameDropdow
+                onClick={() => selectAsset?.length > 0 && handleOpenModalPool(selectAsset)}
+              >
+                Assign To Portfolio
               </NameDropdow>
               <NameDropdow>Enable Auction</NameDropdow>
             </div>

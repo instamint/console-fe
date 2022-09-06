@@ -8,6 +8,7 @@ import Overview from './Overview'
 export default function AssetsDetail() {
   const params = useParams()
   const [isLoading, setIsLoading] = useState(true)
+  const [reloadPage, setReloadPage] = useState(false)
   const [dataDetail, setDataDetail] = useState<any>(null)
   const [loadingNote, setLoadingNote] = useState(true)
   const navigate = useNavigate()
@@ -37,7 +38,7 @@ export default function AssetsDetail() {
     } else {
       fetchDetailAsset(id)
     }
-  }, [id])
+  }, [id, reloadPage])
 
   return (
     <>
@@ -77,11 +78,7 @@ export default function AssetsDetail() {
               <Route
                 element={
                   <>
-                    <AccountHeader
-                      id={id}
-                      dataDetail={dataDetail}
-                      setLoadingNote={setLoadingNote}
-                    />
+                    <AccountHeader id={id} dataDetail={dataDetail} />
                     <Outlet />
                   </>
                 }
@@ -90,7 +87,12 @@ export default function AssetsDetail() {
                   path='overview/:id'
                   element={
                     <>
-                      <Overview dataDetail={dataDetail} loadingNote={loadingNote} />
+                      <Overview
+                        dataDetail={dataDetail}
+                        loadingNote={loadingNote}
+                        setReloadPage={setReloadPage}
+                        setLoadingNote={setLoadingNote}
+                      />
                     </>
                   }
                 />

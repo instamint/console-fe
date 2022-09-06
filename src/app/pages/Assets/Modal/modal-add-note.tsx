@@ -78,7 +78,7 @@ export default function ModalAddNote({modalAddNote, setModalAddNote, handleAddNo
                 >
                   Cancel
                 </button>
-                <button type='submit' className='btn btn-success'>
+                <button type='submit' className='btn btn-primary'>
                   Save
                 </button>
               </GroupBtn>
