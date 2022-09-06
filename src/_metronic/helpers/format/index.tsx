@@ -21,6 +21,13 @@ export const shortAddressBehind = (value: string, n = 25, nlast = 4, v = 13) => 
   return subString + '...' + lastSubString
 }
 
+export const shortAddressMaxLength = (value: string, n = 25) => {
+  if (value?.length <= n) {
+    return value
+  }
+  return value?.substring(0, n) + '...'
+}
+
 export const showIconChain = (chain: string) => {
   const ImgChain = styled.img`
     width: 22px;
