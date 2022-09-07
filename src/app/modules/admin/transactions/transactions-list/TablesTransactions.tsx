@@ -80,7 +80,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.transaction_type}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.type}</span>
                 </div>
               </div>
             </td>
