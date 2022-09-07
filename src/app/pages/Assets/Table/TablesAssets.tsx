@@ -14,6 +14,7 @@ import ICSort from '../../../components/Sort'
 import ModalAuction from '../Modal/modal-auction'
 import {useAlert} from 'react-alert'
 import styled from 'styled-components'
+import { Search } from '../../../components/FilterSearch/search'
 
 type Props = {
   className: string
@@ -88,7 +89,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         reps = await updatePool(values?.portfolio?.id, list_assets_id)
       }
       if (reps) {
-        navigate('/portfolios')
+        alert.success('Assign To Portfolio successful!')
+        setReloadList((preState) => !preState)
+        setModalShow(false)
       }
     } catch (error) {
       setError('Portfolio Name already exists, please try again')
@@ -284,10 +287,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
-      <div className='card-header border-0 pt-5'>
-        <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Yours Assets</span>
-        </h3>
+      <div className='card-header border-0 pt-5 d-flex align-items-center'>
+        <Search title='Search Assets' />
         <FilterSearch
           setSearch={setSearch}
           openModalPool={openModalPool}
@@ -454,4 +455,5 @@ export {TablesAssets}
 const SpanThTable = styled.span`
   width: max-content;
   display: flex;
+  align-items: center;
 `

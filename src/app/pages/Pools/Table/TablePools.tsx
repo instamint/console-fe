@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {getListPools} from '../../../../utils/api/pools'
-import { shortAddress } from '../../../../_metronic/helpers/format'
+import {shortAddress} from '../../../../_metronic/helpers/format'
 import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
 import FilterSearch from '../../../components/FilterSearch'
 import {Loading} from '../../../components/Loading'
+import ICSort from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
@@ -18,12 +18,17 @@ const TablesPools: React.FC<Props> = ({className}) => {
   const [listPools, setListPools] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const {searched, setSearch, results} = useSearch(listPools, ['name', 'namespace'])
+  const [params, setParams] = useState({
+    sort_name: '',
+    sort_type: '',
+  })
+  const [sort_name, set_sort_name] = useState('')
+  const [sort_type, set_sort_type] = useState('')
 
-  const fetchListPools = async () => {
-    setIsLoading(true)
+  const fetchListPools = async (params) => {
     try {
-      const reps = await getListPools()
-      reps && setListPools(reps)
+      const reps = await getListPools(params)
+      reps && setListPools(reps?.data)
     } catch (error) {
       console.error({error})
     } finally {
@@ -31,30 +36,23 @@ const TablesPools: React.FC<Props> = ({className}) => {
     }
   }
 
-  const listAssetsInPool = (list_assets) => {
-    if (list_assets?.length > 0) {
-      return list_assets?.map((item, index) => {
-        return (
-          <Link
-            key={index}
-            to={{
-              pathname: '/assets/detail',
-              search: `?id=${item?.id}`,
-            }}
-            className='text-dark fw-bold fs-7'
-            style={{marginRight: '4px'}}
-          >
-            <NameAssets>{item?.id}</NameAssets>
-            {index + 1 === list_assets?.length ? '' : ', '}
-          </Link>
-        )
-      })
-    } else return ''
+  const handleSort = (name) => {
+    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort_name !== name) {
+      sortTypeNow = 'ASC'
+    }
+    setParams({
+      ...params,
+      sort_name: name,
+      sort_type: sortTypeNow,
+    })
+    set_sort_name(name)
+    set_sort_type(sortTypeNow)
   }
 
   useEffect(() => {
-    fetchListPools()
-  }, [])
+    fetchListPools(params)
+  }, [params])
 
   const renderList = useCallback(
     () =>
@@ -93,16 +91,6 @@ const TablesPools: React.FC<Props> = ({className}) => {
                 </div>
               </div>
             </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start'>
-                  <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
-                    {shortAddress(item?.hashId)}
-                  </span>
-                  <ReactTooltip place='top' effect='solid' />
-                </div>
-              </div>
-            </td>
           </tr>
         )
       }),
@@ -132,9 +120,31 @@ const TablesPools: React.FC<Props> = ({className}) => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='min-w-60px'>#</th>
-                  <th className='min-w-60px'>UUID</th>
-                  <th className='min-w-150px'>PORTFOLIO NAME</th>
-                  <th className='min-w-150px'>PORTFOLIO CREATE TIMESTAMP</th>
+                  <th className='min-w-60px'>
+                    <SpanThTable
+                      className='cursor-pointer'
+                      onClick={() => !isLoading && handleSort('uuid')}
+                    >
+                      UUID <ICSort type={sort_name === 'uuid' ? sort_type : 'default'} />
+                    </SpanThTable>
+                  </th>
+                  <th className='min-w-150px'>
+                    <SpanThTable
+                      className='cursor-pointer'
+                      onClick={() => !isLoading && handleSort('name')}
+                    >
+                      PORTFOLIO NAME <ICSort type={sort_name === 'name' ? sort_type : 'default'} />
+                    </SpanThTable>
+                  </th>
+                  <th className='min-w-150px'>
+                    <SpanThTable
+                      className='cursor-pointer'
+                      onClick={() => !isLoading && handleSort('createdAt')}
+                    >
+                      PORTFOLIO CREATE TIMESTAMP{' '}
+                      <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
+                    </SpanThTable>
+                  </th>
                 </tr>
               </thead>
               {/* end::Table head */}
@@ -166,10 +176,8 @@ const TablesPools: React.FC<Props> = ({className}) => {
 
 export {TablesPools}
 
-
-
-const NameAssets = styled.span`
-  &:hover {
-    color: #009ef7
-  }
+const SpanThTable = styled.span`
+  width: max-content;
+  display: flex;
+  align-items: center;
 `

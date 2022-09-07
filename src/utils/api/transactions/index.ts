@@ -2,10 +2,10 @@ import axios from 'axios'
 
 const API_URL = process.env.REACT_APP_API_URL
 
-export const GET_LIST_CONTRACTS = `${API_URL}/ethereum-contract`
+export const GET_LIST_TRANSACTIONS = `${API_URL}/transaction`
 
-export const getListContracts = async (params): Promise<any> => {
-  let url = `${GET_LIST_CONTRACTS}?`
+export const getListTransactions = async (params): Promise<any> => {
+  let url = `${GET_LIST_TRANSACTIONS}?`
   if (params) {
     Object.keys(params).map((key) => {
       url += key + '=' + params[key] + '&'

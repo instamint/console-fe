@@ -10,7 +10,6 @@ export default function AssetsDetail() {
   const [isLoading, setIsLoading] = useState(true)
   const [reloadPage, setReloadPage] = useState(false)
   const [dataDetail, setDataDetail] = useState<any>(null)
-  const [loadingNote, setLoadingNote] = useState(true)
   const navigate = useNavigate()
   const paramUrl = params?.[Object.keys(params)?.[0]]?.split('/')
   const id = paramUrl?.[paramUrl?.length - 1] || null
@@ -89,9 +88,7 @@ export default function AssetsDetail() {
                     <>
                       <Overview
                         dataDetail={dataDetail}
-                        loadingNote={loadingNote}
                         setReloadPage={setReloadPage}
-                        setLoadingNote={setLoadingNote}
                       />
                     </>
                   }
