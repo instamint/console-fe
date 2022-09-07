@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import {getListParties} from '../../../../utils/api/parties'
 import {shortAddress} from '../../../../_metronic/helpers/format'
 import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
+import { Search } from '../../../components/FilterSearch/search'
 import {Loading} from '../../../components/Loading'
 import ICSort from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
@@ -108,10 +109,8 @@ const TablesParties: React.FC<Props> = ({className}) => {
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
-      <div className='card-header border-0 pt-5'>
-        <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Parties</span>
-        </h3>
+      <div className='card-header border-0 pt-5 d-flex align-items-center'>
+        <Search title='Search Parties' />
         <div className='d-flex flex-wrap flex-stack'>
           <div className='d-flex align-items-center'>
             <div
@@ -157,7 +156,10 @@ const TablesParties: React.FC<Props> = ({className}) => {
                   </span>
                 </th>
                 <th>
-                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('createdAt')}>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('createdAt')}
+                  >
                     TIMESTAMP <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
                   </span>
                 </th>

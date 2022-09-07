@@ -6,9 +6,14 @@ export const GET_LIST_POOLS = `${API_URL}/portfolio`
 export const ADD_POOL = `${API_URL}/portfolio/add`
 export const UPDATE_POOL = (id) => `${API_URL}/portfolio/add-assets/${id}`
 
-export const getListPools = async (): Promise<any> => {
-  const response = await axios.get<any>(GET_LIST_POOLS)
-  return response.data
+export const getListPools = async (params): Promise<any> => {
+  let url = `${GET_LIST_POOLS}?`
+  if (params) {
+    Object.keys(params).map((key) => {
+      url += key + '=' + params[key] + '&'
+    })
+  }
+  return axios.get(url)
 }
 
 export const createPool = async (pool_name: string, list_assets_id: Array<string | number>): Promise<any> => {

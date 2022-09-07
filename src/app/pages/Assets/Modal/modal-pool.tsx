@@ -31,8 +31,11 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
   const fetchListPortfolio = async () => {
     // setIsLoading(true)
     try {
-      const reps = await getListPools()
-      reps && setListPortfolio(reps)
+      const reps = await getListPools({
+        sort_name: "",
+        sort_type: ""
+      })
+      reps && setListPortfolio(reps?.data || [])
     } catch (error) {
       console.error({error})
     } finally {

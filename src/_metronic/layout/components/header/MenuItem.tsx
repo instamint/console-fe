@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import {useLocation} from 'react-router'
 import clsx from 'clsx'
 import {checkIsActive, KTSVG} from '../../../helpers'
+import styled from 'styled-components'
 
 type Props = {
   to: string
@@ -11,6 +12,7 @@ type Props = {
   fontIcon?: string
   hasArrow?: boolean
   hasBullet?: boolean
+  label?: string
 }
 
 const MenuItem: React.FC<Props> = ({
@@ -20,6 +22,7 @@ const MenuItem: React.FC<Props> = ({
   fontIcon,
   hasArrow = false,
   hasBullet = false,
+  label = null,
 }) => {
   const {pathname} = useLocation()
 
@@ -49,7 +52,10 @@ const MenuItem: React.FC<Props> = ({
           </span>
         )}
 
-        <span className='menu-title'>{title}</span>
+        <span className='menu-title'>
+          {title}
+          {label ? <LabelItem className='badge badge-light-danger ms-1'>{label}</LabelItem> : ''}
+        </span>
 
         {hasArrow && <span className='menu-arrow'></span>}
       </Link>
@@ -58,3 +64,7 @@ const MenuItem: React.FC<Props> = ({
 }
 
 export {MenuItem}
+
+const LabelItem = styled.span`
+  font-size: 9px;
+`
