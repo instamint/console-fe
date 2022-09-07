@@ -29,7 +29,7 @@ export default function BidHistory({idAsset}) {
   const fetchListBidHistory = async (id, params) => {
     try {
       const reps = await getListBidHistory(id, params)
-      reps && setListBidHistory(reps?.data?.content)
+      reps && setListBidHistory(reps?.data)
     } catch (error) {
       console.error({error})
     }
@@ -41,8 +41,8 @@ export default function BidHistory({idAsset}) {
 
   const renderListBidHistory = useCallback(
     () =>
-      Array.isArray([...listBidHistory]) &&
-      [...listBidHistory]?.splice(0, 10)?.map((item, index) => {
+      Array.isArray(listBidHistory) &&
+      listBidHistory?.map((item, index) => {
         return (
           <tr key={index}>
             <td className='w-250px'>{convertTimeZone(item?.createdAt)}</td>
