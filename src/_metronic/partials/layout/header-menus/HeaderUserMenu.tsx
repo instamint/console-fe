@@ -11,7 +11,7 @@ const HeaderUserMenu: FC = () => {
       data-kt-menu='true'
     >
       <div className='menu-item px-4'>
-        <div className='menu-content d-flex align-items-center px-3'>
+        <div className='menu-content d-flex align-items-center px-3 pt-0'>
           {/* <div className='symbol symbol-50px me-5'>
             <img alt='Logo' src={toAbsoluteUrl('/media/avatars/300-1.jpg')} />
           </div> */}
