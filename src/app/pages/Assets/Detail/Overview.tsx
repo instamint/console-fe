@@ -1,8 +1,8 @@
 import { useAlert } from 'react-alert'
 import { endAuction } from '../../../../utils/api/assets'
 import { TablesTransactions } from '../../Transactions/Table/TablesTransactions'
-import BidHistory from './BidHistory'
-import Notes from './Notes'
+import BidHistory from './BidHistory/index'
+import Notes from './Notes/index'
 
 export default function Overview({dataDetail, setReloadPage}) {
   const alert = useAlert()
@@ -103,7 +103,7 @@ export default function Overview({dataDetail, setReloadPage}) {
         </div>
       </div>
       <div className='card'>
-        <TablesTransactions />
+        <TablesTransactions idAsset={dataDetail?.asset?.id} />
       </div>
     </>
   )

@@ -2,9 +2,11 @@ import React from 'react'
 
 type Props = {
   title?: string
+  setSearch?: (value: string) => void
+  searched?: string
 }
 
-const Search: React.FC<Props> = ({title}) => {
+const Search: React.FC<Props> = ({title, setSearch, searched}) => {
   return (
     <div className='card-title'>
       {/*begin::Search*/}
@@ -36,10 +38,15 @@ const Search: React.FC<Props> = ({title}) => {
         </span>
         {/*end::Svg Icon*/}
         <input
+          value={searched || ""}
           type='text'
           data-kt-customer-table-filter='search'
           className='form-control form-control-solid w-250px ps-15'
-          placeholder={title || "Search..."}
+          placeholder={title || 'Search...'}
+          onChange={(e) => {
+            e.preventDefault()
+            setSearch(e.target.value)
+          }}
         />
       </div>
       {/*end::Search*/}

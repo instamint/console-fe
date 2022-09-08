@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import {Link} from 'react-router-dom'
 import {useFormik} from 'formik'
 import {requestPassword} from '../core/_requests'
+import AmericanFlag from '../../../images/american-flag.svg'
 
 const initialValues = {
   email: 'jamiel@instamint.com',
@@ -11,7 +12,7 @@ const initialValues = {
 
 const forgotPasswordSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Wrong email format')
+    .email('The value is not a valid email address')
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('Email is required'),
@@ -44,92 +45,130 @@ export function ForgotPassword() {
 
   return (
     <>
-      <form
-        className='form w-100 fv-plugins-bootstrap5 fv-plugins-framework'
-        noValidate
-        id='kt_login_password_reset_form'
-        onSubmit={formik.handleSubmit}
-      >
-        <div className='text-center mb-10'>
-          {/* begin::Title */}
-          <h1 className='text-dark mb-3'>Forgot Password ?</h1>
-          {/* end::Title */}
-
-          {/* begin::Link */}
-          <div className='text-gray-400 fw-bold fs-4'>Enter your email to reset your password.</div>
-          {/* end::Link */}
+      <div className='d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px'>
+        <div className='d-flex flex-stack py-2'>
+          <div className='me-2'>
+            <Link
+              to={'/auth/login'}
+              className='btn btn-icon bg-light rounded-circle'
+            >
+              <span className='svg-icon svg-icon-2 svg-icon-gray-800'>
+                <svg
+                  width={24}
+                  height={24}
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9.60001 11H21C21.6 11 22 11.4 22 12C22 12.6 21.6 13 21 13H9.60001V11Z'
+                    fill='currentColor'
+                  />
+                  <path
+                    opacity='0.3'
+                    d='M9.6 20V4L2.3 11.3C1.9 11.7 1.9 12.3 2.3 12.7L9.6 20Z'
+                    fill='currentColor'
+                  />
+                </svg>
+              </span>
+            </Link>
+          </div>
+          <div className='m-0'>
+            <span
+              className='text-gray-400 fw-bold fs-5 me-2'
+              data-kt-translate='password-reset-head-desc'
+            >
+              Join the Token Revolution
+            </span>
+            <Link
+              to={'/auth/registration'}
+              className='link-primary fw-bold fs-5'
+              data-kt-translate='password-reset-head-link'
+            >
+              Sign In
+            </Link>
+          </div>
         </div>
-
-        {/* begin::Title */}
-        {hasErrors === true && (
-          <div className='mb-lg-15 alert alert-danger'>
-            <div className='alert-text font-weight-bold'>
-              Sorry, looks like there are some errors detected, please try again.
-            </div>
-          </div>
-        )}
-
-        {hasErrors === false && (
-          <div className='mb-10 bg-light-info p-8 rounded'>
-            <div className='text-info'>Sent password reset. Please check your email</div>
-          </div>
-        )}
-        {/* end::Title */}
-
-        {/* begin::Form group */}
-        <div className='fv-row mb-10'>
-          <label className='form-label fw-bolder text-gray-900 fs-6'>Email</label>
-          <input
-            type='email'
-            placeholder=''
-            autoComplete='off'
-            {...formik.getFieldProps('email')}
-            className={clsx(
-              'form-control form-control-lg form-control-solid',
-              {'is-invalid': formik.touched.email && formik.errors.email},
-              {
-                'is-valid': formik.touched.email && !formik.errors.email,
-              }
-            )}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <div className='fv-plugins-message-container'>
-              <div className='fv-help-block'>
-                <span role='alert'>{formik.errors.email}</span>
+        <div className='py-20'>
+          <form
+            className='form w-100 fv-plugins-bootstrap5 fv-plugins-framework'
+            noValidate
+            id='kt_login_password_reset_form'
+            onSubmit={formik.handleSubmit}
+          >
+            <div className='text-start mb-10'>
+              <h1 className='text-dark mb-3 fs-3x' data-kt-translate='password-reset-title'>
+                Forgot Password ?
+              </h1>
+              <div
+                className='text-gray-400 fw-semibold fs-6'
+                data-kt-translate='password-reset-desc'
+              >
+                Enter your email to reset your password.
               </div>
             </div>
-          )}
+            <div className='fv-row mb-10'>
+              <input
+                type='email'
+                placeholder=''
+                autoComplete='off'
+                {...formik.getFieldProps('email')}
+                className={clsx(
+                  'form-control form-control-lg form-control-solid',
+                  {'is-invalid': formik.touched.email && formik.errors.email},
+                  {
+                    'is-valid': formik.touched.email && !formik.errors.email,
+                  }
+                )}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <div className='fv-plugins-message-container mt-2'>
+                  <div className='fv-help-block'>
+                    <span role='alert'>{formik.errors.email}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className='d-flex flex-stack'>
+              <div className='m-0'>
+                <button
+                  type='submit'
+                  id='kt_password_reset_submit'
+                  className='btn btn-primary me-2'
+                  data-kt-translate='password-reset-submit'
+                >
+                  <span className='indicator-label'>Submit</span>
+                  <span className='indicator-progress'>
+                    Please wait...
+                    <span className='spinner-border spinner-border-sm align-middle ms-2' />
+                  </span>
+                </button>
+                <Link className='btn btn-lg btn-light-primary fw-bold' to='/auth/login'>
+                  Cancel
+                </Link>
+              </div>
+            </div>
+          </form>
         </div>
-        {/* end::Form group */}
-
-        {/* begin::Form group */}
-        <div className='d-flex flex-wrap justify-content-center pb-lg-0'>
+        <div className='m-0'>
           <button
-            type='submit'
-            id='kt_password_reset_submit'
-            className='btn btn-lg btn-primary fw-bolder me-4'
+            className='btn btn-flex btn-link rotate'
+            data-kt-menu-trigger='click'
+            data-kt-menu-placement='bottom-start'
+            data-kt-menu-offset='0px, 0px'
           >
-            <span className='indicator-label'>Submit</span>
-            {loading && (
-              <span className='indicator-progress'>
-                Please wait...
-                <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-              </span>
-            )}
+            <img
+              data-kt-element='current-lang-flag'
+              className='w-25px h-25px rounded-circle me-3'
+              src={AmericanFlag}
+              alt=''
+            />
+            <span data-kt-element='current-lang-name' className='me-2'>
+              English
+            </span>
           </button>
-          <Link to='/auth/login'>
-            <button
-              type='button'
-              id='kt_login_password_reset_form_cancel_button'
-              className='btn btn-lg btn-light-primary fw-bolder'
-              disabled={formik.isSubmitting || !formik.isValid}
-            >
-              Cancel
-            </button>
-          </Link>{' '}
         </div>
-        {/* end::Form group */}
-      </form>
+      </div>
     </>
   )
 }
