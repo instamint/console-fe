@@ -15,11 +15,9 @@ type Props = {
   className: string
 }
 
-type Disable = boolean
-
 const TablesParties: React.FC<Props> = ({className}) => {
   const [listParties, setListParties] = useState<Array<any>>([])
-  const {searched, setSearch, results} = useSearch(listParties, ['name', 'namespace'])
+  const {searched, setSearch, results} = useSearch(listParties, ['name', 'uuid', 'createdAt'])
   const [isLoading, setIsLoading] = useState(true)
   const [sort_name, set_sort_name] = useState('')
   const [sort_type, set_sort_type] = useState('')
@@ -30,8 +28,14 @@ const TablesParties: React.FC<Props> = ({className}) => {
 
   const fetchListParties = async (params) => {
     try {
-      // setIsLoading(true)
-      const responsive = await getListParties(params)
+      let responsive = await getListParties(params)
+      if (responsive?.data?.length) {
+        responsive?.data?.forEach(item => {
+          if (item?.createdAt) {
+            item.createdAt = convertTimeZone(item.createdAt)
+          }
+        });
+      }
       setListParties(responsive?.data || [])
     } catch (error) {
       console.error({error})
@@ -60,8 +64,8 @@ const TablesParties: React.FC<Props> = ({className}) => {
 
   const renderList = useCallback(
     () =>
-      Array.isArray(listParties) &&
-      listParties?.map((item, index) => {
+      Array.isArray(results) &&
+      results?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -84,7 +88,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{convertTimeZone(item?.createdAt)}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.createdAt}</span>
                 </div>
               </div>
             </td>
@@ -103,14 +107,14 @@ const TablesParties: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [listParties]
+    [results, searched]
   )
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5 d-flex align-items-center'>
-        <Search title='Search Parties' />
+        <Search title='Search Parties' setSearch={setSearch} searched={searched} />
         <div className='d-flex flex-wrap flex-stack'>
           <div className='d-flex align-items-center'>
             <div
@@ -171,7 +175,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <tbody>
               {isLoading ? (
                 <Loading />
-              ) : listParties?.length > 0 ? (
+              ) : results?.length > 0 ? (
                 renderList()
               ) : (
                 <tr>

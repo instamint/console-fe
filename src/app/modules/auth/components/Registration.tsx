@@ -5,13 +5,14 @@ import * as Yup from 'yup'
 import clsx from 'clsx'
 import {getUserByToken, register} from '../core/_requests'
 import {Link} from 'react-router-dom'
-import {toAbsoluteUrl} from '../../../../_metronic/helpers'
 import {PasswordMeterComponent} from '../../../../_metronic/assets/ts/components'
 import {useAuth} from '../core/Auth'
+import AmericanFlag from '../../../images/american-flag.svg'
 
 const initialValues = {
   firstname: '',
   lastname: '',
+  namespace: '',
   email: '',
   password: '',
   changepassword: '',
@@ -28,6 +29,10 @@ const registrationSchema = Yup.object().shape({
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('Email is required'),
+  namespace: Yup.string()
+    .min(3, 'Minimum 3 symbols')
+    .max(50, 'Maximum 50 symbols')
+    .required('Namespace is required'),
   lastname: Yup.string()
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
@@ -79,268 +84,255 @@ export function Registration() {
   }, [])
 
   return (
-    <form
-      className='form w-100 fv-plugins-bootstrap5 fv-plugins-framework'
-      noValidate
-      id='kt_login_signup_form'
-      onSubmit={formik.handleSubmit}
-    >
-      {/* begin::Heading */}
-      <div className='mb-10 text-center'>
-        {/* begin::Title */}
-        <h1 className='text-dark mb-3'>Create an Account</h1>
-        {/* end::Title */}
-
-        {/* begin::Link */}
-        <div className='text-gray-400 fw-bold fs-4'>
-          Already have an account?
-          <Link to='/auth/login' className='link-primary fw-bolder' style={{marginLeft: '5px'}}>
-            Forgot Password ?
+    <div className='d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px'>
+      <div className='d-flex flex-stack py-2'>
+        <div className='me-2'>
+          <Link to={'/auth/login'} className='btn btn-icon bg-light rounded-circle'>
+            <span className='svg-icon svg-icon-2 svg-icon-gray-800'>
+              <svg
+                width={24}
+                height={24}
+                viewBox='0 0 24 24'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M9.60001 11H21C21.6 11 22 11.4 22 12C22 12.6 21.6 13 21 13H9.60001V11Z'
+                  fill='currentColor'
+                />
+                <path
+                  opacity='0.3'
+                  d='M9.6 20V4L2.3 11.3C1.9 11.7 1.9 12.3 2.3 12.7L9.6 20Z'
+                  fill='currentColor'
+                />
+              </svg>
+            </span>
           </Link>
         </div>
-        {/* end::Link */}
-      </div>
-      {/* end::Heading */}
 
-      {/* begin::Action */}
-      <button type='button' className='btn btn-light-primary fw-bolder w-100 mb-10'>
-        <img
-          alt='Logo'
-          src={toAbsoluteUrl('/media/svg/brand-logos/google-icon.svg')}
-          className='h-20px me-3'
-        />
-        Sign in with Google
-      </button>
-      {/* end::Action */}
-
-      <div className='d-flex align-items-center mb-10'>
-        <div className='border-bottom border-gray-300 mw-50 w-100'></div>
-        <span className='fw-bold text-gray-400 fs-7 mx-2'>OR</span>
-        <div className='border-bottom border-gray-300 mw-50 w-100'></div>
-      </div>
-
-      {formik.status && (
-        <div className='mb-lg-15 alert alert-danger'>
-          <div className='alert-text font-weight-bold'>{formik.status}</div>
+        <div className='m-0'>
+          <span className='text-gray-400 fw-bold fs-5 me-2' data-kt-translate='sign-up-head-desc'>
+            Already a member ?
+          </span>
+          <Link
+            to={'/auth/login'}
+            className='link-primary fw-bold fs-5'
+            data-kt-translate='sign-up-head-link'
+          >
+            Sign In
+          </Link>
         </div>
-      )}
+      </div>
 
-      {/* begin::Form group Firstname */}
-      <div className='row fv-row mb-7'>
-        <div className='col-xl-6'>
-          <label className='class="form-label fw-bolder text-dark fs-6'>First name</label>
-          <input
-            placeholder='First name'
-            type='text'
-            autoComplete='off'
-            {...formik.getFieldProps('firstname')}
-            className={clsx(
-              'form-control form-control-lg form-control-solid',
-              {
-                'is-invalid': formik.touched.firstname && formik.errors.firstname,
-              },
-              {
-                'is-valid': formik.touched.firstname && !formik.errors.firstname,
-              }
-            )}
-          />
-          {formik.touched.firstname && formik.errors.firstname && (
-            <div className='fv-plugins-message-container'>
-              <div className='fv-help-block'>
-                <span role='alert'>{formik.errors.firstname}</span>
-              </div>
+      <div className='py-20'>
+        <form
+          className='form w-100 fv-plugins-bootstrap5 fv-plugins-framework'
+          noValidate
+          id='kt_login_signup_form'
+          onSubmit={formik.handleSubmit}
+        >
+          <div className='text-start mb-10'>
+            <h1 className='text-dark mb-3 fs-3x' data-kt-translate='sign-up-title'>
+              Create an Account
+            </h1>
+            <div className='text-gray-400 fw-semibold fs-6' data-kt-translate='general-desc'>
+              Get unlimited access &amp; earn money
             </div>
-          )}
-        </div>
-        <div className='col-xl-6'>
-          {/* begin::Form group Lastname */}
-          <div className='fv-row mb-5'>
-            <label className='form-label fw-bolder text-dark fs-6'>Last name</label>
+          </div>
+          <div className='row fv-row mb-7 fv-plugins-icon-container'>
+            <div className='col-xl-6'>
+              <input
+                placeholder='First name'
+                type='text'
+                autoComplete='off'
+                {...formik.getFieldProps('firstname')}
+                className={clsx(
+                  'form-control form-control-lg form-control-solid',
+                  {
+                    'is-invalid': formik.touched.firstname && formik.errors.firstname,
+                  },
+                  {
+                    'is-valid': formik.touched.firstname && !formik.errors.firstname,
+                  }
+                )}
+              />
+              {formik.touched.firstname && formik.errors.firstname && (
+                <div className='fv-plugins-message-container mt-2'>
+                  <div className='fv-help-block'>
+                    <span role='alert'>{formik.errors.firstname}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className='col-xl-6'>
+              <input
+                placeholder='Last name'
+                type='text'
+                autoComplete='off'
+                {...formik.getFieldProps('lastname')}
+                className={clsx(
+                  'form-control form-control-lg form-control-solid',
+                  {
+                    'is-invalid': formik.touched.lastname && formik.errors.lastname,
+                  },
+                  {
+                    'is-valid': formik.touched.lastname && !formik.errors.lastname,
+                  }
+                )}
+              />
+              {formik.touched.lastname && formik.errors.lastname && (
+                <div className='fv-plugins-message-container mt-2'>
+                  <div className='fv-help-block'>
+                    <span role='alert'>{formik.errors.lastname}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
             <input
-              placeholder='Last name'
+              placeholder='Email'
+              type='email'
+              autoComplete='off'
+              {...formik.getFieldProps('email')}
+              className={clsx(
+                'form-control form-control-lg form-control-solid',
+                {'is-invalid': formik.touched.email && formik.errors.email},
+                {
+                  'is-valid': formik.touched.email && !formik.errors.email,
+                }
+              )}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className='fv-plugins-message-container mt-2'>
+                <div className='fv-help-block'>
+                  <span role='alert'>{formik.errors.email}</span>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
+            <input
+              placeholder='Namespace'
               type='text'
               autoComplete='off'
-              {...formik.getFieldProps('lastname')}
+              {...formik.getFieldProps('namespace')}
               className={clsx(
                 'form-control form-control-lg form-control-solid',
-                {
-                  'is-invalid': formik.touched.lastname && formik.errors.lastname,
-                },
-                {
-                  'is-valid': formik.touched.lastname && !formik.errors.lastname,
-                }
+                {'is-invalid': formik.touched.namespace && formik.errors.namespace},
               )}
             />
-            {formik.touched.lastname && formik.errors.lastname && (
-              <div className='fv-plugins-message-container'>
+            {formik.touched.namespace && formik.errors.namespace && (
+              <div className='fv-plugins-message-container mt-2'>
                 <div className='fv-help-block'>
-                  <span role='alert'>{formik.errors.lastname}</span>
+                  <span role='alert'>{formik.errors.namespace}</span>
                 </div>
               </div>
             )}
           </div>
-          {/* end::Form group */}
-        </div>
-      </div>
-      {/* end::Form group */}
-
-      {/* begin::Form group Email */}
-      <div className='fv-row mb-7'>
-        <label className='form-label fw-bolder text-dark fs-6'>Email</label>
-        <input
-          placeholder='Email'
-          type='email'
-          autoComplete='off'
-          {...formik.getFieldProps('email')}
-          className={clsx(
-            'form-control form-control-lg form-control-solid',
-            {'is-invalid': formik.touched.email && formik.errors.email},
-            {
-              'is-valid': formik.touched.email && !formik.errors.email,
-            }
-          )}
-        />
-        {formik.touched.email && formik.errors.email && (
-          <div className='fv-plugins-message-container'>
-            <div className='fv-help-block'>
-              <span role='alert'>{formik.errors.email}</span>
+          <div className='fv-row mb-10 fv-plugins-icon-container' data-kt-password-meter='true'>
+            <div className='mb-1'>
+              <div className='position-relative mb-3'>
+                <input
+                  type='password'
+                  placeholder='Password'
+                  autoComplete='off'
+                  {...formik.getFieldProps('password')}
+                  className={clsx('form-control form-control-lg form-control-solid', {
+                    'is-invalid': formik.touched.password && formik.errors.password,
+                  })}
+                />
+                {formik.touched.password && formik.errors.password ? (
+                  <div className='fv-plugins-message-container mt-2'>
+                    <div className='fv-help-block'>
+                      <span role='alert'>{formik.errors.password}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <span
+                    className='btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2'
+                    data-kt-password-meter-control='visibility'
+                  >
+                    <i className='bi bi-eye-slash fs-2' />
+                    <i className='bi bi-eye fs-2 d-none' />
+                  </span>
+                )}
+              </div>
+              <div
+                className='d-flex align-items-center mb-3'
+                data-kt-password-meter-control='highlight'
+              >
+                <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2' />
+                <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2' />
+                <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2' />
+                <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px' />
+              </div>
             </div>
+            <div className='text-muted' data-kt-translate='sign-up-hint'>
+              Use 8 or more characters with a mix of letters, numbers &amp; symbols.
+            </div>
+            <div className='fv-plugins-message-container mt-2 invalid-feedback' />
           </div>
-        )}
-      </div>
-      {/* end::Form group */}
-
-      {/* begin::Form group Password */}
-      <div className='mb-10 fv-row' data-kt-password-meter='true'>
-        <div className='mb-1'>
-          <label className='form-label fw-bolder text-dark fs-6'>Password</label>
-          <div className='position-relative mb-3'>
+          <div className='fv-row mb-10 fv-plugins-icon-container'>
             <input
               type='password'
-              placeholder='Password'
+              placeholder='Password confirmation'
               autoComplete='off'
-              {...formik.getFieldProps('password')}
+              {...formik.getFieldProps('changepassword')}
               className={clsx(
                 'form-control form-control-lg form-control-solid',
                 {
-                  'is-invalid': formik.touched.password && formik.errors.password,
+                  'is-invalid': formik.touched.changepassword && formik.errors.changepassword,
                 },
                 {
-                  'is-valid': formik.touched.password && !formik.errors.password,
+                  'is-valid': formik.touched.changepassword && !formik.errors.changepassword,
                 }
               )}
             />
-            {formik.touched.password && formik.errors.password && (
-              <div className='fv-plugins-message-container'>
+            {formik.touched.changepassword && formik.errors.changepassword && (
+              <div className='fv-plugins-message-container mt-2'>
                 <div className='fv-help-block'>
-                  <span role='alert'>{formik.errors.password}</span>
+                  <span role='alert'>{formik.errors.changepassword}</span>
                 </div>
               </div>
             )}
           </div>
-          {/* begin::Meter */}
-          <div
-            className='d-flex align-items-center mb-3'
-            data-kt-password-meter-control='highlight'
-          >
-            <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2'></div>
-            <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2'></div>
-            <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2'></div>
-            <div className='flex-grow-1 bg-secondary bg-active-success rounded h-5px'></div>
+          <div className='d-flex flex-stack'>
+            <button
+              id='kt_sign_up_submit'
+              className='btn btn-primary'
+              data-kt-translate='sign-up-submit'
+            >
+              {!loading && <span className='indicator-label'>Submit</span>}
+              {loading && (
+                <span className='indicator-progress' style={{display: 'block'}}>
+                  Please wait...{' '}
+                  <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
+                </span>
+              )}
+            </button>
           </div>
-          {/* end::Meter */}
-        </div>
-        <div className='text-muted'>
-          Use 8 or more characters with a mix of letters, numbers & symbols.
-        </div>
+          <div />
+        </form>
       </div>
-      {/* end::Form group */}
-
-      {/* begin::Form group Confirm password */}
-      <div className='fv-row mb-5'>
-        <label className='form-label fw-bolder text-dark fs-6'>Confirm Password</label>
-        <input
-          type='password'
-          placeholder='Password confirmation'
-          autoComplete='off'
-          {...formik.getFieldProps('changepassword')}
-          className={clsx(
-            'form-control form-control-lg form-control-solid',
-            {
-              'is-invalid': formik.touched.changepassword && formik.errors.changepassword,
-            },
-            {
-              'is-valid': formik.touched.changepassword && !formik.errors.changepassword,
-            }
-          )}
-        />
-        {formik.touched.changepassword && formik.errors.changepassword && (
-          <div className='fv-plugins-message-container'>
-            <div className='fv-help-block'>
-              <span role='alert'>{formik.errors.changepassword}</span>
-            </div>
-          </div>
-        )}
-      </div>
-      {/* end::Form group */}
-
-      {/* begin::Form group */}
-      <div className='fv-row mb-10'>
-        <div className='form-check form-check-custom form-check-solid'>
-          <input
-            className='form-check-input'
-            type='checkbox'
-            id='kt_login_toc_agree'
-            {...formik.getFieldProps('acceptTerms')}
-          />
-          <label
-            className='form-check-label fw-bold text-gray-700 fs-6'
-            htmlFor='kt_login_toc_agree'
-          >
-            I Agree the{' '}
-            <Link to='/auth/terms' className='ms-1 link-primary'>
-              terms and conditions
-            </Link>
-            .
-          </label>
-          {formik.touched.acceptTerms && formik.errors.acceptTerms && (
-            <div className='fv-plugins-message-container'>
-              <div className='fv-help-block'>
-                <span role='alert'>{formik.errors.acceptTerms}</span>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      {/* end::Form group */}
-
-      {/* begin::Form group */}
-      <div className='text-center'>
+      <div className='m-0'>
         <button
-          type='submit'
-          id='kt_sign_up_submit'
-          className='btn btn-lg btn-primary w-100 mb-5'
-          disabled={formik.isSubmitting || !formik.isValid || !formik.values.acceptTerms}
+          className='btn btn-flex btn-link rotate'
+          data-kt-menu-trigger='click'
+          data-kt-menu-placement='bottom-start'
+          data-kt-menu-offset='0px, 0px'
         >
-          {!loading && <span className='indicator-label'>Submit</span>}
-          {loading && (
-            <span className='indicator-progress' style={{display: 'block'}}>
-              Please wait...{' '}
-              <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-            </span>
-          )}
+          <img
+            data-kt-element='current-lang-flag'
+            className='w-25px h-25px rounded-circle me-3'
+            src={AmericanFlag}
+            alt=''
+          />
+          <span data-kt-element='current-lang-name' className='me-2'>
+            English
+          </span>
         </button>
-        <Link to='/auth/login'>
-          <button
-            type='button'
-            id='kt_login_signup_form_cancel_button'
-            className='btn btn-lg btn-light-primary w-100 mb-5'
-          >
-            Cancel
-          </button>
-        </Link>
       </div>
-      {/* end::Form group */}
-    </form>
+    </div>
   )
 }

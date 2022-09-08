@@ -52,8 +52,8 @@ export default function Notes({idAsset}) {
 
   const renderList = useCallback(
     () =>
-      Array.isArray([...listNote]) &&
-      [...listNote]?.splice(0, 10)?.map((item, index) => {
+      Array.isArray(listNote) &&
+      listNote?.map((item, index) => {
         return (
           <tr key={index}>
             <td className='w-250px'>{convertTimeZone(item?.createdAt)}</td>

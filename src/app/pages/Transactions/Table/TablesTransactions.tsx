@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
 import ReactTooltip from 'react-tooltip'
-import { getListTransactions } from '../../../../utils/api/transactions'
+import { getListTransactions, getListTransactionsByAsset } from '../../../../utils/api/transactions'
 import {shortAddress} from '../../../../_metronic/helpers/format'
 import FilterSearch from '../../../components/FilterSearch'
 import useSearch from '../../../hooks/useSearch'
@@ -9,15 +9,24 @@ import styled from 'styled-components'
 import ICSort from '../../../components/Sort'
 import { Loading } from '../../../components/Loading'
 import { Search } from '../../../components/FilterSearch/search'
+import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
 
 type Props = {
   className?: string
+  idAsset?: string | number
 }
 
-const TablesTransactions: React.FC<Props> = ({className}) => {
+const TablesTransactions: React.FC<Props> = ({className, idAsset}) => {
   const [listTransactions, setListTransactions] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const {searched, setSearch, results} = useSearch(listTransactions, ['name', 'namespace'])
+  const {searched, setSearch, results} = useSearch(listTransactions, [
+    'id',
+    'uuid',
+    'type',
+    'cost',
+    'costUnits',
+    'createdAt',
+  ])
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
@@ -27,7 +36,16 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
 
   const fetchListTransactions = async (params) => {
     try {
-      const reps = await getListTransactions(params)
+      let reps = idAsset
+        ? await getListTransactionsByAsset(idAsset, params)
+        : await getListTransactions(params)
+      if (reps?.data?.length) {
+        reps?.data?.forEach((item) => {
+          if (item?.createdAt) {
+            item.createdAt = convertTimeZone(item.createdAt)
+          }
+        })
+      }
       reps && setListTransactions(reps?.data)
     } catch (error) {
       console.error({error})
@@ -56,8 +74,8 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
 
   const renderList = useCallback(
     () =>
-      Array.isArray(listTransactions) &&
-      listTransactions?.map((item, index) => {
+      Array.isArray(results) &&
+      results?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -115,14 +133,14 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [listTransactions]
+    [results]
   )
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5 d-flex align-items-center'>
-        <Search title='Search Transactions' />
+        <Search title='Search Transactions' setSearch={setSearch} searched={searched} />
         <FilterSearch setSearch={setSearch} />
       </div>
       {/* end::Header */}
@@ -193,7 +211,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
               {/* end::Table head */}
               {/* begin::Table body */}
               <tbody>
-                {listTransactions?.length > 0 ? (
+                {results?.length > 0 ? (
                   renderList()
                 ) : (
                   <tr>

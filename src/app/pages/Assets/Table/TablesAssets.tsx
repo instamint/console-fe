@@ -22,7 +22,18 @@ type Props = {
 
 const TablesAssets: React.FC<Props> = ({className}) => {
   const [listAssets, setListAssets] = useState<Array<any>>([])
-  const {searched, setSearch, results} = useSearch(listAssets, ['name', 'namespace'])
+  const {searched, setSearch, results} = useSearch(listAssets, [
+    'hashId',
+    'xref',
+    'assetTypeName',
+    'portfolioName',
+    'mintCompletedStatus',
+    'bestBid',
+    'auction',
+    'chainName',
+    'issuerName',
+    'ownerName',
+  ])
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
   const [modalShow, setModalShow] = useState(false)
@@ -153,8 +164,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   const renderList = useCallback(
     () =>
-      Array.isArray(filterMintedAssetList(listAssets)) &&
-      filterMintedAssetList(listAssets)?.map((item, index) => {
+      Array.isArray(filterMintedAssetList(results)) &&
+      filterMintedAssetList(results)?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -281,14 +292,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [listAssets, selectAsset, minted]
+    [results, selectAsset, minted, searched]
   )
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5 d-flex align-items-center'>
-        <Search title='Search Assets' />
+        <Search title='Search Assets' setSearch={setSearch} searched={searched} />
         <FilterSearch
           setSearch={setSearch}
           openModalPool={openModalPool}
@@ -304,7 +315,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         <div className='table-responsive'>
           {/* begin::Table */}
 
-          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+          <table
+            className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'
+            id='kt_customers_table'
+          >
             <thead style={{verticalAlign: 'top'}}>
               <tr className='fw-bold text-muted'>
                 <th></th>
@@ -402,7 +416,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <tbody>
               {isLoading ? (
                 <Loading />
-              ) : filterMintedAssetList(listAssets)?.length > 0 ? (
+              ) : filterMintedAssetList(results)?.length > 0 ? (
                 renderList()
               ) : (
                 <tr>

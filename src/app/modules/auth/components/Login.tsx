@@ -4,12 +4,13 @@ import * as Yup from 'yup'
 import clsx from 'clsx'
 import {Link} from 'react-router-dom'
 import {useFormik} from 'formik'
-import {getUserByToken, login} from '../core/_requests'
-import {toAbsoluteUrl} from '../../../../_metronic/helpers'
+import {login} from '../core/_requests'
 import {useAuth} from '../core/Auth'
+import AmericanFlag from '../../../images/american-flag.svg'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
+    .email('The value is not a valid email address')
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('UserName is required'),
@@ -54,159 +55,125 @@ export function Login() {
   })
 
   return (
-    <form
-      className='form w-100'
-      onSubmit={formik.handleSubmit}
-      noValidate
-      id='kt_login_signin_form'
-    >
-      {/* begin::Heading */}
-      <div className='text-center mb-10'>
-        <h1 className='text-dark mb-3'>Console</h1>
-        <div className='text-gray-400 fw-bold fs-4'></div>
-      </div>
-      {/* begin::Heading */}
-
-      {/* {formik.status ? (
-        <div className='mb-lg-15 alert alert-danger'>
-          <div className='alert-text font-weight-bold'>{formik.status}</div>
-        </div>
-      ) : (
-        <div className='mb-10 bg-light-info p-8 rounded'>
-          <div className='text-info'>
-            Use account <strong>admin@demo.com</strong> and password <strong>demo</strong> to
-            continue.
-          </div>
-        </div>
-      )} */}
-
-      {/* begin::Form group */}
-      <div className='fv-row mb-10'>
-        <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
-        <input
-          placeholder='Enter Username Here'
-          {...formik.getFieldProps('email')}
-          className={clsx(
-            'form-control form-control-lg form-control-solid'
-            // {'is-invalid': formik.touched.email && formik.errors.email},
-            // {
-            //   'is-valid': formik.touched.email && !formik.errors.email,
-            // }
-          )}
-          type='text'
-          name='email'
-          autoComplete='off'
-        />
-        {formik.touched.email && formik.errors.email && (
-          <div className='fv-plugins-message-container'>
-            <div className='fv-help-block'>
-              <span role='alert'>{formik.errors.email}</span>
-            </div>
-          </div>
-        )}
-      </div>
-      {/* end::Form group */}
-
-      {/* begin::Form group */}
-      <div className='fv-row mb-10'>
-        {/* <div className='d-flex justify-content-between mt-n5'> */}
-        <div className='d-flex flex-stack mb-2'>
-          {/* begin::Label */}
-          <label className='form-label fw-bolder text-dark fs-6 mb-0'>Password</label>
-          {/* end::Label */}
-          {/* begin::Link */}
+    <div className='d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px'>
+      <div className='d-flex flex-stack py-2'>
+        <div className='me-2' />
+        <div className='m-0'>
+          <span className='text-gray-400 fw-bold fs-5 me-2' data-kt-translate='sign-in-head-desc'>
+            Join the Token Revolution
+          </span>
           <Link
-            to='/auth/forgot-password'
-            className='link-primary fs-6 fw-bolder'
-            style={{marginLeft: '5px'}}
+            to={'/auth/registration'}
+            className='link-primary fw-bold fs-5'
+            data-kt-translate='sign-in-head-link'
           >
-            Forgot Password ?
+            Sign Up
           </Link>
-          {/* end::Link */}
         </div>
-        {/* </div> */}
-        <input
-          type='password'
-          placeholder='Enter Password Here'
-          autoComplete='off'
-          {...formik.getFieldProps('password')}
-          className={clsx(
-            'form-control form-control-lg form-control-solid'
-            
-          )}
-        />
-        {formik.touched.password && formik.errors.password && (
-          <div className='fv-plugins-message-container'>
-            <div className='fv-help-block'>
-              <span role='alert'>{formik.errors.password}</span>
+      </div>
+      <div className='py-20'>
+        <form className='form' onSubmit={formik.handleSubmit} noValidate id='kt_login_signin_form'>
+          <div className='card-body'>
+            <div className='text-start mb-10'>
+              <h1 className='text-dark mb-3 fs-3x' data-kt-translate='sign-in-title'>
+                Sign In
+              </h1>
+              <div className='text-gray-400 fw-semibold fs-6' data-kt-translate='general-desc'>
+                Instamint is for tokens what Stripe is for payments
+              </div>
+            </div>
+            <div className='fv-row mb-8 fv-plugins-icon-container'>
+              <input
+                placeholder='Email'
+                {...formik.getFieldProps('email')}
+                className={clsx('form-control form-control-lg form-control-solid')}
+                type='text'
+                name='email'
+                autoComplete='off'
+              />
+              {formik.touched.email && formik.errors.email && (
+                <div className='fv-plugins-message-container mt-2'>
+                  <div className='fv-help-block'>
+                    <span role='alert'>{formik.errors.email}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className='fv-row mb-7 fv-plugins-icon-container'>
+              <input
+                type='password'
+                placeholder='Password'
+                autoComplete='off'
+                {...formik.getFieldProps('password')}
+                className={clsx('form-control form-control-lg form-control-solid')}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <div className='fv-plugins-message-container mt-2'>
+                  <div className='fv-help-block'>
+                    <span role='alert'>{formik.errors.password}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            {formik?.status && formik?.status && (
+              <div className='fv-plugins-message-container mb-2'>
+                <span className='fv-help-block' role='alert'>
+                  {formik?.status}
+                </span>
+              </div>
+            )}
+            <div className='d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10'>
+              <div />
+              <Link
+                to={'/auth/forgot-password'}
+                className='link-primary'
+                data-kt-translate='sign-in-forgot-password'
+              >
+                Forgot Password ?
+              </Link>
+            </div>
+
+            <div className='d-flex flex-stack'>
+              <button
+                type='submit'
+                id='kt_sign_in_submit'
+                className='btn btn-primary me-2 flex-shrink-0'
+              >
+                {!loading && (
+                  <span className='indicator-label' data-kt-translate='sign-in-submit'>
+                    Sign In
+                  </span>
+                )}
+                {loading && (
+                  <span className='indicator-progress' style={{display: 'block'}}>
+                    Processing...
+                    <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
+                  </span>
+                )}
+              </button>
             </div>
           </div>
-        )}
+          <div />
+        </form>
       </div>
-      {/* end::Form group */}
-
-      {/* begin::Action */}
-      <div className='text-center'>
+      <div className='m-0'>
         <button
-          type='submit'
-          id='kt_sign_in_submit'
-          className='btn btn-lg btn-primary w-100 mb-3'
-          disabled={formik.isSubmitting || !formik.isValid}
+          className='btn btn-flex btn-link rotate'
+          data-kt-menu-trigger='click'
+          data-kt-menu-placement='bottom-start'
+          data-kt-menu-offset='0px, 0px'
         >
-          {!loading && <span className='indicator-label'>Continue</span>}
-          {loading && (
-            <span className='indicator-progress' style={{display: 'block'}}>
-              Please wait...
-              <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-            </span>
-          )}
+          <img
+            data-kt-element='current-lang-flag'
+            className='w-25px h-25px rounded-circle me-3'
+            src={AmericanFlag}
+            alt=''
+          />
+          <span data-kt-element='current-lang-name' className='me-2'>
+            English
+          </span>
         </button>
-        {formik?.status && formik?.status && (
-          <div className='fv-plugins-message-container'>
-            <span className='error-login' role='alert'>
-              {formik?.status}
-            </span>
-          </div>
-        )}
-
-        {/* begin::Separator
-        <div className='text-center text-muted text-uppercase fw-bolder mb-5'>or</div>
-        {/* end::Separator */}
-
-        {/* begin::Google link */}
-        {/* <a href='#' className='btn btn-flex flex-center btn-light btn-lg w-100 mb-5'>
-          <img
-            alt='Logo'
-            src={toAbsoluteUrl('/media/svg/brand-logos/google-icon.svg')}
-            className='h-20px me-3'
-          />
-          Continue with Google
-        </a> */}
-        {/* end::Google link */}
-
-        {/* begin::Google link */}
-        {/* <a href='#' className='btn btn-flex flex-center btn-light btn-lg w-100 mb-5'>
-          <img
-            alt='Logo'
-            src={toAbsoluteUrl('/media/svg/brand-logos/facebook-4.svg')}
-            className='h-20px me-3'
-          />
-          Continue with Facebook
-        </a> */}
-        {/* end::Google link */}
-
-        {/* begin::Google link */}
-        {/* <a href='#' className='btn btn-flex flex-center btn-light btn-lg w-100'>
-          <img
-            alt='Logo'
-            src={toAbsoluteUrl('/media/svg/brand-logos/apple-black.svg')}
-            className='h-20px me-3'
-          />
-          Continue with Apple
-        </a> */}
-        {/* end::Google link */}
       </div>
-      {/* end::Action */}
-    </form>
+    </div>
   )
 }
