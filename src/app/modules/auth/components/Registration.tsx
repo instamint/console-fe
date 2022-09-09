@@ -21,31 +21,24 @@ const initialValues = {
 }
 
 const registrationSchema = Yup.object().shape({
-  firstname: Yup.string()
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('First name is required'),
+  firstname: Yup.string().trim().max(50, 'Maximum 50 symbols').required('First name is required'),
   email: Yup.string()
+    .trim()
     .email('Wrong email format')
-    .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('Email is required'),
-  namespace: Yup.string()
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('Namespace is required'),
-  lastname: Yup.string()
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('Last name is required'),
+  namespace: Yup.string().trim().max(50, 'Maximum 50 symbols').required('Namespace is required'),
+  lastname: Yup.string().trim().max(50, 'Maximum 50 symbols').required('Last name is required'),
   password: Yup.string()
+    .trim()
     .max(50, 'Maximum 50 symbols')
     .required('Password is required')
     .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^:-_+=();"'{}<>,.?/|-])[A-Za-z\d@$!%*#?&:^-_+=();"'{}<>,.?/|-]{8,}$/,
       'Use 8 or more characters with a mix of letters, numbers & symbols.'
     ),
   changepassword: Yup.string()
+    .trim()
     .required('Password confirmation is required')
     .when('password', {
       is: (val: string) => (val && val.length > 0 ? true : false),
@@ -82,6 +75,7 @@ export function Registration() {
         saveAuth(undefined)
         setStatus(error?.response?.data || 'The registration details is incorrect')
         alert.error('The registration details is incorrect')
+      } finally {
         setSubmitting(false)
         setLoading(false)
       }
@@ -293,7 +287,7 @@ export function Registration() {
           <div className='fv-row mb-10 fv-plugins-icon-container'>
             <input
               type='password'
-              placeholder='Password confirmation'
+              placeholder='Confirm Password'
               autoComplete='off'
               {...formik.getFieldProps('changepassword')}
               className={clsx(
@@ -320,8 +314,9 @@ export function Registration() {
               className='btn btn-primary'
               data-kt-translate='sign-up-submit'
             >
-              {!loading && <span className='indicator-label'>Submit</span>}
-              {loading && (
+              {!loading ? (
+                <span className='indicator-label'>Submit</span>
+              ) : (
                 <span className='indicator-progress' style={{display: 'block'}}>
                   Please wait...{' '}
                   <span className='spinner-border spinner-border-sm align-middle ms-2'></span>

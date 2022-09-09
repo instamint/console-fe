@@ -84,11 +84,11 @@ const TablesContracts: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span
-                    data-tip={item?.etherscanUrl}
+                    data-tip={item?.etherscanurl}
                     className='text-dark fw-bold fs-7 text-hover-primary cursor-pointer'
-                    onClick={() => item?.etherscanUrl && openTab(item?.etherscanUrl)}
+                    onClick={() => item?.etherscanurl && openTab(item?.etherscanurl)}
                   >
-                    {item?.etherscanUrl && shortAddressBehind(item?.etherscanUrl)}
+                    {item?.etherscanurl && shortAddressBehind(item?.etherscanurl)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
                 </div>

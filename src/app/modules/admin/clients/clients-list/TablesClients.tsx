@@ -58,7 +58,6 @@ const TablesClients: React.FC<Props> = ({className}) => {
       const reps = await changeRevoked(id)
       if (reps) {
         setReloadList((preState) => !preState)
-        alert.success('Successful Revoke Client!')
       } 
     } catch (error) {
       console.error({error})
@@ -134,17 +133,18 @@ const TablesClients: React.FC<Props> = ({className}) => {
                 <th>
                   <SpanThTable
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('party.name')}
+                    onClick={() => !isLoading && handleSort('party.namespace')}
                   >
-                    NAME SPACE <ICSort type={sort_name === 'party.name' ? sort_type : 'default'} />
+                    NAME SPACE{' '}
+                    <ICSort type={sort_name === 'party.namespace' ? sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
                   <SpanThTable
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('party.namespace')}
+                    onClick={() => !isLoading && handleSort('party.name')}
                   >
-                    NAME <ICSort type={sort_name === 'party.namespace' ? sort_type : 'default'} />
+                    NAME <ICSort type={sort_name === 'party.name' ? sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
