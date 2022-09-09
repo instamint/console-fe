@@ -13,7 +13,7 @@ const ApiKeysPage: FC = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [showModalKey, setShowModalKey] = useState(false)
   const {currentUser, setCurrentUser, saveAuth, auth} = useAuth()
-  const [apiKeyUser, setApiKeyUser] = useState(currentUser?.api_key || '')
+  const [apiKeyUser, setApiKeyUser] = useState(currentUser?.apiKey || '')
 
   const fetchFirstApiKey = async () => {
     try {
@@ -21,12 +21,12 @@ const ApiKeysPage: FC = () => {
       if (reps?.key) {
         const newCurrentUser = {
           ...currentUser,
-          api_key: reps?.key,
+          apiKey: reps?.key,
         }
-        const newAuth = {...auth, api_key: reps?.key}
+        const newAuth = {...auth, apiKey: reps?.key}
         saveAuth(newAuth)
         setCurrentUser(newCurrentUser)
-        setApiKeyUser(newCurrentUser?.api_key)
+        setApiKeyUser(newCurrentUser?.apiKey)
       }
     } catch (error) {
       console.error({error})
@@ -34,10 +34,10 @@ const ApiKeysPage: FC = () => {
   }
 
   useEffect(() => {
-    if (!currentUser?.api_key) {
+    if (!currentUser?.apiKey) {
       fetchFirstApiKey()
     } else {
-      setApiKeyUser(currentUser?.api_key)
+      setApiKeyUser(currentUser?.apiKey)
     }
   }, [currentUser])
   

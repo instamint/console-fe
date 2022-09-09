@@ -48,10 +48,7 @@ export function ForgotPassword() {
       <div className='d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px'>
         <div className='d-flex flex-stack py-2'>
           <div className='me-2'>
-            <Link
-              to={'/auth/login'}
-              className='btn btn-icon bg-light rounded-circle'
-            >
+            <Link to={'/auth/login'} className='btn btn-icon bg-light rounded-circle'>
               <span className='svg-icon svg-icon-2 svg-icon-gray-800'>
                 <svg
                   width={24}
@@ -78,10 +75,10 @@ export function ForgotPassword() {
               className='text-gray-400 fw-bold fs-5 me-2'
               data-kt-translate='password-reset-head-desc'
             >
-              Join the Token Revolution
+              Already a member ?
             </span>
             <Link
-              to={'/auth/registration'}
+              to={'/auth/login'}
               className='link-primary fw-bold fs-5'
               data-kt-translate='password-reset-head-link'
             >

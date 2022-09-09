@@ -8,6 +8,7 @@ import {Link} from 'react-router-dom'
 import {PasswordMeterComponent} from '../../../../_metronic/assets/ts/components'
 import {useAuth} from '../core/Auth'
 import AmericanFlag from '../../../images/american-flag.svg'
+import {useAlert} from 'react-alert'
 
 const initialValues = {
   firstname: '',
@@ -16,7 +17,7 @@ const initialValues = {
   email: '',
   password: '',
   changepassword: '',
-  acceptTerms: false,
+  // acceptTerms: false,
 }
 
 const registrationSchema = Yup.object().shape({
@@ -38,41 +39,49 @@ const registrationSchema = Yup.object().shape({
     .max(50, 'Maximum 50 symbols')
     .required('Last name is required'),
   password: Yup.string()
-    .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
-    .required('Password is required'),
+    .required('Password is required')
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      'Use 8 or more characters with a mix of letters, numbers & symbols.'
+    ),
   changepassword: Yup.string()
     .required('Password confirmation is required')
     .when('password', {
       is: (val: string) => (val && val.length > 0 ? true : false),
       then: Yup.string().oneOf([Yup.ref('password')], "Password and Confirm Password didn't match"),
     }),
-  acceptTerms: Yup.bool().required('You must accept the terms and conditions'),
+  // acceptTerms: Yup.bool().required('You must accept the terms and conditions'),
 })
 
 export function Registration() {
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const {saveAuth, setCurrentUser} = useAuth()
+  const alert = useAlert()
+
   const formik = useFormik({
     initialValues,
     validationSchema: registrationSchema,
-    onSubmit: async (values, {setStatus, setSubmitting}) => {
+    onSubmit: async (values, {setStatus, setSubmitting, resetForm}) => {
       setLoading(true)
       try {
         const {data: auth} = await register(
+          values.namespace,
           values.email,
-          values.firstname,
-          values.lastname,
           values.password,
-          values.changepassword
+          values.firstname,
+          values.lastname
         )
-        saveAuth(auth)
-        const {data: user} = await getUserByToken(auth.api_token)
-        setCurrentUser(user)
+        resetForm()
+        // saveAuth(auth)
+        // setCurrentUser(auth)
+        alert.success('Successful account registration!')
       } catch (error) {
         console.error(error)
         saveAuth(undefined)
-        setStatus('The registration details is incorrect')
+        setStatus(error?.response?.data || 'The registration details is incorrect')
+        alert.error('The registration details is incorrect')
         setSubmitting(false)
         setLoading(false)
       }
@@ -136,9 +145,14 @@ export function Registration() {
               Create an Account
             </h1>
             <div className='text-gray-400 fw-semibold fs-6' data-kt-translate='general-desc'>
-              Get unlimited access &amp; earn money
+              Tokenize everything.
             </div>
           </div>
+          {formik.status && (
+            <div className='mb-lg-5 alert alert-danger'>
+              <div className='alert-text font-weight-bold'>{formik.status}</div>
+            </div>
+          )}
           <div className='row fv-row mb-7 fv-plugins-icon-container'>
             <div className='col-xl-6'>
               <input
@@ -217,10 +231,9 @@ export function Registration() {
               type='text'
               autoComplete='off'
               {...formik.getFieldProps('namespace')}
-              className={clsx(
-                'form-control form-control-lg form-control-solid',
-                {'is-invalid': formik.touched.namespace && formik.errors.namespace},
-              )}
+              className={clsx('form-control form-control-lg form-control-solid', {
+                'is-invalid': formik.touched.namespace && formik.errors.namespace,
+              })}
             />
             {formik.touched.namespace && formik.errors.namespace && (
               <div className='fv-plugins-message-container mt-2'>
@@ -234,7 +247,7 @@ export function Registration() {
             <div className='mb-1'>
               <div className='position-relative mb-3'>
                 <input
-                  type='password'
+                  type={showPassword ? 'text' : 'password'}
                   placeholder='Password'
                   autoComplete='off'
                   {...formik.getFieldProps('password')}
@@ -252,9 +265,13 @@ export function Registration() {
                   <span
                     className='btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2'
                     data-kt-password-meter-control='visibility'
+                    onClick={() => setShowPassword((preState) => !preState)}
                   >
-                    <i className='bi bi-eye-slash fs-2' />
-                    <i className='bi bi-eye fs-2 d-none' />
+                    {showPassword ? (
+                      <i className='bi bi-eye fs-2' />
+                    ) : (
+                      <i className='bi bi-eye-slash fs-2' />
+                    )}
                   </span>
                 )}
               </div>

@@ -26,7 +26,7 @@ export function MenuInner() {
           menuPlacement='bottom-start'
           menuTrigger={`{default:'click', lg: 'hover'}`}
         >
-          <MenuItem to='/admin/users' title='Users' fontIcon='bi-person' />
+          <MenuItem to='/admin/clients' title='Clients' fontIcon='bi-person' />
           <MenuItem
             icon='/media/icons/duotune/general/gen051.svg'
             to='/admin/logins'
