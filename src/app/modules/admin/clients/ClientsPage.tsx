@@ -1,11 +1,11 @@
 import {Route, Routes, Outlet, Navigate} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../../_metronic/layout/core'
-import { TablesUsers } from './users-list/TablesUser'
+import { TablesClients } from './clients-list/TablesClients'
 
 const usersBreadcrumbs: Array<PageLink> = [
   {
-    title: 'Users',
-    path: '/admin/users',
+    title: 'Clients',
+    path: '/admin/clients',
     isSeparator: false,
     isActive: false,
   },
@@ -17,23 +17,23 @@ const usersBreadcrumbs: Array<PageLink> = [
   },
 ]
 
-const UsersPage = () => {
+const ClientsPage = () => {
   return (
     <Routes>
       <Route element={<Outlet />}>
         <Route
-          path='users'
+          path='clients'
           element={
             <>
-              <PageTitle breadcrumbs={usersBreadcrumbs}>Users List</PageTitle>
-              <TablesUsers className='card-xxl-stretch mb-5 mb-xl-8' />
+              <PageTitle breadcrumbs={usersBreadcrumbs}>Clients List</PageTitle>
+              <TablesClients className='card-xxl-stretch mb-5 mb-xl-8' />
             </>
           }
         />
       </Route>
-      <Route index element={<Navigate to='/admin/users' />} />
+      <Route index element={<Navigate to='/admin/clients' />} />
     </Routes>
   )
 }
 
-export default UsersPage
+export default ClientsPage

@@ -75,12 +75,12 @@ export default function CreateKey({
       if (reps?.key) {
         const newCurrentUser = {
           ...currentUser,
-          api_key: reps?.key,
+          apiKey: reps?.key,
         }
         setCurrentUser(newCurrentUser)
         const newAuth = {
           ...auth,
-          api_key: reps?.key,
+          apiKey: reps?.key,
         }
         saveAuth(newAuth)
       }
@@ -200,7 +200,7 @@ export default function CreateKey({
                 </button>
                 <button
                   type='submit'
-                  className='btn btn-success'
+                  className='btn btn-primary'
                   data-bs-dismiss='modal'
                   disabled={isLoading}
                 >

@@ -6,9 +6,8 @@ export interface AuthModel {
   issueDate: string
   expireDate: string
   favorite?: Array<any>
-  api_key?: string
-  firstName?: string
-  lastName?: string
+  apiKey?: string
+  name?: string
   email?: string
 }
 
@@ -56,8 +55,7 @@ export interface UserModel {
   id?: number
   // password: string | undefined
   email?: string
-  firstName?: string
-  lastName?: string
+  name?: string
   username?: string
   role?: Array<string>
   accessToken?: string
@@ -78,5 +76,5 @@ export interface UserModel {
   communication?: UserCommunicationModel
   address?: UserAddressModel
   socialNetworks?: UserSocialNetworksModel
-  api_key?: string
+  apiKey?: string
 }

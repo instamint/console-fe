@@ -10,10 +10,13 @@ import AmericanFlag from '../../../images/american-flag.svg'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
-    .email('The value is not a valid email address')
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
-    .required('UserName is required'),
+    .required('UserName is required')
+    .matches(
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      'The value is not a valid email address'
+    ),
   password: Yup.string()
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
@@ -21,8 +24,8 @@ const loginSchema = Yup.object().shape({
 })
 
 const initialValues = {
-  email: 'jamiel@instamint.com',
-  password: 'jamiel@123',
+  email: 'jamiel@chainhaus.com',
+  password: 'jamiel123',
 }
 
 /*
