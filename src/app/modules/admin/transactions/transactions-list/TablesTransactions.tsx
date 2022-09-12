@@ -29,6 +29,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
+    limit: '',
   })
   const [sort_name, set_sort_name] = useState('')
   const [sort_type, set_sort_type] = useState('')

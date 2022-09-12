@@ -241,7 +241,7 @@ export default function ModalAuction({
                   ''
                 )}
               </div>
-              {error && (
+              {error && !errors?.buy_now_price && !errors?.reserve_price && (
                 <div className='fv-plugins-message-container'>
                   <div className='fv-help-block'>
                     <span role='alert'>{error}</span>

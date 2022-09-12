@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {getListPools} from '../../../../utils/api/pools'
-import {shortAddress} from '../../../../_metronic/helpers/format'
+import {shortAddress, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
 import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
 import FilterSearch from '../../../components/FilterSearch'
 import {Loading} from '../../../components/Loading'
@@ -21,6 +21,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
+    limit: '',
   })
   const [sort_name, set_sort_name] = useState('')
   const [sort_type, set_sort_type] = useState('')
@@ -80,7 +81,10 @@ const TablesPools: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
+                  <span data-tip={item?.name} className='text-dark fw-bold fs-7'>
+                    {shortAddressMaxLength(item?.name, 10)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>

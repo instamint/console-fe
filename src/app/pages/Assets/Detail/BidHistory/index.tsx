@@ -11,6 +11,7 @@ export default function BidHistory({idAsset}) {
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
+    limit: '',
   })
 
   const handleSort = (name) => {

@@ -2,6 +2,7 @@
 import {FC} from 'react'
 import {Link} from 'react-router-dom'
 import {useAuth} from '../../../../app/modules/auth'
+import AvatarUser from '../../../../app/images/avatar-user.jpeg'
 
 const HeaderUserMenu: FC = () => {
   const {currentUser, logout} = useAuth()
@@ -12,17 +13,13 @@ const HeaderUserMenu: FC = () => {
     >
       <div className='menu-item px-4'>
         <div className='menu-content d-flex align-items-center px-3 pt-0'>
-          {/* <div className='symbol symbol-50px me-5'>
-            <img alt='Logo' src={toAbsoluteUrl('/media/avatars/300-1.jpg')} />
-          </div> */}
+          <div className='symbol symbol-50px me-5'>
+            <img alt='Logo' src={currentUser?.profileUrl || AvatarUser} />
+          </div>
 
           <div className='d-flex flex-column'>
-            <div className='fw-bolder d-flex align-items-center fs-5'>
-              {currentUser?.name}
-            </div>
-            <a className='fw-bold text-muted text-hover-primary fs-7'>
-              {currentUser?.username}
-            </a>
+            <div className='fw-bolder d-flex align-items-center fs-5'>{currentUser?.name}</div>
+            <a className='fw-bold text-muted text-hover-primary fs-7'>{currentUser?.username}</a>
           </div>
         </div>
       </div>
