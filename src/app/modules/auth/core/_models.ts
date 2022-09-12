@@ -9,6 +9,7 @@ export interface AuthModel {
   apiKey?: string
   name?: string
   email?: string
+  profileUrl?: string
 }
 
 export interface UserAddressModel {
@@ -77,4 +78,5 @@ export interface UserModel {
   address?: UserAddressModel
   socialNetworks?: UserSocialNetworksModel
   apiKey?: string
+  profileUrl?: string
 }

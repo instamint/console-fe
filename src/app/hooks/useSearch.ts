@@ -3,6 +3,7 @@ import {useState, useMemo} from 'react'
 const defaultOptions = {
   includeScore: true,
   keys: [],
+  threshold: 0.5,
 }
 const useSearch = (data: any[], searchKeys: string[]) => {
   const searchOptions = useMemo(
@@ -15,13 +16,15 @@ const useSearch = (data: any[], searchKeys: string[]) => {
   }, [data, searchOptions])
   const results = useMemo(() => {
     if (search === null || search.trim() === "") return data
-    return fuzeSearch
-      .search(search)
-      // .sort((a, b) => {
-      //   return (a.score || 0) > (b.score || 0) ? 1 : -1
-      // })
-      .filter(({score}) => (score || 0) < 0.4)
-      .map(({item}) => item)
+    return (
+      fuzeSearch
+        .search(search)
+        .sort((a, b) => {
+          return (a.score || 0) > (b.score || 0) ? 1 : -1
+        })
+        .filter(({score}) => (score || 0) < 0.2)
+        .map(({item}) => item)
+    )
   }, [data, search, fuzeSearch])
   return {setSearch, results, searched: search}
 }

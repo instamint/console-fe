@@ -15,6 +15,7 @@ export default function Notes({idAsset}) {
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
+    limit: '',
   })
 
   const handleSort = (name) => {

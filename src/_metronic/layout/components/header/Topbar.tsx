@@ -1,14 +1,14 @@
 import clsx from 'clsx'
 import React, {FC} from 'react'
-import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import {KTSVG} from '../../../helpers'
 import {
   HeaderNotificationsMenu,
   HeaderUserMenu,
-  QuickLinks,
   Search,
-  ThemeModeSwitcher,
 } from '../../../partials'
 import {useLayout} from '../../core'
+import AvatarUser from '../../../../app/images/avatar-user.jpeg'
+import { useAuth } from '../../../../app/modules/auth'
 
 const toolbarButtonMarginClass = 'ms-1 ms-lg-3',
   toolbarButtonHeightClass = 'w-30px h-30px w-md-40px h-md-40px',
@@ -16,6 +16,7 @@ const toolbarButtonMarginClass = 'ms-1 ms-lg-3',
   toolbarButtonIconSizeClass = 'svg-icon-1'
 
 const Topbar: FC = () => {
+  const {currentUser} = useAuth()
   const {config} = useLayout()
 
   return (
@@ -78,7 +79,7 @@ const Topbar: FC = () => {
           data-kt-menu-placement='bottom-end'
           data-kt-menu-flip='bottom'
         >
-          <img src={toAbsoluteUrl('/media/avatars/300-1.jpg')} alt='metronic' />
+          <img src={currentUser?.profileUrl || AvatarUser} alt='metronic' />
         </div>
         <HeaderUserMenu />
         {/* end::Toggle */}

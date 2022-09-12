@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {createAuction, endAuction, getListAsset} from '../../../../utils/api/assets'
 import FilterSearch from '../FilterSearch/index'
 import {Loading} from '../../../components/Loading'
@@ -14,7 +14,8 @@ import ICSort from '../../../components/Sort'
 import ModalAuction from '../Modal/modal-auction'
 import {useAlert} from 'react-alert'
 import styled from 'styled-components'
-import { Search } from '../../../components/FilterSearch/search'
+import {Search} from '../../../components/FilterSearch/search'
+import Pagination from '../../../components/Pagination'
 
 type Props = {
   className: string
@@ -43,19 +44,31 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const [sort_type, set_sort_type] = useState('')
   const [reloadList, setReloadList] = useState(false)
   const [minted, setMinted] = useState(false)
+  const [paginate, setPaginate] = useState(null)
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
+    limit: 30,
+    page: 1,
   })
   const [error, setError] = useState(null)
-  const navigate = useNavigate()
   const alert = useAlert()
 
   const fetchListAssets = async (params) => {
     // setIsLoading(true)
     try {
       const responsive = await getListAsset(params)
-      responsive && setListAssets(responsive?.data || [])
+      if (responsive) {
+        setListAssets(responsive?.data?.content || [])
+        setPaginate({
+          current_page: responsive?.data?.pageable?.pageNumber || params?.page || 1,
+          // from_record: 11,
+          record_per_page: responsive?.data?.pageable?.pageSize ?? params?.limit,
+          // to_record: 20,
+          total_page: responsive?.data?.totalPages ?? 0,
+          total_record: responsive?.data?.totalElements ?? 0,
+        })
+      }
     } catch (error) {
       console.error({error})
     } finally {
@@ -94,7 +107,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     try {
       const list_assets_id = selectAsset?.map((i) => i.id) || []
       let reps = null
-      if (values?.poolname && values?.poolname?.trim() !== "") {
+      if (values?.poolname && values?.poolname?.trim() !== '') {
         reps = await createPool(values?.poolname, list_assets_id)
       } else {
         reps = await updatePool(values?.portfolio?.id, list_assets_id)
@@ -114,8 +127,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     try {
       const reps = await createAuction({
         id: idAssetAuction,
-        reserve: values?.reserve_price && values?.reserve_price !== "" ? values?.reserve_price : 0,
-        buyNow: values?.buy_now_price && values?.buy_now_price !== "" ? values?.buy_now_price : 0,
+        reserve: values?.reserve_price && values?.reserve_price !== '' ? values?.reserve_price : 0,
+        buyNow: values?.buy_now_price && values?.buy_now_price !== '' ? values?.buy_now_price : 0,
         auctionType: values?.auction_type,
       })
       alert.success('Auction successful!')
@@ -430,6 +443,16 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             </tbody>
           </table>
         </div>
+        {paginate?.total_page > 0 && (
+          <div className='card-footer-v2'>
+            <Pagination
+              setIsLoading={setIsLoading}
+              paginate={paginate}
+              params={params}
+              setParams={setParams}
+            />
+          </div>
+        )}
       </div>
       <Modal
         className='modal fade'

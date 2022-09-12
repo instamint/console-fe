@@ -5,9 +5,10 @@ import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {getListParties} from '../../../../utils/api/parties'
 import {shortAddress} from '../../../../_metronic/helpers/format'
-import { convertTimeZone } from '../../../../_metronic/helpers/format/datetime'
-import { Search } from '../../../components/FilterSearch/search'
+import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
+import {Search} from '../../../components/FilterSearch/search'
 import {Loading} from '../../../components/Loading'
+import Pagination from '../../../components/Pagination'
 import ICSort from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
 
@@ -21,22 +22,35 @@ const TablesParties: React.FC<Props> = ({className}) => {
   const [isLoading, setIsLoading] = useState(true)
   const [sort_name, set_sort_name] = useState('')
   const [sort_type, set_sort_type] = useState('')
+  const [paginate, setPaginate] = useState(null)
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
+    limit: 30,
+    page: 1,
   })
 
   const fetchListParties = async (params) => {
     try {
       let responsive = await getListParties(params)
-      if (responsive?.data?.length) {
-        responsive?.data?.forEach(item => {
-          if (item?.createdAt) {
-            item.createdAt = convertTimeZone(item.createdAt)
-          }
-        });
+      if (responsive) {
+        if (responsive?.data?.content?.length) {
+          responsive?.data?.content?.forEach((item) => {
+            if (item?.createdAt) {
+              item.createdAt = convertTimeZone(item.createdAt)
+            }
+          })
+          setListParties(responsive?.data?.content || [])
+        }
+        setPaginate({
+          current_page: responsive?.data?.pageable?.pageNumber || params?.page || 1,
+          // from_record: 11,
+          record_per_page: responsive?.data?.pageable?.pageSize ?? params?.limit,
+          // to_record: 20,
+          total_page: responsive?.data?.totalPages ?? 0,
+          total_record: responsive?.data?.totalElements ?? 0,
+        })
       }
-      setListParties(responsive?.data || [])
     } catch (error) {
       console.error({error})
     } finally {
@@ -192,6 +206,16 @@ const TablesParties: React.FC<Props> = ({className}) => {
 
           {/* end::Table */}
         </div>
+        {paginate?.total_page > 0 && (
+          <div className='card-footer-v2'>
+            <Pagination
+              setIsLoading={setIsLoading}
+              paginate={paginate}
+              params={params}
+              setParams={setParams}
+            />
+          </div>
+        )}
         {/* end::Table container */}
       </div>
       {/* begin::Body */}
