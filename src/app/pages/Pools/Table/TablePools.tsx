@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {getListPools} from '../../../../utils/api/pools'
-import {shortAddress, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
+import {shortAddress} from '../../../../_metronic/helpers/format'
 import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
 import FilterSearch from '../../../components/FilterSearch'
 import {Loading} from '../../../components/Loading'
@@ -81,10 +81,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.name} className='text-dark fw-bold fs-7'>
-                    {shortAddressMaxLength(item?.name, 10)}
-                  </span>
-                  <ReactTooltip place='top' effect='solid' />
+                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
                 </div>
               </div>
             </td>

@@ -8,7 +8,7 @@ import useSearch from '../../../hooks/useSearch'
 import {Modal} from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
 import {createPool, updatePool} from '../../../../utils/api/pools'
-import {shortAddress, shortAddressBehind, showIconChain} from '../../../../_metronic/helpers/format'
+import {shortAddress, shortAddressBehind, shortAddressMaxLength, showIconChain} from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
 import ICSort from '../../../components/Sort'
 import ModalAuction from '../Modal/modal-auction'
@@ -115,6 +115,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       if (reps) {
         alert.success('Assign To Portfolio successful!')
         setReloadList((preState) => !preState)
+        setSelectAsset([])
         setModalShow(false)
       }
     } catch (error) {
@@ -231,9 +232,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='badge py-3 px-4 fs-7 badge-light-primary'>
-                    {item?.portfolioName}
+                  <span
+                    data-tip={item?.portfolioName}
+                    className='badge py-3 px-4 fs-7 badge-light-primary'
+                  >
+                    {item?.portfolioName && shortAddressMaxLength(item?.portfolioName, 10)}
                   </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>

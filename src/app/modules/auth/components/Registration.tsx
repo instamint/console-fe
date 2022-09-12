@@ -59,7 +59,7 @@ export function Registration() {
     onSubmit: async (values, {setStatus, setSubmitting, resetForm}) => {
       setLoading(true)
       try {
-        const {data: auth} = await register(
+        await register(
           values.namespace,
           values.email,
           values.password,
@@ -67,13 +67,13 @@ export function Registration() {
           values.lastname
         )
         resetForm()
-        // saveAuth(auth)
-        // setCurrentUser(auth)
         alert.success('Successful account registration!')
       } catch (error) {
-        console.error(error)
-        saveAuth(undefined)
-        setStatus(error?.response?.data || 'The registration details is incorrect')
+        console.error({error})
+        setStatus(
+          (error?.response?.data && (error?.response?.data !== undefined)) ?
+            'The registration details is incorrect' : null
+        )
         alert.error('The registration details is incorrect')
       } finally {
         setSubmitting(false)
