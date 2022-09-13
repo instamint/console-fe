@@ -50,13 +50,7 @@ export const DropdownIndicator = (props) => {
   )
 }
 
-export default function Pagination({
-  paginate,
-  setIsLoading,
-  params,
-  setParams,
-  isMenuList = false,
-}) {
+export default function Pagination({paginate, setIsLoading, params, setParams, isMenuList = false, setPage}) {
   const [pagination, setPagination] = useState(null)
   function onPaginateChange(page, per_page) {
     const windowGlobal = typeof window !== 'undefined' ? window : null
@@ -64,8 +58,9 @@ export default function Pagination({
       windowGlobal.scrollTo(0, 0)
     }
     setIsLoading(true)
-    const new_params = {...params, page: page, per_page: per_page}
-    setParams(new_params)
+    // const new_params = {...params, page: page, per_page: per_page}
+    // setParams(new_params)
+    setPage(page)
   }
 
   const perPageOptions = [

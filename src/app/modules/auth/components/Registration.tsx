@@ -58,26 +58,30 @@ export function Registration() {
     validationSchema: registrationSchema,
     onSubmit: async (values, {setStatus, setSubmitting, resetForm}) => {
       setLoading(true)
-      try {
-        await register(
-          values.namespace,
-          values.email,
-          values.password,
-          values.firstname,
-          values.lastname
-        )
-        resetForm()
-        alert.success('Successful account registration!')
-      } catch (error) {
-        console.error({error})
-        setStatus(
-          (error?.response?.data && (error?.response?.data !== undefined)) ?
-            'The registration details is incorrect' : null
-        )
-        alert.error('The registration details is incorrect')
-      } finally {
-        setSubmitting(false)
-        setLoading(false)
+      if (!loading) {
+        setSubmitting(true)
+        try {
+          await register(
+            values.namespace,
+            values.email,
+            values.password,
+            values.firstname,
+            values.lastname
+          )
+          resetForm()
+          alert.success('Successful account registration!')
+        } catch (error) {
+          console.error({error})
+          setStatus(
+            error?.response?.data && error?.response?.data !== undefined
+              ? 'The registration details is incorrect'
+              : null
+          )
+          alert.error('The registration details is incorrect')
+        } finally {
+          setSubmitting(false)
+          setLoading(false)
+        }
       }
     },
   })
