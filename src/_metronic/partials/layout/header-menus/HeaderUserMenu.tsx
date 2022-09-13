@@ -2,7 +2,7 @@
 import {FC} from 'react'
 import {Link} from 'react-router-dom'
 import {useAuth} from '../../../../app/modules/auth'
-import AvatarUser from '../../../../app/images/avatar-user.jpeg'
+import { useCheckImage } from '../../../../app/hooks/useCheckImage'
 
 const HeaderUserMenu: FC = () => {
   const {currentUser, logout} = useAuth()
@@ -14,7 +14,7 @@ const HeaderUserMenu: FC = () => {
       <div className='menu-item px-4'>
         <div className='menu-content d-flex align-items-center px-3 pt-0'>
           <div className='symbol symbol-50px me-5'>
-            <img alt='Logo' src={currentUser?.profileUrl || AvatarUser} />
+            <img alt='Logo' src={useCheckImage(currentUser?.profileUrl)} />
           </div>
 
           <div className='d-flex flex-column'>

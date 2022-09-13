@@ -7,8 +7,8 @@ import {
   Search,
 } from '../../../partials'
 import {useLayout} from '../../core'
-import AvatarUser from '../../../../app/images/avatar-user.jpeg'
 import { useAuth } from '../../../../app/modules/auth'
+import { useCheckImage } from '../../../../app/hooks/useCheckImage'
 
 const toolbarButtonMarginClass = 'ms-1 ms-lg-3',
   toolbarButtonHeightClass = 'w-30px h-30px w-md-40px h-md-40px',
@@ -79,7 +79,7 @@ const Topbar: FC = () => {
           data-kt-menu-placement='bottom-end'
           data-kt-menu-flip='bottom'
         >
-          <img src={currentUser?.profileUrl || AvatarUser} alt='avatar' />
+          <img src={useCheckImage(currentUser?.profileUrl)} alt='avatar' />
         </div>
         <HeaderUserMenu />
         {/* end::Toggle */}

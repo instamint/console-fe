@@ -34,20 +34,20 @@ const patternTwoDigisAfterComma = /^(\d*\.{0,1}\d{0,2}$)/
 const AuctionSchema = Yup.object().shape({
   auction_type: Yup.string().trim().nullable(null).required('Auction Type is required'),
   reserve_price: Yup.number()
+    .max(99999999999999999999, 'Maximum 20 digits')
     .test(
       'is-decimal',
       'Price should be a decimal with maximum two digits after comma',
       (val: any) => {
         if (val !== undefined) {
-        let x = new BigNumber(val).toFixed(2)
           return patternTwoDigisAfterComma.test(toFixed(val))
         }
         return true
       }
     )
-    .max(99999999999999999999, 'Maximum 20 digits')
     .typeError('Price should be a decimal with maximum two digits after comma'),
   buy_now_price: Yup.number()
+    .max(99999999999999999999, 'Maximum 20 digits')
     .test(
       'is-decimal',
       'Price should be a decimal with maximum two digits after comma',
@@ -58,7 +58,6 @@ const AuctionSchema = Yup.object().shape({
         return true
       }
     )
-    .max(99999999999999999999, 'Maximum 20 digits')
     .typeError('Price should be a decimal with maximum two digits after comma'),
 })
 
