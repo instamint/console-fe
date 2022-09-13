@@ -28,27 +28,28 @@ const TablesParties: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
+  const [page, setPage] = useState(1)
 
   const fetchListParties = async (params) => {
     try {
       let responsive = await getListParties(params)
       if (responsive) {
         if (responsive?.data?.length) {
-          responsive?.data?.content?.forEach((item) => {
+          responsive?.data?.forEach((item) => {
             if (item?.createdAt) {
               item.createdAt = convertTimeZone(item.createdAt)
             }
           })
           setListParties(responsive?.data || [])
         }
-        // setPaginate({
-        //   current_page: responsive?.data?.pageable?.pageNumber || params?.page || 1,
-        //   // from_record: 11,
-        //   record_per_page: responsive?.data?.pageable?.pageSize ?? params?.limit,
-        //   // to_record: 20,
-        //   total_page: responsive?.data?.totalPages ?? 0,
-        //   total_record: responsive?.data?.totalElements ?? 0,
-        // })
+        setPaginate({
+          current_page: page || 1,
+          // from_record: 11,
+          record_per_page: 30,
+          // to_record: 20,
+          total_page: Math.ceil(parseInt(responsive?.data?.length) / 30) ?? 0,
+          total_record: responsive?.data?.length ?? 0,
+        })
       }
     } catch (error) {
       console.error({error})
@@ -212,6 +213,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
               paginate={paginate}
               params={params}
               setParams={setParams}
+              setPage={setPage}
             />
           </div>
         )}

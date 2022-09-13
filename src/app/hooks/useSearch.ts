@@ -1,31 +1,37 @@
-import Fuse from 'fuse.js'
 import {useState, useMemo} from 'react'
-const defaultOptions = {
-  includeScore: true,
-  keys: [],
-  threshold: 0.5,
-}
+
 const useSearch = (data: any[], searchKeys: string[]) => {
-  const searchOptions = useMemo(
-    () => ({...defaultOptions, keys: [...searchKeys]}),
-    [searchKeys]
-  )
+  const convertType = (text) => {
+    if (typeof text === 'string') {
+      return text
+    } else if (typeof text === 'boolean') {
+      return text === true ? 'TRUE' : 'FALSE'
+    } else if (typeof text === 'number') {
+      return text.toString()
+    }
+  }
+
+  const filterData = (item) => {
+    let valid_totals = 0
+    searchKeys?.forEach((key) => {
+      const context = item[key]
+      if (context !== null && context !== undefined && context !== '') {
+        if (convertType(context)?.toLowerCase()?.includes(search.trim().toLowerCase())) {
+          valid_totals++
+        }
+      }
+    })
+    return valid_totals > 0
+  }
+
   const [search, setSearch] = useState<null | string>(null)
-  const fuzeSearch = useMemo(() => {
-    return new Fuse(data, searchOptions)
-  }, [data, searchOptions])
   const results = useMemo(() => {
-    if (search === null || search.trim() === "") return data
-    return (
-      fuzeSearch
-        .search(search)
-        .sort((a, b) => {
-          return (a.score || 0) > (b.score || 0) ? 1 : -1
-        })
-        .filter(({score}) => (score || 0) < 0.2)
-        .map(({item}) => item)
-    )
-  }, [data, search, fuzeSearch])
+    if (search && search?.trim() !== '' && data?.length > 0 && searchKeys?.length > 0) {
+      return [...data].filter((item) => filterData(item))
+    } else {
+      return data
+    }
+  }, [data, search])
   return {setSearch, results, searched: search}
 }
 export default useSearch

@@ -50,6 +50,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
+  const [page, setPage] = useState(1)
   const [error, setError] = useState(null)
   const alert = useAlert()
 
@@ -59,14 +60,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       const responsive = await getListAsset(params)
       if (responsive) {
         setListAssets(responsive?.data || [])
-        // setPaginate({
-        //   current_page: responsive?.data?.pageable?.pageNumber || params?.page || 1,
-        //   // from_record: 11,
-        //   record_per_page: responsive?.data?.pageable?.pageSize ?? params?.limit,
-        //   // to_record: 20,
-        //   total_page: responsive?.data?.totalPages ?? 0,
-        //   total_record: responsive?.data?.totalElements ?? 0,
-        // })
+        setPaginate({
+          current_page: page || 1,
+          // from_record: 11,
+          record_per_page: 30,
+          // to_record: 20,
+          total_page: Math.ceil(parseInt(responsive?.data?.length) / 30) ?? 0,
+          total_record: responsive?.data?.length ?? 0,
+        })
       }
     } catch (error) {
       console.error({error})
@@ -212,7 +213,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span data-tip={item?.xref} className='text-dark fw-bold fs-7'>
-                    {shortAddress(item?.xref)}
+                    {item?.xref && shortAddress(item?.xref)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
                 </div>
@@ -222,7 +223,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span data-tip={item?.assetTypeName} className='text-dark fw-bold fs-7'>
-                    {shortAddressBehind(item?.assetTypeName, 10)}
+                    {item?.assetTypeName && shortAddressBehind(item?.assetTypeName, 10)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
                 </div>
@@ -454,6 +455,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               paginate={paginate}
               params={params}
               setParams={setParams}
+              setPage={setPage}
             />
           </div>
         )}
