@@ -8,7 +8,12 @@ import useSearch from '../../../hooks/useSearch'
 import {Modal} from 'react-bootstrap'
 import ModalPool from '../Modal/modal-pool'
 import {createPool, updatePool} from '../../../../utils/api/pools'
-import {shortAddress, shortAddressBehind, shortAddressMaxLength, showIconChain} from '../../../../_metronic/helpers/format'
+import {
+  shortAddress,
+  shortAddressBehind,
+  shortAddressMaxLength,
+  showIconChain,
+} from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
 import ICSort from '../../../components/Sort'
 import ModalAuction from '../Modal/modal-auction'
@@ -45,12 +50,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const [reloadList, setReloadList] = useState(false)
   const [minted, setMinted] = useState(false)
   const [paginate, setPaginate] = useState(null)
+  const [isLoadingAuction, setIsLoadingAuction] = useState(false)
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
     limit: '',
   })
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState<string | number>(1)
   const [error, setError] = useState(null)
   const alert = useAlert()
 
@@ -60,14 +66,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       const responsive = await getListAsset(params)
       if (responsive) {
         setListAssets(responsive?.data || [])
-        setPaginate({
-          current_page: page || 1,
-          // from_record: 11,
-          record_per_page: 30,
-          // to_record: 20,
-          total_page: Math.ceil(parseInt(responsive?.data?.length) / 30) ?? 0,
-          total_record: responsive?.data?.length ?? 0,
-        })
       }
     } catch (error) {
       console.error({error})
@@ -126,7 +124,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   const handleAuction = async (values) => {
     try {
-      const reps = await createAuction({
+      await createAuction({
         id: idAssetAuction,
         reserve: values?.reserve_price && values?.reserve_price !== '' ? values?.reserve_price : 0,
         buyNow: values?.buy_now_price && values?.buy_now_price !== '' ? values?.buy_now_price : 0,
@@ -142,6 +140,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   }
 
   const handleEndAuction = async (id) => {
+    setIsLoadingAuction(true)
     try {
       await endAuction(id)
       alert.success('End Auction successful!')
@@ -149,6 +148,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     } catch (error) {
       alert.error('End Auction failed, please try again!')
       console.error({error})
+    } finally {
+      setIsLoadingAuction(false)
     }
   }
 
@@ -166,11 +167,28 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     set_sort_type(sortTypeNow)
   }
 
-  const filterMintedAssetList = (listAssets) => {
+  const filterMintedAssetList = (listAssets, page) => {
+    let newListAssets = [...listAssets]
+    if (page) {
+      const start = (page - 1) * 30
+      const end = start + 30
+      newListAssets = newListAssets.slice(start, end)
+    }
     if (minted) {
-      return listAssets?.filter((item) => item?.mintCompletedStatus === true)
-    } else return listAssets
+      return newListAssets?.filter((item) => item?.mintCompletedStatus === true)
+    } else return newListAssets
   }
+
+  useEffect(() => {
+    setPaginate({
+      current_page: page || 1,
+      // from_record: 11,
+      record_per_page: 30,
+      // to_record: 20,
+      total_page: Math.ceil(results?.length / 30) ?? 0,
+      total_record: results?.length ?? 0,
+    })
+  }, [results, page])
 
   useEffect(() => {
     fetchListAssets(params)
@@ -178,8 +196,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   const renderList = useCallback(
     () =>
-      Array.isArray(filterMintedAssetList(results)) &&
-      filterMintedAssetList(results)?.map((item, index) => {
+      Array.isArray(filterMintedAssetList(results, page)) &&
+      filterMintedAssetList(results, page)?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -298,7 +316,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 </Link>
                 <button
                   onClick={() =>
-                    item?.auction ? handleEndAuction(item?.id) : openModalAuction(item?.id)
+                    item?.auction
+                      ? !isLoadingAuction && handleEndAuction(item?.id)
+                      : openModalAuction(item?.id)
                   }
                   className='btn btn-sm fw-bold btn-primary ms-3'
                   style={{minWidth: '108px'}}
@@ -310,14 +330,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [results, selectAsset, minted, searched]
+    [results, selectAsset, minted, searched, page, isLoadingAuction]
   )
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5 d-flex align-items-center'>
-        <Search title='Search Assets' setSearch={setSearch} searched={searched} />
+        <Search title='Search Assets' setSearch={setSearch} searched={searched} setPage={setPage} />
         <FilterSearch
           setSearch={setSearch}
           openModalPool={openModalPool}
@@ -434,7 +454,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <tbody>
               {isLoading ? (
                 <Loading />
-              ) : filterMintedAssetList(results)?.length > 0 ? (
+              ) : filterMintedAssetList(results, page)?.length > 0 ? (
                 renderList()
               ) : (
                 <tr>

@@ -4,9 +4,10 @@ type Props = {
   title?: string
   setSearch?: (value: string) => void
   searched?: string
+  setPage?: (value: string | number) => void
 }
 
-const Search: React.FC<Props> = ({title, setSearch, searched}) => {
+const Search: React.FC<Props> = ({title, setSearch, searched, setPage}) => {
   return (
     <div className='card-title'>
       {/*begin::Search*/}
@@ -38,7 +39,7 @@ const Search: React.FC<Props> = ({title, setSearch, searched}) => {
         </span>
         {/*end::Svg Icon*/}
         <input
-          value={searched || ""}
+          value={searched || ''}
           type='text'
           data-kt-customer-table-filter='search'
           className='form-control form-control-solid w-250px ps-15'
@@ -46,6 +47,7 @@ const Search: React.FC<Props> = ({title, setSearch, searched}) => {
           onChange={(e) => {
             e.preventDefault()
             setSearch(e.target.value)
+            setPage(1)
           }}
         />
       </div>

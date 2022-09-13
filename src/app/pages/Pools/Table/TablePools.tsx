@@ -64,13 +64,6 @@ const TablesPools: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{index + 1}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span data-tip={item?.uuid} className='text-dark fw-bold fs-7'>
                     {shortAddress(item?.uuid)}
                   </span>
@@ -120,7 +113,6 @@ const TablesPools: React.FC<Props> = ({className}) => {
               {/* begin::Table head */}
               <thead>
                 <tr className='fw-bold text-muted'>
-                  <th className='min-w-60px'>#</th>
                   <th className='min-w-60px'>
                     <SpanThTable
                       className='cursor-pointer'
