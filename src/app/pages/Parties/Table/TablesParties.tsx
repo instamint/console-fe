@@ -28,7 +28,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState<string | number>(1)
 
   const fetchListParties = async (params) => {
     try {
@@ -42,14 +42,6 @@ const TablesParties: React.FC<Props> = ({className}) => {
           })
           setListParties(responsive?.data || [])
         }
-        setPaginate({
-          current_page: page || 1,
-          // from_record: 11,
-          record_per_page: 30,
-          // to_record: 20,
-          total_page: Math.ceil(parseInt(responsive?.data?.length) / 30) ?? 0,
-          total_record: responsive?.data?.length ?? 0,
-        })
       }
     } catch (error) {
       console.error({error})
@@ -72,14 +64,33 @@ const TablesParties: React.FC<Props> = ({className}) => {
     set_sort_type(sortTypeNow)
   }
 
+  const filterListResults = (results, page) => {
+    let newList = [...results]
+    if (page) {
+      const start = (page - 1) * 30
+      const end = start + 30
+      newList = newList.slice(start, end)
+    } 
+    return newList
+  }
+
+  useEffect(() => {
+    setPaginate({
+      current_page: page || 1,
+      record_per_page: 30,
+      total_page: Math.ceil(results?.length / 30) ?? 0,
+      total_record: results?.length ?? 0,
+    })
+  }, [results, page])
+
   useEffect(() => {
     fetchListParties(params)
   }, [params])
 
   const renderList = useCallback(
     () =>
-      Array.isArray(results) &&
-      results?.map((item, index) => {
+      Array.isArray(filterListResults(results, page)) &&
+      filterListResults(results, page)?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -121,7 +132,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [results, searched]
+    [results, searched, page]
   )
 
   return (
@@ -189,7 +200,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <tbody>
               {isLoading ? (
                 <Loading />
-              ) : results?.length > 0 ? (
+              ) : filterListResults(results, page)?.length > 0 ? (
                 renderList()
               ) : (
                 <tr>

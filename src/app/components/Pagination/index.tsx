@@ -57,7 +57,7 @@ export default function Pagination({paginate, setIsLoading, params, setParams, i
     if (windowGlobal) {
       windowGlobal.scrollTo(0, 0)
     }
-    setIsLoading(true)
+    // setIsLoading(true)
     // const new_params = {...params, page: page, per_page: per_page}
     // setParams(new_params)
     setPage(page)
@@ -162,7 +162,7 @@ export default function Pagination({paginate, setIsLoading, params, setParams, i
 
   useEffect(() => {
     fetchPagination(paginate?.current_page)
-  }, [paginate?.current_page])
+  }, [paginate])
 
   return (
     <>
