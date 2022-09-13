@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAlert } from 'react-alert'
 import { endAuction } from '../../../../utils/api/assets'
 import { TablesTransactions } from '../../Transactions/Table/TablesTransactions'
@@ -6,15 +7,19 @@ import Notes from './Notes/index'
 
 export default function Overview({dataDetail, setReloadPage}) {
   const alert = useAlert()
+  const [isLoadingAuction, setIsLoadingAuction] = useState(false)
 
   const handleEndAuction = async (id) => {
+    setIsLoadingAuction(true)
     try {
       await endAuction(id)
       alert.success('End Auction successful!')
       setReloadPage((preState) => !preState)
+      setIsLoadingAuction(false)
     } catch (error) {
       alert.error('End Auction failed, please try again!')
       console.error({error})
+      setIsLoadingAuction(false)
     }
   }
 
@@ -84,7 +89,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                 {dataDetail?.asset?.auction ? (
                   <button
                     className='btn btn-primary px-6 flex-shrink-0 align-self-center'
-                    onClick={() => handleEndAuction(dataDetail?.asset?.id)}
+                    onClick={() => !isLoadingAuction && handleEndAuction(dataDetail?.asset?.id)}
                   >
                     End Auction
                   </button>

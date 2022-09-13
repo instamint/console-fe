@@ -145,10 +145,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       await endAuction(id)
       alert.success('End Auction successful!')
       setReloadList((preState) => !preState)
+      setIsLoadingAuction(false)
     } catch (error) {
       alert.error('End Auction failed, please try again!')
       console.error({error})
-    } finally {
       setIsLoadingAuction(false)
     }
   }
