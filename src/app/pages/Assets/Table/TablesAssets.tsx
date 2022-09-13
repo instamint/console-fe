@@ -48,8 +48,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
-    limit: 30,
-    page: 1,
+    limit: '',
   })
   const [error, setError] = useState(null)
   const alert = useAlert()
@@ -59,15 +58,15 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     try {
       const responsive = await getListAsset(params)
       if (responsive) {
-        setListAssets(responsive?.data?.content || [])
-        setPaginate({
-          current_page: responsive?.data?.pageable?.pageNumber || params?.page || 1,
-          // from_record: 11,
-          record_per_page: responsive?.data?.pageable?.pageSize ?? params?.limit,
-          // to_record: 20,
-          total_page: responsive?.data?.totalPages ?? 0,
-          total_record: responsive?.data?.totalElements ?? 0,
-        })
+        setListAssets(responsive?.data || [])
+        // setPaginate({
+        //   current_page: responsive?.data?.pageable?.pageNumber || params?.page || 1,
+        //   // from_record: 11,
+        //   record_per_page: responsive?.data?.pageable?.pageSize ?? params?.limit,
+        //   // to_record: 20,
+        //   total_page: responsive?.data?.totalPages ?? 0,
+        //   total_record: responsive?.data?.totalElements ?? 0,
+        // })
       }
     } catch (error) {
       console.error({error})
