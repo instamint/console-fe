@@ -51,7 +51,7 @@ export function Login() {
         console.error(error)
         saveAuth(undefined)
         setStatus(
-          error?.response?.data?.responseData || 'Login information is incorrect, please try again'
+          error?.response?.data || 'Login information is incorrect, please try again'
         )
         setSubmitting(false)
         setLoading(false)

@@ -39,6 +39,6 @@ export const showIconChain = (chain: string) => {
     case 'algorand-testnet':
       return <ImgChain src={IconAlgorand}></ImgChain>
     default:
-      return <ImgChain src={IconEthereum}></ImgChain>
+      return ""
   }
 }
