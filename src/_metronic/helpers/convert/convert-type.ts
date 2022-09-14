@@ -48,5 +48,5 @@ export function convertType(value) {
     return value ? '1' : '-1'
   }
 
-  return value
+  return value || ""
 }
