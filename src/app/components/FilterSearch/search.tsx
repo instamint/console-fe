@@ -2,8 +2,8 @@ import React from 'react'
 
 type Props = {
   title?: string
-  setSearch?: (value: string) => void
-  searched?: string
+  setSearch: (value: string) => void
+  searched: string
   setPage?: (value: string | number) => void
 }
 
@@ -47,7 +47,7 @@ const Search: React.FC<Props> = ({title, setSearch, searched, setPage}) => {
           onChange={(e) => {
             e.preventDefault()
             setSearch(e.target.value)
-            setPage(1)
+            setPage && setPage(1)
           }}
         />
       </div>

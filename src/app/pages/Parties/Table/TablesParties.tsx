@@ -9,7 +9,7 @@ import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
 import {Search} from '../../../components/FilterSearch/search'
 import {Loading} from '../../../components/Loading'
 import Pagination from '../../../components/Pagination'
-import ICSort from '../../../components/Sort'
+import ICSort, { sortRows } from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
@@ -20,14 +20,13 @@ const TablesParties: React.FC<Props> = ({className}) => {
   const [listParties, setListParties] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listParties, ['name', 'uuid', 'createdAt'])
   const [isLoading, setIsLoading] = useState(true)
-  const [sort_name, set_sort_name] = useState('')
-  const [sort_type, set_sort_type] = useState('')
   const [paginate, setPaginate] = useState(null)
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
     limit: '',
   })
+  const [sort, setSort] = useState({sort_type: '', sort_name: ''})
   const [page, setPage] = useState<string | number>(1)
 
   const fetchListParties = async (params) => {
@@ -51,21 +50,22 @@ const TablesParties: React.FC<Props> = ({className}) => {
   }
 
   const handleSort = (name) => {
-    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
-    if (sort_name !== name) {
+    let sortTypeNow = sort.sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort.sort_name !== name) {
       sortTypeNow = 'ASC'
     }
-    setParams({
-      ...params,
+    setPage(1) //return the page to 1 when sorting
+    setSort({
       sort_name: name,
       sort_type: sortTypeNow,
     })
-    set_sort_name(name)
-    set_sort_type(sortTypeNow)
   }
 
   const filterListResults = (results, page) => {
     let newList = [...results]
+    if (sort?.sort_name !== '' && sort?.sort_type !== '') {
+      newList = sortRows(newList, sort)
+    }
     if (page) {
       const start = (page - 1) * 30
       const end = start + 30
@@ -132,7 +132,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [results, searched, page]
+    [results, searched, page, sort]
   )
 
   return (
@@ -176,12 +176,12 @@ const TablesParties: React.FC<Props> = ({className}) => {
               <tr className='fw-bold text-muted'>
                 <th>
                   <span className='cursor-pointer' onClick={() => !isLoading && handleSort('name')}>
-                    NAME <ICSort type={sort_name === 'name' ? sort_type : 'default'} />
+                    NAME <ICSort type={sort.sort_name === 'name' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
                   <span className='cursor-pointer' onClick={() => !isLoading && handleSort('uuid')}>
-                    UUID <ICSort type={sort_name === 'uuid' ? sort_type : 'default'} />
+                    UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
@@ -189,7 +189,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('createdAt')}
                   >
-                    TIMESTAMP <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
+                    TIMESTAMP <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>ACTION</th>
@@ -222,8 +222,6 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <Pagination
               setIsLoading={setIsLoading}
               paginate={paginate}
-              params={params}
-              setParams={setParams}
               setPage={setPage}
             />
           </div>

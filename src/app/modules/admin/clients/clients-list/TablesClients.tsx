@@ -3,10 +3,10 @@ import React, {useCallback, useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {changeRevoked, getListClients} from '../../../../../utils/api/clients'
 import FilterSearch from '../../../../components/FilterSearch'
-import ICSort from '../../../../components/Sort'
+import ICSort, { sortRows } from '../../../../components/Sort'
 import useSearch from '../../../../hooks/useSearch'
 import {useAlert} from 'react-alert'
-import { Loading } from '../../../../components/Loading'
+import {Loading} from '../../../../components/Loading'
 
 type Props = {
   className: string
@@ -24,8 +24,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
     sort_name: '',
     sort_type: '',
   })
-  const [sort_name, set_sort_name] = useState('')
-  const [sort_type, set_sort_type] = useState('')
+  const [sort, setSort] = useState({sort_type: '', sort_name: ''})
 
   const fetchListClients = async (params) => {
     try {
@@ -39,17 +38,14 @@ const TablesClients: React.FC<Props> = ({className}) => {
   }
 
   const handleSort = (name) => {
-    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
-    if (sort_name !== name) {
+    let sortTypeNow = sort.sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort.sort_name !== name) {
       sortTypeNow = 'ASC'
     }
-    setParams({
-      ...params,
+    setSort({
       sort_name: name,
       sort_type: sortTypeNow,
     })
-    set_sort_name(name)
-    set_sort_type(sortTypeNow)
   }
 
   const handleRevokeClient = async (id) => {
@@ -58,7 +54,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
       const reps = await changeRevoked(id)
       if (reps) {
         setReloadList((preState) => !preState)
-      } 
+      }
     } catch (error) {
       console.error({error})
       alert.error('An error occurred, please try again!')
@@ -67,14 +63,22 @@ const TablesClients: React.FC<Props> = ({className}) => {
     }
   }
 
+  const filterList = (results) => {
+    let newListAssets = [...results]
+    if (sort?.sort_name !== '' && sort?.sort_type !== '') {
+      newListAssets = sortRows(newListAssets, sort)
+    }
+    return newListAssets
+  }
+
   useEffect(() => {
     fetchListClients(params)
   }, [params, reloadList])
 
   const renderList = useCallback(
     () =>
-      Array.isArray(listClients) &&
-      listClients?.map((item, index) => {
+      Array.isArray(filterList(listClients)) &&
+      filterList(listClients)?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -114,7 +118,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [listClients]
+    [listClients, sort]
   )
 
   return (
@@ -133,18 +137,18 @@ const TablesClients: React.FC<Props> = ({className}) => {
                 <th>
                   <SpanThTable
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('party.namespace')}
+                    onClick={() => !isLoading && handleSort('namespace')}
                   >
                     NAME SPACE{' '}
-                    <ICSort type={sort_name === 'party.namespace' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'namespace' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
                   <SpanThTable
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('party.name')}
+                    onClick={() => !isLoading && handleSort('name')}
                   >
-                    NAME <ICSort type={sort_name === 'party.name' ? sort_type : 'default'} />
+                    NAME <ICSort type={sort.sort_name === 'name' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -152,7 +156,8 @@ const TablesClients: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('userName')}
                   >
-                    USER NAME <ICSort type={sort_name === 'userName' ? sort_type : 'default'} />
+                    USER NAME{' '}
+                    <ICSort type={sort.sort_name === 'userName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th></th>
@@ -161,7 +166,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
             <tbody>
               {isLoading ? (
                 <Loading />
-              ) : listClients?.length > 0 ? (
+              ) : filterList(listClients)?.length > 0 ? (
                 renderList()
               ) : (
                 <tr>
