@@ -51,8 +51,8 @@ export function sortRows(rows, sort) {
         curValue = curValue[sort_name]
       }
 
-      if (isNil(preValue)) return 1
-      if (isNil(curValue)) return -1
+      // if (isNil(preValue)) return 1
+      // if (isNil(curValue)) return -1
 
       const aLocale = convertType(preValue)
       const bLocale = convertType(curValue)
