@@ -25,7 +25,6 @@ export default function AssetsDetail() {
       })
     } catch (error) {
       console.error({error})
-      navigate('/error/404')
     } finally {
       setIsLoading(false)
     }

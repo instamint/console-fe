@@ -85,7 +85,9 @@ const TablesPools: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{convertTimeZone(item?.createdAt)}</span>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.createdAt && convertTimeZone(item?.createdAt)}
+                  </span>
                 </div>
               </div>
             </td>

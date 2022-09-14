@@ -1,3 +1,4 @@
+import checkErrorsType from '../../../../utils/errors-type'
 import {AuthModel} from './_models'
 
 const AUTH_LOCAL_STORAGE_KEY = 'kt-auth-react-v'
@@ -47,6 +48,13 @@ const removeAuth = () => {
   }
 }
 
+const logoutApp = () => {
+  removeAuth()
+  if (window.location.pathname !== '/auth' && window.location.pathname !== '/auth/login') {
+    window.location.href = '/auth/login'
+  }
+}
+
 export function setupAxios(axios: any) {
   axios.defaults.headers.Accept = 'application/json'
   axios.interceptors.request.use(
@@ -60,6 +68,17 @@ export function setupAxios(axios: any) {
     },
     (err: any) => Promise.reject(err)
   )
+  axios.interceptors.response.use(
+    function (response) {
+      return response
+    },
+    function (error) {
+      if (error?.response?.status) {
+        checkErrorsType(error?.response?.status)
+      } 
+      return Promise.reject(error)
+    }
+  )
 }
 
-export {getAuth, setAuth, removeAuth, AUTH_LOCAL_STORAGE_KEY}
+export {getAuth, setAuth, removeAuth, AUTH_LOCAL_STORAGE_KEY, logoutApp}

@@ -15,7 +15,7 @@ import {
   showIconChain,
 } from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
-import ICSort, { sortRows } from '../../../components/Sort'
+import ICSort, {sortRows} from '../../../components/Sort'
 import ModalAuction from '../Modal/modal-auction'
 import {useAlert} from 'react-alert'
 import styled from 'styled-components'
@@ -193,7 +193,17 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   useEffect(() => {
     fetchListAssets(params)
+    const interval = setInterval(() => {
+      fetchListAssets(params)
+    }, 30000)
+    return () => {
+      clearInterval(interval)
+    }
   }, [reloadList])
+
+  useEffect(() => {
+    ReactTooltip.rebuild()
+  }, [listAssets])
 
   const renderList = useCallback(
     () =>
@@ -222,7 +232,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
-                    {shortAddress(item?.hashId)}
+                    {item?.hashId && shortAddress(item?.hashId)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
                 </div>
@@ -385,7 +395,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('assetTypeName')}
                   >
                     ASSET TYPE{' '}
-                    <ICSort type={sort.sort_name === 'assetTypeName' ? sort.sort_type : 'default'} />
+                    <ICSort
+                      type={sort.sort_name === 'assetTypeName' ? sort.sort_type : 'default'}
+                    />
                   </SpanThTable>
                 </th>
                 <th>
@@ -394,7 +406,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('portfolioName')}
                   >
                     PORTFOLIO{' '}
-                    <ICSort type={sort.sort_name === 'portfolioName' ? sort.sort_type : 'default'} />
+                    <ICSort
+                      type={sort.sort_name === 'portfolioName' ? sort.sort_type : 'default'}
+                    />
                   </SpanThTable>
                 </th>
                 <th className='min-w-150px'>
@@ -431,7 +445,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('chainName')}
                   >
-                    CHAIN <ICSort type={sort.sort_name === 'chainName' ? sort.sort_type : 'default'} />
+                    CHAIN{' '}
+                    <ICSort type={sort.sort_name === 'chainName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
