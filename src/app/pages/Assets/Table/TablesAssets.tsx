@@ -15,7 +15,7 @@ import {
   showIconChain,
 } from '../../../../_metronic/helpers/format'
 import ReactTooltip from 'react-tooltip'
-import ICSort from '../../../components/Sort'
+import ICSort, { sortRows } from '../../../components/Sort'
 import ModalAuction from '../Modal/modal-auction'
 import {useAlert} from 'react-alert'
 import styled from 'styled-components'
@@ -45,8 +45,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const [modalShow, setModalShow] = useState(false)
   const [idAssetAuction, setIdAssetAuction] = useState(null)
   const [typeModal, setTypeModal] = useState('portfolio')
-  const [sort_name, set_sort_name] = useState('')
-  const [sort_type, set_sort_type] = useState('')
   const [reloadList, setReloadList] = useState(false)
   const [minted, setMinted] = useState(false)
   const [paginate, setPaginate] = useState(null)
@@ -56,12 +54,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
+  const [sort, setSort] = useState({sort_type: '', sort_name: ''})
+
   const [page, setPage] = useState<string | number>(1)
   const [error, setError] = useState(null)
   const alert = useAlert()
 
   const fetchListAssets = async (params) => {
-    // setIsLoading(true)
     try {
       const responsive = await getListAsset(params)
       if (responsive) {
@@ -154,29 +153,31 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   }
 
   const handleSort = (name) => {
-    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
-    if (sort_name !== name) {
+    let sortTypeNow = sort.sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort.sort_name !== name) {
       sortTypeNow = 'ASC'
     }
-    setParams({
-      ...params,
+    setPage(1) //return the page to 1 when sorting
+    setSort({
       sort_name: name,
       sort_type: sortTypeNow,
     })
-    set_sort_name(name)
-    set_sort_type(sortTypeNow)
   }
 
-  const filterMintedAssetList = (listAssets, page) => {
-    let newListAssets = [...listAssets]
+  const filterMintedAssetList = (results, page) => {
+    let newListAssets = [...results]
+    if (sort?.sort_name !== '' && sort?.sort_type !== '') {
+      newListAssets = sortRows(newListAssets, sort)
+    }
     if (page) {
       const start = (page - 1) * 30
       const end = start + 30
       newListAssets = newListAssets.slice(start, end)
     }
     if (minted) {
-      return newListAssets?.filter((item) => item?.mintCompletedStatus === true)
-    } else return newListAssets
+      newListAssets = newListAssets?.filter((item) => item?.mintCompletedStatus === true)
+    }
+    return newListAssets
   }
 
   useEffect(() => {
@@ -192,7 +193,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   useEffect(() => {
     fetchListAssets(params)
-  }, [params, reloadList])
+  }, [reloadList])
 
   const renderList = useCallback(
     () =>
@@ -330,7 +331,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [results, selectAsset, minted, searched, page, isLoadingAuction]
+    [results, selectAsset, minted, searched, page, isLoadingAuction, sort]
   )
 
   return (
@@ -365,7 +366,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('hashId')}
                   >
-                    ASSET ID <ICSort type={sort_name === 'hashId' ? sort_type : 'default'} />
+                    ASSET ID{' '}
+                    <ICSort type={sort.sort_name === 'hashId' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th className='min-w-150px'>
@@ -374,7 +376,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('xref')}
                   >
                     CROSS REFERENCE
-                    <ICSort type={sort_name === 'xref' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'xref' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th className='min-w-100px'>
@@ -383,7 +385,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('assetTypeName')}
                   >
                     ASSET TYPE{' '}
-                    <ICSort type={sort_name === 'assetTypeName' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'assetTypeName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -392,7 +394,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('portfolioName')}
                   >
                     PORTFOLIO{' '}
-                    <ICSort type={sort_name === 'portfolioName' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'portfolioName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th className='min-w-150px'>
@@ -401,7 +403,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('mintCompletedStatus')}
                   >
                     MINT COMPLETED
-                    <ICSort type={sort_name === 'mintCompletedStatus' ? sort_type : 'default'} />
+                    <ICSort
+                      type={sort.sort_name === 'mintCompletedStatus' ? sort.sort_type : 'default'}
+                    />
                   </SpanThTable>
                 </th>
                 <th className='min-w-100px'>
@@ -410,7 +414,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('bestBid')}
                   >
                     BEST BID
-                    <ICSort type={sort_name === 'bestBid' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'bestBid' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -419,7 +423,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('auction')}
                   >
                     AUCTION
-                    <ICSort type={sort_name === 'auction' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'auction' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -427,7 +431,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('chainName')}
                   >
-                    CHAIN <ICSort type={sort_name === 'chainName' ? sort_type : 'default'} />
+                    CHAIN <ICSort type={sort.sort_name === 'chainName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -436,7 +440,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('issuerName')}
                   >
                     ISSUER
-                    <ICSort type={sort_name === 'issuerName' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'issuerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -445,7 +449,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('ownerName')}
                   >
                     OWNER
-                    <ICSort type={sort_name === 'ownerName' ? sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'ownerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>ACTION</th>
@@ -470,13 +474,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         </div>
         {paginate?.total_page > 0 && (
           <div className='card-footer-v2'>
-            <Pagination
-              setIsLoading={setIsLoading}
-              paginate={paginate}
-              params={params}
-              setParams={setParams}
-              setPage={setPage}
-            />
+            <Pagination setIsLoading={setIsLoading} paginate={paginate} setPage={setPage} />
           </div>
         )}
       </div>

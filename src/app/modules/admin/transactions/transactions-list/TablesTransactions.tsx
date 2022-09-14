@@ -6,7 +6,7 @@ import {shortAddress} from '../../../../../_metronic/helpers/format'
 import FilterSearch from '../../../../components/FilterSearch'
 import useSearch from '../../../../hooks/useSearch'
 import styled from 'styled-components'
-import ICSort from '../../../../components/Sort'
+import ICSort, { sortRows } from '../../../../components/Sort'
 import { Loading } from '../../../../components/Loading'
 import { Search } from '../../../../components/FilterSearch/search'
 import { convertTimeZone } from '../../../../../_metronic/helpers/format/datetime'
@@ -31,8 +31,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
-  const [sort_name, set_sort_name] = useState('')
-  const [sort_type, set_sort_type] = useState('')
+  const [sort, setSort] = useState({sort_type: '', sort_name: ''})
 
   const fetchListTransactions = async (params) => {
     try {
@@ -53,17 +52,22 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
   }
 
   const handleSort = (name) => {
-    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
-    if (sort_name !== name) {
+    let sortTypeNow = sort.sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort.sort_name !== name) {
       sortTypeNow = 'ASC'
     }
-    setParams({
-      ...params,
+    setSort({
       sort_name: name,
       sort_type: sortTypeNow,
     })
-    set_sort_name(name)
-    set_sort_type(sortTypeNow)
+  }
+
+  const filterList = (results) => {
+    let newListAssets = [...results]
+    if (sort?.sort_name !== '' && sort?.sort_type !== '') {
+      newListAssets = sortRows(newListAssets, sort)
+    }
+    return newListAssets
   }
 
   useEffect(() => {
@@ -72,8 +76,8 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
 
   const renderList = useCallback(
     () =>
-      Array.isArray(results) &&
-      results?.map((item, index) => {
+      Array.isArray(filterList(results)) &&
+      filterList(results)?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -131,14 +135,14 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [results]
+    [results, sort]
   )
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5 d-flex align-items-center'>
-        <Search title='Search Transactions' setSearch={setSearch} searched={searched} />
+        <Search title='Search Transactions' setSearch={setSearch} searched={searched}/>
         <FilterSearch setSearch={setSearch} />
       </div>
       {/* end::Header */}
@@ -159,7 +163,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('id')}
                     >
-                      ID <ICSort type={sort_name === 'id' ? sort_type : 'default'} />
+                      ID <ICSort type={sort.sort_name === 'id' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -167,16 +171,16 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('uuid')}
                     >
-                      UUID <ICSort type={sort_name === 'uuid' ? sort_type : 'default'} />
+                      UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
                     <SpanThTable
                       className='cursor-pointer'
-                      onClick={() => !isLoading && handleSort('transactionType.type')}
+                      onClick={() => !isLoading && handleSort('type')}
                     >
                       TRANSACTION TYPE{' '}
-                      <ICSort type={sort_name === 'transactionType.type' ? sort_type : 'default'} />
+                      <ICSort type={sort.sort_name === 'type' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-100px'>
@@ -184,7 +188,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('cost')}
                     >
-                      COST <ICSort type={sort_name === 'cost' ? sort_type : 'default'} />
+                      COST <ICSort type={sort.sort_name === 'cost' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-100px'>
@@ -192,7 +196,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('costUnits')}
                     >
-                      COST UNIT <ICSort type={sort_name === 'costUnits' ? sort_type : 'default'} />
+                      COST UNIT <ICSort type={sort.sort_name === 'costUnits' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-100px'>
@@ -200,7 +204,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('createdAt')}
                     >
-                      TIMESTAMP <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
+                      TIMESTAMP <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className=''></th>
@@ -209,7 +213,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
               {/* end::Table head */}
               {/* begin::Table body */}
               <tbody>
-                {results?.length > 0 ? (
+                {filterList(results)?.length > 0 ? (
                   renderList()
                 ) : (
                   <tr>

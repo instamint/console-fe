@@ -6,7 +6,7 @@ import { getListContracts } from '../../../../utils/api/contracts'
 import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
 import FilterSearch from '../../../components/FilterSearch'
 import { Loading } from '../../../components/Loading'
-import ICSort from '../../../components/Sort'
+import ICSort, { sortRows } from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
@@ -22,21 +22,17 @@ const TablesContracts: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
-  const [sort_name, set_sort_name] = useState('')
-  const [sort_type, set_sort_type] = useState('')
+  const [sort, setSort] = useState({sort_type: '', sort_name: ''})
 
   const handleSort = (name) => {
-    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
-    if (sort_name !== name) {
+    let sortTypeNow = sort.sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort.sort_name !== name) {
       sortTypeNow = 'ASC'
     }
-    setParams({
-      ...params,
+    setSort({
       sort_name: name,
       sort_type: sortTypeNow,
     })
-    set_sort_name(name)
-    set_sort_type(sortTypeNow)
   }
 
   const fetchListContracts = async (params) => {
@@ -50,6 +46,14 @@ const TablesContracts: React.FC<Props> = ({className}) => {
     }
   }
 
+  const filterList = (results) => {
+    let newListAssets = [...results]
+    if (sort?.sort_name !== '' && sort?.sort_type !== '') {
+      newListAssets = sortRows(newListAssets, sort)
+    }
+    return newListAssets
+  }
+
   const openTab = (url) => {
     window.open(url)
   }
@@ -60,8 +64,8 @@ const TablesContracts: React.FC<Props> = ({className}) => {
 
   const renderList = useCallback(
     () =>
-      Array.isArray(listContracts) &&
-      listContracts?.map((item: any, index) => {
+      Array.isArray(filterList(listContracts)) &&
+      filterList(listContracts)?.map((item: any, index) => {
         return (
           <tr key={index}>
             <td>
@@ -128,7 +132,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [listContracts]
+    [listContracts, sort]
   )
 
   return (
@@ -158,7 +162,8 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('address')}
                     >
-                      ADDRESS <ICSort type={sort_name === 'address' ? sort_type : 'default'} />
+                      ADDRESS{' '}
+                      <ICSort type={sort.sort_name === 'address' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -167,7 +172,9 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       onClick={() => !isLoading && handleSort('description')}
                     >
                       DESCRIPTION{' '}
-                      <ICSort type={sort_name === 'description' ? sort_type : 'default'} />
+                      <ICSort
+                        type={sort.sort_name === 'description' ? sort.sort_type : 'default'}
+                      />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -176,7 +183,9 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       onClick={() => !isLoading && handleSort('etherscanurl')}
                     >
                       ETHERSCAN URL{' '}
-                      <ICSort type={sort_name === 'etherscanurl' ? sort_type : 'default'} />
+                      <ICSort
+                        type={sort.sort_name === 'etherscanurl' ? sort.sort_type : 'default'}
+                      />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -184,7 +193,8 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('shortName')}
                     >
-                      SHORT NAME <ICSort type={sort_name === 'shortName' ? sort_type : 'default'} />
+                      SHORT NAME{' '}
+                      <ICSort type={sort.sort_name === 'shortName' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -192,7 +202,8 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('chainName')}
                     >
-                      CHAIN <ICSort type={sort_name === 'chainName' ? sort_type : 'default'} />
+                      CHAIN{' '}
+                      <ICSort type={sort.sort_name === 'chainName' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -201,17 +212,23 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       onClick={() => !isLoading && handleSort('lastUsedTokenId')}
                     >
                       LAST USED TOKEN ID{' '}
-                      <ICSort type={sort_name === 'lastUsedTokenId' ? sort_type : 'default'} />
+                      <ICSort
+                        type={sort.sort_name === 'lastUsedTokenId' ? sort.sort_type : 'default'}
+                      />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
                     <SpanThTable
                       className='cursor-pointer'
-                      onClick={() => !isLoading && handleSort('contractType.type')}
+                      onClick={() => !isLoading && handleSort('contractTypeResponseDto.type')}
                     >
                       CONTRACT TYPE{' '}
                       <ICSort
-                        type={sort_name === 'contractType.type' ? sort_type : 'default'}
+                        type={
+                          sort.sort_name === 'contractTypeResponseDto.type'
+                            ? sort.sort_type
+                            : 'default'
+                        }
                       />
                     </SpanThTable>
                   </th>
@@ -220,7 +237,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
               {/* end::Table head */}
               {/* begin::Table body */}
               <tbody>
-                {listContracts?.length > 0 ? (
+                {filterList(listContracts)?.length > 0 ? (
                   renderList()
                 ) : (
                   <tr>

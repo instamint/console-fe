@@ -7,7 +7,7 @@ import {shortAddress} from '../../../../_metronic/helpers/format'
 import {convertTimeZone} from '../../../../_metronic/helpers/format/datetime'
 import FilterSearch from '../../../components/FilterSearch'
 import {Loading} from '../../../components/Loading'
-import ICSort from '../../../components/Sort'
+import ICSort, { sortRows } from '../../../components/Sort'
 import useSearch from '../../../hooks/useSearch'
 
 type Props = {
@@ -23,8 +23,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
-  const [sort_name, set_sort_name] = useState('')
-  const [sort_type, set_sort_type] = useState('')
+  const [sort, setSort] = useState({sort_type: '', sort_name: ''})
 
   const fetchListPools = async (params) => {
     try {
@@ -38,17 +37,22 @@ const TablesPools: React.FC<Props> = ({className}) => {
   }
 
   const handleSort = (name) => {
-    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
-    if (sort_name !== name) {
+    let sortTypeNow = sort.sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort.sort_name !== name) {
       sortTypeNow = 'ASC'
     }
-    setParams({
-      ...params,
+    setSort({
       sort_name: name,
       sort_type: sortTypeNow,
     })
-    set_sort_name(name)
-    set_sort_type(sortTypeNow)
+  }
+
+  const filterList = (results) => {
+    let newListAssets = [...results]
+    if (sort?.sort_name !== '' && sort?.sort_type !== '') {
+      newListAssets = sortRows(newListAssets, sort)
+    }
+    return newListAssets
   }
 
   useEffect(() => {
@@ -57,8 +61,8 @@ const TablesPools: React.FC<Props> = ({className}) => {
 
   const renderList = useCallback(
     () =>
-      Array.isArray(listPools) &&
-      listPools?.map((item, index) => {
+      Array.isArray(filterList(listPools)) &&
+      filterList(listPools)?.map((item, index) => {
         return (
           <tr key={index}>
             <td>
@@ -88,7 +92,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
           </tr>
         )
       }),
-    [listPools]
+    [listPools, sort]
   )
 
   return (
@@ -118,7 +122,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('uuid')}
                     >
-                      UUID <ICSort type={sort_name === 'uuid' ? sort_type : 'default'} />
+                      UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -126,7 +130,8 @@ const TablesPools: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('name')}
                     >
-                      PORTFOLIO NAME <ICSort type={sort_name === 'name' ? sort_type : 'default'} />
+                      PORTFOLIO NAME{' '}
+                      <ICSort type={sort.sort_name === 'name' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -135,7 +140,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
                       onClick={() => !isLoading && handleSort('createdAt')}
                     >
                       PORTFOLIO CREATE TIMESTAMP{' '}
-                      <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
+                      <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                 </tr>
@@ -143,7 +148,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
               {/* end::Table head */}
               {/* begin::Table body */}
               <tbody>
-                {listPools?.length > 0 ? (
+                {filterList(listPools)?.length > 0 ? (
                   renderList()
                 ) : (
                   <tr>
