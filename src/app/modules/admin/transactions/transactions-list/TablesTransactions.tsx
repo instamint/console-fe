@@ -36,13 +36,6 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
   const fetchListTransactions = async (params) => {
     try {
       let reps = await getListTransactions(params)
-      if (reps?.data?.length) {
-        reps?.data?.forEach((item) => {
-          if (item?.createdAt) {
-            item.createdAt = convertTimeZone(item.createdAt)
-          }
-        })
-      }
       reps && setListTransactions(reps?.data)
     } catch (error) {
       console.error({error})
@@ -121,7 +114,9 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.createdAt}</span>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.createdAt && convertTimeZone(item?.createdAt)}
+                  </span>
                 </div>
               </div>
             </td>
