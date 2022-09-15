@@ -11,7 +11,7 @@ export default function BidHistory({idAsset}) {
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
-    limit: '',
+    limit: '10',
   })
 
   const handleSort = (name) => {
@@ -65,27 +65,13 @@ export default function BidHistory({idAsset}) {
           <thead className='border-gray-200 fs-5 fw-semibold bg-lighten'>
             <tr className='fw-bold text-muted'>
               <th className='w-250px'>
-                <SpanThTable className='cursor-pointer' onClick={() => handleSort('createdAt')}>
-                  TIMESTAMP <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
-                </SpanThTable>
+                <span>TIMESTAMP</span>
               </th>
               <th>
-                <SpanThTable
-                  className='cursor-pointer'
-                  onClick={() => handleSort('bidder.name')}
-                  style={{paddingTop: '0px'}}
-                >
-                  BIDDER <ICSort type={sort_name === 'bidder.name' ? sort_type : 'default'} />
-                </SpanThTable>
+                <span>BIDDER</span>
               </th>
               <th>
-                <SpanThTable
-                  className='cursor-pointer'
-                  onClick={() => handleSort('bid')}
-                  style={{paddingTop: '0px'}}
-                >
-                  BID <ICSort type={sort_name === 'bid' ? sort_type : 'default'} />
-                </SpanThTable>
+                <span>BID</span>
               </th>
             </tr>
           </thead>

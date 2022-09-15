@@ -15,7 +15,7 @@ export default function Notes({idAsset}) {
   const [params, setParams] = useState({
     sort_name: '',
     sort_type: '',
-    limit: '',
+    limit: '10',
   })
 
   const handleSort = (name) => {
@@ -92,14 +92,10 @@ export default function Notes({idAsset}) {
               <thead className='border-gray-200 fs-5 fw-semibold bg-lighten'>
                 <tr className='fw-bold text-muted'>
                   <th className='w-250px' style={{paddingTop: '0px'}}>
-                    <SpanThTable className='cursor-pointer' onClick={() => handleSort('createdAt')}>
-                      TIMESTAMP <ICSort type={sort_name === 'createdAt' ? sort_type : 'default'} />
-                    </SpanThTable>
+                    <span>TIMESTAMP</span>
                   </th>
                   <th className='w-250px' style={{paddingTop: '0px'}}>
-                    <SpanThTable className='cursor-pointer' onClick={() => handleSort('note')}>
-                      NOTE <ICSort type={sort_name === 'note' ? sort_type : 'default'} />
-                    </SpanThTable>
+                    <span>NOTE</span>
                   </th>
                 </tr>
               </thead>
