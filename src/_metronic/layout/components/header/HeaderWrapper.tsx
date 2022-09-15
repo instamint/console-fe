@@ -24,12 +24,11 @@ export function HeaderWrapper() {
           'd-flex align-items-stretch justify-content-between'
         )}
       >
-        <Link to='/' className='d-flex align-items-center mr-2 me-4'>
+        <Link to='/' className='d-flex align-items-center mr-2 me-5'>
             <img
               alt='Logo'
-              src={toAbsoluteUrl('/media/logos/instamint_logo.png')}
-              width={150}
-              height={40}
+              src={toAbsoluteUrl('/media/logos/logo-instamint.png')}
+              width={165}
             />
         </Link>
 

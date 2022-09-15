@@ -5,8 +5,7 @@ import {ForgotPassword} from './components/ForgotPassword'
 import {Login} from './components/Login'
 import {Registration} from './components/Registration'
 import BackgroundImage from '../../images/background-login.png'
-
-import LogoIstamint from '../../images/instamint.png'
+import { toAbsoluteUrl } from '../../../_metronic/helpers'
 
 const AuthPage = () => {
   useEffect(() => {
@@ -20,8 +19,13 @@ const AuthPage = () => {
     <>
       <div className='d-flex flex-column flex-root' id='kt_app_root'>
         <div className='d-flex flex-column flex-lg-row flex-column-fluid'>
-          <a className='d-block d-lg-none mx-auto py-20'>
-            <img alt='Logo' src={LogoIstamint} className='theme-light-show h-35px' />
+          <a className='d-block d-lg-none mx-auto py-5'>
+            <img
+              alt='Logo'
+              src={toAbsoluteUrl('/media/logos/logo-instamint.png')}
+              width={160}
+              className='theme-light-show'
+            />
           </a>
           <div className='d-flex flex-column flex-column-fluid flex-center w-lg-50 p-10'>
             <Routes>

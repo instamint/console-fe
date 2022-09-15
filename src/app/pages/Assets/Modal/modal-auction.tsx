@@ -34,7 +34,7 @@ const patternTwoDigisAfterComma = /^(\d*\.{0,1}\d{0,2}$)/
 const AuctionSchema = Yup.object().shape({
   auction_type: Yup.string().trim().nullable(null).required('Auction Type is required'),
   reserve_price: Yup.number()
-    .max(99999999, 'Maximum 8 digits')
+    .max(100000000, 'Maximum 8 digits')
     .test(
       'is-decimal',
       'Price should be a decimal with maximum two digits after comma',
@@ -47,7 +47,7 @@ const AuctionSchema = Yup.object().shape({
     )
     .typeError('Price should be a decimal with maximum two digits after comma'),
   buy_now_price: Yup.number()
-    .max(99999999, 'Maximum 8 digits')
+    .max(100000000, 'Maximum 8 digits')
     .test(
       'is-decimal',
       'Price should be a decimal with maximum two digits after comma',
@@ -142,7 +142,7 @@ export default function ModalAuction({
               <div>
                 <div className='d-flex align-items-center'>
                   <Title>Auction Type:</Title>
-                  <div>
+                  <div ref={refDropDown}>
                     <button
                       onClick={() => setDropDown((preState) => !preState)}
                       type='button'
@@ -157,7 +157,6 @@ export default function ModalAuction({
                       <IconDrop className='fa-solid fa-caret-down'></IconDrop>
                     </button>
                     <DivDropDownItem
-                      ref={refDropDown}
                       className='menu menu-sub menu-sub-dropdown p-4'
                       data-kt-menu='true'
                       style={{display: dropDown ? 'block' : 'none', position: 'absolute'}}
