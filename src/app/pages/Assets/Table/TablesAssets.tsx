@@ -189,15 +189,19 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   }
 
   useEffect(() => {
+    let tmpResults = [...results]
+    if (minted) {
+      tmpResults = tmpResults?.filter((item) => item?.mintCompletedStatus === true)
+    }
     setPaginate({
       current_page: page || 1,
       // from_record: 11,
       record_per_page: 30,
       // to_record: 20,
-      total_page: Math.ceil(results?.length / 30) ?? 0,
-      total_record: results?.length ?? 0,
+      total_page: Math.ceil(tmpResults?.length / 30) ?? 0,
+      total_record: tmpResults?.length ?? 0,
     })
-  }, [results, page])
+  }, [results, page, minted])
 
   useEffect(() => {
     fetchListAssets(params)
@@ -218,7 +222,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       Array.isArray(filterMintedAssetList(results, page)) &&
       filterMintedAssetList(results, page)?.map((item, index) => {
         return (
-          <tr key={index} onClick={() => navigateDetailAsset(item?.id)} className='cursor-pointer'>
+          <TrTable key={index} onClick={() => navigateDetailAsset(item?.id)} className='cursor-pointer'>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
@@ -336,7 +340,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 }
               />
             </td>
-          </tr>
+          </TrTable>
         )
       }),
     [results, selectAsset, minted, searched, page, isLoadingAuction, sort]
@@ -530,4 +534,10 @@ const SpanThTable = styled.span`
   width: max-content;
   display: flex;
   align-items: center;
+`
+
+const TrTable = styled.tr`
+  &:hover {
+    background-color: rgba(230, 246, 255, 0.5);
+  }
 `
