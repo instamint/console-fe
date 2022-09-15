@@ -109,7 +109,7 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
               {listPortfolio?.length > 0 ? (
                 <div className='d-flex align-items-center mt-6'>
                   <Title>Existing Portfolio:</Title>
-                  <DivDropDown>
+                  <DivDropDown ref={refDropDown}>
                     <button
                       onClick={() =>
                         (!values?.poolname || values?.poolname?.trim() === '') &&
@@ -141,7 +141,6 @@ export default function ModalPool({modalShow, setModalShow, handlePool, error, s
                       ></IconDrop>
                     </button>
                     <DivDropDownItem
-                      ref={refDropDown}
                       className='menu menu-sub menu-sub-dropdown p-4'
                       data-kt-menu='true'
                       style={{display: dropDown ? 'block' : 'none', position: 'absolute'}}

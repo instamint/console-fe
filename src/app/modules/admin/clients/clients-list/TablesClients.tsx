@@ -29,7 +29,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
   const fetchListClients = async (params) => {
     try {
       let reps = await getListClients(params)
-      reps && setListClients(reps?.data?.content)
+      reps && setListClients(reps?.data)
     } catch (error) {
       console.error({error})
     } finally {

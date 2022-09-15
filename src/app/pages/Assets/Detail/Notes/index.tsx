@@ -17,6 +17,7 @@ export default function Notes({idAsset}) {
     sort_type: '',
     limit: '10',
   })
+  const [loadingAddNote, setLoadingAddNote] = useState(false)
 
   const handleSort = (name) => {
     let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
@@ -33,13 +34,17 @@ export default function Notes({idAsset}) {
   }
 
   const handleAddNote = async (note: string) => {
-    try {
-      await AddNote(note, idAsset)
-      setReloadList((preState) => !preState)
-    } catch (error) {
-      console.error({error})
-    } finally {
-      setModalAddNote(false)
+    setLoadingAddNote(true)
+    if (!loadingAddNote) {
+      try {
+        await AddNote(note, idAsset)
+        setReloadList((preState) => !preState)
+      } catch (error) {
+        console.error({error})
+      } finally {
+        setLoadingAddNote(false)
+        setModalAddNote(false)
+      }
     }
   }
   const fetchListNote = async (id, params) => {
