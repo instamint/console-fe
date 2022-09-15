@@ -1,8 +1,12 @@
+import {convertTimeZone} from './../../_metronic/helpers/format/datetime'
 import {useState, useMemo} from 'react'
+import { isTimeISO } from '../../_metronic/helpers/convert/convert-type'
 
 const useSearch = (data: any[], searchKeys: string[]) => {
   const convertType = (text) => {
-    if (typeof text === 'string') {
+    if (isTimeISO(text)) {
+      return convertTimeZone(text)
+    } else if (typeof text === 'string') {
       return text
     } else if (typeof text === 'boolean') {
       return text === true ? 'TRUE' : 'FALSE'

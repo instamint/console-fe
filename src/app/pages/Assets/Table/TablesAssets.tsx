@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {createAuction, endAuction, getListAsset} from '../../../../utils/api/assets'
 import FilterSearch from '../FilterSearch/index'
 import {Loading} from '../../../components/Loading'
@@ -59,6 +59,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   const [page, setPage] = useState<string | number>(1)
   const [error, setError] = useState(null)
   const alert = useAlert()
+  const navigate = useNavigate()
 
   const fetchListAssets = async (params) => {
     try {
@@ -180,6 +181,12 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     return newListAssets
   }
 
+  const navigateDetailAsset = (id) => {
+    if(id) {
+      navigate(`detail/overview/${id}`)
+    } 
+  }
+
   useEffect(() => {
     setPaginate({
       current_page: page || 1,
@@ -210,7 +217,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       Array.isArray(filterMintedAssetList(results, page)) &&
       filterMintedAssetList(results, page)?.map((item, index) => {
         return (
-          <tr key={index}>
+          <tr key={index} onClick={() => navigateDetailAsset(item?.id)} className='cursor-pointer'>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
@@ -317,14 +324,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             </td>
             <td>
               <div className='d-flex justify-content-start flex-shrink-0 align-items-center'>
-                <Link
+                {/* <Link
                   to={{
                     pathname: `detail/overview/${item?.id}`,
                   }}
                   className='btn btn-sm fw-bold btn-primary'
                 >
                   Details
-                </Link>
+                </Link> */}
                 <button
                   onClick={() =>
                     item?.auction

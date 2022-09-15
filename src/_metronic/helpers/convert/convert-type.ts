@@ -1,3 +1,5 @@
+import moment from "moment"
+
 export function isEmpty(obj = {}) {
   return Object.keys(obj).length === 0
 }
@@ -22,6 +24,11 @@ export function isDateString(value) {
   if (!isString(value)) return false
 
   return value.match(/^\d{2}-\d{2}-\d{4}$/)
+}
+
+export function isTimeISO(value) {
+  if (!value) return false
+  return moment(value, moment.ISO_8601).isValid()
 }
 
 export function convertDateString(value) {
