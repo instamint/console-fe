@@ -21,6 +21,7 @@ import {useAlert} from 'react-alert'
 import styled from 'styled-components'
 import {Search} from '../../../components/FilterSearch/search'
 import Pagination from '../../../components/Pagination'
+import ButtonAction from '../../../components/Button/button-action'
 
 type Props = {
   className: string
@@ -221,7 +222,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                  <div
+                    className='form-check form-check-sm form-check-custom form-check-solid'
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <input
                       className='form-check-input'
                       type='checkbox'
@@ -323,27 +327,14 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               </div>
             </td>
             <td>
-              <div className='d-flex justify-content-start flex-shrink-0 align-items-center'>
-                {/* <Link
-                  to={{
-                    pathname: `detail/overview/${item?.id}`,
-                  }}
-                  className='btn btn-sm fw-bold btn-primary'
-                >
-                  Details
-                </Link> */}
-                <button
-                  onClick={() =>
-                    item?.auction
-                      ? !isLoadingAuction && handleEndAuction(item?.id)
-                      : openModalAuction(item?.id)
-                  }
-                  className='btn btn-sm fw-bold btn-primary ms-3'
-                  style={{minWidth: '108px'}}
-                >
-                  {item?.auction ? 'End Auction' : 'Auction'}
-                </button>
-              </div>
+              <ButtonAction
+                name={item?.auction ? 'End Auction' : 'Auction'}
+                handleClick={() =>
+                  item?.auction
+                    ? !isLoadingAuction && handleEndAuction(item?.id)
+                    : openModalAuction(item?.id)
+                }
+              />
             </td>
           </tr>
         )
@@ -368,7 +359,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       {/* begin::Body */}
       <div className='card-body py-4'>
         {/* begin::Table container */}
-        <div className='table-responsive'>
+        <div className='table-responsive' style={{paddingBottom: "30px"}}>
           {/* begin::Table */}
 
           <table
@@ -495,7 +486,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           </table>
         </div>
         {paginate?.total_page > 0 && (
-          <div className='card-footer-v2'>
+          <div className='card-footer-asset'>
             <Pagination setIsLoading={setIsLoading} paginate={paginate} setPage={setPage} />
           </div>
         )}
