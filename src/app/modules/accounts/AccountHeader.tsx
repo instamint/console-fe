@@ -27,7 +27,7 @@ const AccountHeader: React.FC = () => {
               <div className='d-flex flex-column'>
                 <div className='d-flex align-items-center mb-2'>
                   <a href='#' className='text-gray-800 text-hover-primary fs-2 fw-bolder me-1'>
-                    {currentUser?.name}
+                    {currentUser?.fullname}
                   </a>
                   <a href='#'>
                     <KTSVG
@@ -41,7 +41,7 @@ const AccountHeader: React.FC = () => {
                     data-bs-toggle='modal'
                     data-bs-target='#kt_modal_upgrade_plan'
                   >
-                    Upgrade to Pro
+                    Enterprise
                   </a>
                 </div>
 
