@@ -1,4 +1,4 @@
-import SampleComponent from "./SampleComponent";
+import ConnectStompComponent from "./SampleComponent";
 
 export default function MonitoringPage() {
   return (
@@ -7,9 +7,9 @@ export default function MonitoringPage() {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Monitoring</span>
         </h3>
-        <div>
-            <SampleComponent />
-        </div>
+      </div>
+      <div className='pt-5'>
+        <ConnectStompComponent />
       </div>
     </div>
   )

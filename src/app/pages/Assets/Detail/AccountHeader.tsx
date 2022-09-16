@@ -111,7 +111,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
             </div>
           </div>
 
-          {dataDetail?.algorandAsset?.algorandAssetId && (
+          {dataDetail?.asset?.chainName === 'algorand-testnet' && (
             <div className='flex-equal me-8'>
               <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
                 <tbody>
@@ -124,11 +124,11 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>METADATA CID:</td>
+                    <td className='text-gray-400'>METADATACID:</td>
                     <td className='text-gray-800'>{dataDetail?.asset?.metadataCid}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>METADATA URI</td>
+                    <td className='text-gray-400'>METADATAURI:</td>
                     <td data-tip={dataDetail?.asset?.metadataUri} className='text-gray-800'>
                       {dataDetail?.asset?.metadataUri &&
                         shortAddressMaxLength(dataDetail?.asset?.metadataUri, 15)}
@@ -150,7 +150,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
             </div>
           )}
 
-          {dataDetail?.algorandAsset?.algorandAssetId && (
+          {dataDetail?.asset?.chainName === 'algorand-testnet' && (
             <div className='flex-equal'>
               <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
                 <tbody>
@@ -167,7 +167,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     <td className='text-gray-800'>{dataDetail?.algorandAsset?.assetName}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>UNIT NAME</td>
+                    <td className='text-gray-400'>UNIT NAME:</td>
                     <td className='text-gray-800'>{dataDetail?.algorandAsset?.unit_name}</td>
                   </tr>
                   <tr>

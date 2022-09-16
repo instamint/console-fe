@@ -47,7 +47,12 @@ if (container) {
       <MetronicI18nProvider>
         <AuthProvider>
           <Provider template={AlertTemplate} {...optionsAlert}>
-            <StompSessionProvider url={'ws://ws.instamint.network/ws'}>
+            <StompSessionProvider
+              url={'ws://ws.instamint.network/ws'}
+              debug={(str) => {
+                console.log(str)
+              }}
+            >
               <AppRoutes />
             </StompSessionProvider>
           </Provider>
