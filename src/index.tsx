@@ -18,6 +18,7 @@ import {AppRoutes} from './app/routing/AppRoutes'
 import {AuthProvider, setupAxios} from './app/modules/auth'
 import {positions, Provider} from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
+import {StompSessionProvider} from 'react-stomp-hooks'
 /**
  * Creates `axios-mock-adapter` instance for provided `axios` instance, add
  * basic Metronic mocks and returns it.
@@ -46,7 +47,9 @@ if (container) {
       <MetronicI18nProvider>
         <AuthProvider>
           <Provider template={AlertTemplate} {...optionsAlert}>
-            <AppRoutes />
+            <StompSessionProvider url={'ws://ws.instamint.network/ws'}>
+              <AppRoutes />
+            </StompSessionProvider>
           </Provider>
         </AuthProvider>
       </MetronicI18nProvider>
