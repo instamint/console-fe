@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 // Address token
 export const shortAddress = (value: string = '', n = 4, nlast = 4, v = 13) => {
+  if (!value) return null
   if (value?.length <= v) {
     return value
   }
@@ -13,6 +14,7 @@ export const shortAddress = (value: string = '', n = 4, nlast = 4, v = 13) => {
 }
 
 export const shortAddressBehind = (value: string, n = 25, nlast = 4, v = 13) => {
+  if (!value) return null
   if (value?.length <= v) {
     return value
   }
@@ -22,6 +24,7 @@ export const shortAddressBehind = (value: string, n = 25, nlast = 4, v = 13) => 
 }
 
 export const shortAddressMaxLength = (value: string, n = 25) => {
+  if (!value) return null
   if (value?.length <= n) {
     return value
   }
@@ -29,6 +32,7 @@ export const shortAddressMaxLength = (value: string, n = 25) => {
 }
 
 export const showIconChain = (chain: string) => {
+  if (!chain) return
   const ImgChain = styled.img`
     width: 22px;
     height: 20px;

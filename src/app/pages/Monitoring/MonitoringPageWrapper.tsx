@@ -16,7 +16,7 @@ const MonitoringWrapper: FC = () => {
   const intl = useIntl()
   return (
     <>
-      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.PORTFOLIOS'})}</PageTitle>
+      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.MONITORING'})}</PageTitle>
       <Monitoring />
     </>
   )
