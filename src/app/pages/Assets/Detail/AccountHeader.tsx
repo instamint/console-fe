@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
-import { useLocation } from 'react-router'
+import {useLocation} from 'react-router'
 import ReactTooltip from 'react-tooltip'
-import { KTSVG } from '../../../../_metronic/helpers'
-import { shortAddress } from '../../../../_metronic/helpers/format'
-import { Dropdown1 } from '../../../../_metronic/partials'
+import {KTSVG} from '../../../../_metronic/helpers'
+import {shortAddress, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
 
 type Props = {
   id: string
@@ -18,7 +17,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
     <div className='card mb-5 mb-xl-10'>
       <div className='card-body pt-9 pb-0'>
         <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
-          <div className='flex-grow-1'>
+          <div className='me-7'>
             <div className='d-flex justify-content-between align-items-start flex-wrap mb-2'>
               <div className='d-flex flex-column'>
                 <div className='d-flex align-items-center mb-2'>
@@ -49,54 +48,28 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                 </div>
 
                 <div className='d-flex flex-wrap fw-bold fs-6 mb-4 pe-2'>
-                  <a
-                    href='#'
-                    className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'
-                  >
+                  <a className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'>
                     <span style={{paddingLeft: '3px'}}>
                       {dataDetail?.asset?.chainName?.charAt(0)?.toUpperCase() +
                         dataDetail?.asset?.chainName?.slice(1)}
                     </span>
                   </a>
                   <a className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'>
-                    {dataDetail?.asset?.assetTypeName}
+                    <span data-tip={dataDetail?.asset?.assetTypeName}>
+                      {dataDetail?.asset?.assetTypeName &&
+                        shortAddressMaxLength(dataDetail?.asset?.assetTypeName, 15)}
+                    </span>
+                    <ReactTooltip place='top' effect='solid' />
                   </a>
                   <a className='d-flex align-items-center text-gray-400 text-hover-primary mb-2'>
                     {dataDetail?.asset?.issuerName}
                   </a>
                 </div>
               </div>
-
-              <div className='d-flex my-4'>
-                <a className='btn btn-sm btn-light me-2' id='kt_user_follow_button'>
-                  <KTSVG
-                    path='/media/icons/duotune/arrows/arr012.svg'
-                    className='svg-icon-3 d-none'
-                  />
-
-                  <span className='indicator-label'>Follow</span>
-                  <span className='indicator-progress'>
-                    Please wait...
-                    <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-                  </span>
-                </a>
-                
-                <div className='me-0'>
-                  <button
-                    className='btn btn-sm btn-icon btn-bg-light btn-active-color-primary'
-                    data-kt-menu-trigger='click'
-                    data-kt-menu-placement='bottom-end'
-                    data-kt-menu-flip='top-end'
-                  >
-                    <i className='bi bi-three-dots fs-3'></i>
-                  </button>
-                  <Dropdown1 />
-                </div>
-              </div>
             </div>
 
-            <div className='d-flex flex-wrap flex-stack'>
-              <div className='d-flex flex-column flex-grow-1 pe-8'>
+            <div className='d-flex flex-wrap flex-stack mb-4'>
+              <div className='d-flex flex-column pe-8'>
                 <div className='d-flex flex-wrap'>
                   <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                     <div className='d-flex align-items-center'>
@@ -137,6 +110,90 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
               </div>
             </div>
           </div>
+
+          {dataDetail?.algorandAsset?.algorandAssetId && (
+            <div className='flex-equal me-8'>
+              <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
+                <tbody>
+                  <tr>
+                    <td className='text-gray-400' style={{paddingTop: '0'}}>
+                      <span>MINT COMPLETED STATUS:</span>
+                    </td>
+                    <td className='text-gray-800' style={{paddingTop: '0'}}>
+                      <span>{dataDetail?.asset?.mintCompletedStatus ? 'TRUE' : 'FALSE'}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>METADATA CID:</td>
+                    <td className='text-gray-800'>{dataDetail?.asset?.metadataCid}</td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>METADATA URI</td>
+                    <td data-tip={dataDetail?.asset?.metadataUri} className='text-gray-800'>
+                      {dataDetail?.asset?.metadataUri &&
+                        shortAddressMaxLength(dataDetail?.asset?.metadataUri, 15)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>
+                      <span
+                        data-tip={dataDetail?.asset?.transactionReceiptJson}
+                        data-for='transactionReceiptJson'
+                      >
+                        TRANSACTION RECEIPTJSON
+                      </span>
+                      <ReactTooltip id='transactionReceiptJson' place='bottom' effect='solid' />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {dataDetail?.algorandAsset?.algorandAssetId && (
+            <div className='flex-equal'>
+              <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
+                <tbody>
+                  <tr>
+                    <td className='text-gray-400' style={{paddingTop: '0'}}>
+                      ALOGRAND ASSETID:
+                    </td>
+                    <td className='text-gray-800' style={{paddingTop: '0'}}>
+                      <span>{dataDetail?.algorandAsset?.algorandAssetId}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>ASSET NAME:</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.assetName}</td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>UNIT NAME</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.unit_name}</td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>TOTAL:</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.total}</td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>CLAWBACKPK:</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.clawBackPk}</td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'> MANAGERPK:</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.managerpk}</td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>RESERVEPK:</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.reservepk}</td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>SENDERPK:</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.senderpk}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         <div className='d-flex overflow-auto h-55px'>
@@ -159,4 +216,4 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
   )
 }
 
-export { AccountHeader }
+export {AccountHeader}

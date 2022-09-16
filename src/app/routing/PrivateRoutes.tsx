@@ -11,6 +11,7 @@ import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
 import AssetsDetail from '../pages/Assets/Detail'
 import { ContractsWrapper } from '../pages/Contracts/ContractsWrapper'
 import { DesignerWrapper } from '../pages/Designer/index'
+import { MonitoringWrapper } from '../pages/Monitoring/MonitoringPageWrapper'
 import PartiesDetail from '../pages/Parties/Detail'
 import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
 import { PoolsWrapper } from '../pages/Pools/PoolsWrapper'
@@ -49,6 +50,7 @@ const PrivateRoutes = () => {
         <Route path='parties' element={<PartiesWrapper />} />
         <Route path='transactions' element={<TransactionsWrapper />} />
         <Route path='contracts' element={<ContractsWrapper />} />
+        <Route path='monitoring' element={<MonitoringWrapper />} />
         {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
           <Route
             path='admin/*'
