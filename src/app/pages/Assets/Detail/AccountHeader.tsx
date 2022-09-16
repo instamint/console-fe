@@ -139,10 +139,16 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <span
                         data-tip={dataDetail?.asset?.transactionReceiptJson}
                         data-for='transactionReceiptJson'
+                        // data-multiline={true}
                       >
                         TRANSACTION RECEIPTJSON
                       </span>
-                      <ReactTooltip id='transactionReceiptJson' place='bottom' effect='solid' />
+                      <ReactTooltip
+                        multiline={true}
+                        id='transactionReceiptJson'
+                        place='bottom'
+                        effect='solid'
+                      />
                     </td>
                   </tr>
                 </tbody>
@@ -155,7 +161,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
               <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
                 <tbody>
                   <tr>
-                    <td className='text-gray-400' style={{paddingTop: '0'}}>
+                    <td className='text-gray-400 min-w-150px' style={{paddingTop: '0'}}>
                       ALOGRAND ASSETID:
                     </td>
                     <td className='text-gray-800' style={{paddingTop: '0'}}>
@@ -176,19 +182,39 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                   </tr>
                   <tr>
                     <td className='text-gray-400'>CLAWBACKPK:</td>
-                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.clawBackPk}</td>
+                    <td className='text-gray-800'>
+                      <span data-tip={dataDetail?.algorandAsset?.clawBackPk}>
+                        {shortAddress(dataDetail?.algorandAsset?.clawBackPk)}
+                      </span>
+                      <ReactTooltip place='top' effect='solid' />
+                    </td>
                   </tr>
                   <tr>
                     <td className='text-gray-400'> MANAGERPK:</td>
-                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.managerpk}</td>
+                    <td className='text-gray-800'>
+                      <span data-tip={dataDetail?.algorandAsset?.managerpk}>
+                        {shortAddress(dataDetail?.algorandAsset?.managerpk)}
+                      </span>
+                      <ReactTooltip place='top' effect='solid' />
+                    </td>
                   </tr>
                   <tr>
                     <td className='text-gray-400'>RESERVEPK:</td>
-                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.reservepk}</td>
+                    <td className='text-gray-800'>
+                      <span data-tip={dataDetail?.algorandAsset?.reservepk}>
+                        {shortAddress(dataDetail?.algorandAsset?.reservepk)}
+                      </span>
+                      <ReactTooltip place='top' effect='solid' />
+                    </td>
                   </tr>
                   <tr>
                     <td className='text-gray-400'>SENDERPK:</td>
-                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.senderpk}</td>
+                    <td className='text-gray-800'>
+                      <span data-tip={dataDetail?.algorandAsset?.senderpk}>
+                        {shortAddress(dataDetail?.algorandAsset?.senderpk)}
+                      </span>
+                      <ReactTooltip place='top' effect='solid' />
+                    </td>
                   </tr>
                 </tbody>
               </table>
