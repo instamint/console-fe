@@ -4,6 +4,7 @@ import {useLocation} from 'react-router'
 import ReactTooltip from 'react-tooltip'
 import {KTSVG} from '../../../../_metronic/helpers'
 import {shortAddress, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
+import './style.scss'
 
 type Props = {
   id: string
@@ -139,7 +140,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <span
                         data-tip={dataDetail?.asset?.transactionReceiptJson}
                         data-for='transactionReceiptJson'
-                        // data-multiline={true}
+                        data-class={"tooltip-width"}
                       >
                         TRANSACTION RECEIPTJSON
                       </span>
