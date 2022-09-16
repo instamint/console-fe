@@ -1,11 +1,9 @@
-import { useState } from "react"
-import { useSubscription } from "react-stomp-hooks"
+import {useSubscription} from 'react-stomp-hooks'
 
-export default function SampleComponent() {
-  const [lastMessage, setLastMessage] = useState('No message received yet')
-  console.log('lastMessage', lastMessage)
-
-  useSubscription('/user/feeds/hello', (message) => setLastMessage(message.body))
+export default function ConnectStompComponent() {
+  useSubscription('/user/feeds/hello', (message) => {
+    console.log(message.body)
+  })
 
   return <div></div>
 }
