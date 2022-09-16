@@ -1,7 +1,7 @@
 import {useSubscription} from 'react-stomp-hooks'
 
 export default function ConnectStompComponent() {
-  useSubscription('/user/feeds/hello', (message) => {
+  useSubscription('/feeds/kafka', (message) => {
     console.log(message.body)
   })
 
