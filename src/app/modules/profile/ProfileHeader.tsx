@@ -75,7 +75,7 @@ const ProfileHeader: React.FC = () => {
                     className='svg-icon-3 d-none'
                   />
 
-                  <span className='indicator-label'>Follow</span>
+                  <span className='indicator-label'>Transfer</span>
                   <span className='indicator-progress'>
                     Please wait...
                     <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
@@ -87,7 +87,7 @@ const ProfileHeader: React.FC = () => {
                   data-bs-toggle='modal'
                   data-bs-target='#kt_modal_offer_a_deal'
                 >
-                  Hire Me
+                  Fund
                 </a>
                 <div className='me-0'>
                   <button
