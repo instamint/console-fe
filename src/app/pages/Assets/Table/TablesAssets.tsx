@@ -302,7 +302,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.bestBid}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.bestBid && `$${item?.bestBid}`}</span>
                 </div>
               </div>
             </td>

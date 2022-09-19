@@ -32,7 +32,7 @@ export default function AuctionHistory({idAsset}) {
             <td className=''>{item?.bestBidderName}</td>
             <td className=''>{item?.startTime && convertTimeZone(item?.startTime)}</td>
             <td className=''>{item?.endTime && convertTimeZone(item?.endTime)}</td>
-            <td className=''>{item?.grossTradeAmount}</td>
+            <td className=''>{item?.grossTradeAmount && `$${item?.grossTradeAmount}`}</td>
             <td className=''>{item?.expired ? 'TRUE' : 'FALSE'}</td>
             <td className=''>{item?.currency && `$${item?.currency}`}</td>
             <td className=''>{item?.closed ? 'TRUE' : 'FALSE'}</td>
