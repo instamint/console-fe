@@ -80,9 +80,8 @@ export default function Overview({dataDetail, setReloadPage}) {
                         data-kt-countup-value='80'
                         data-kt-initialized='1'
                       >
-                        {dataDetail?.asset?.ask ?? 0}
+                        ${dataDetail?.asset?.ask ?? 0}
                       </span>
-                      %
                     </span>
                     <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>Ask</span>
                   </div>
@@ -95,7 +94,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                         className='counted'
                         data-kt-initialized='1'
                       >
-                        ${dataDetail?.asset?.activeAuction ? dataDetail?.asset?.reverse ?? 0 : 0}
+                        ${dataDetail?.asset?.reverse ?? 0}
                       </span>
                     </span>
                     <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>

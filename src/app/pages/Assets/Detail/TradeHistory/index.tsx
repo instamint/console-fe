@@ -31,9 +31,9 @@ export default function TradeHistory({idAsset}) {
           <tr key={index}>
             <td className=''>{item?.buyerName}</td>
             <td className=''>{item?.sellerName}</td>
-            <td className=''>{item?.fee}</td>
-            <td className=''>{item?.platform_fee}</td>
-            <td className=''>{item?.trade_amount}</td>
+            <td className=''>${item?.fee || 0}</td>
+            <td className=''>${item?.platform_fee || 0}</td>
+            <td className=''>${item?.trade_amount || 0}</td>
           </tr>
         )
       }),
