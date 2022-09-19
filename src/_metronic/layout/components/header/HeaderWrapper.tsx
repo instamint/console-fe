@@ -2,11 +2,11 @@
 import clsx from 'clsx'
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 import {useLayout} from '../../core'
 import {Header} from './Header'
 import {DefaultTitle} from './page-title/DefaultTitle'
 import {Topbar} from './Topbar'
+import Logo from '../../../../app/images/logo-instamint.png'
 
 export function HeaderWrapper() {
   const {config, classes, attributes} = useLayout()
@@ -25,11 +25,7 @@ export function HeaderWrapper() {
         )}
       >
         <Link to='/' className='d-flex align-items-center mr-2 me-5'>
-            <img
-              alt='Logo'
-              src={toAbsoluteUrl('/media/logos/logo-instamint.png')}
-              width={165}
-            />
+          <img alt='Logo' src={Logo} width={165} />
         </Link>
 
         {/* begin::Wrapper */}

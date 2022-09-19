@@ -33,7 +33,7 @@ export default function BidHistory({idAsset}) {
           <tr key={index}>
             <td className='w-250px'>{convertTimeZone(item?.createdAt)}</td>
             <td className=''>{item?.partyName || ''}</td>
-            <td className=''>{item?.bid || ''}</td>
+            <td className=''>${item?.bid || 0}</td>
           </tr>
         )
       }),
