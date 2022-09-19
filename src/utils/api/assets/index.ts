@@ -7,6 +7,8 @@ export const GET_DETAIL_ASSETS = (id) => `${API_URL}/asset/detail/${id}`
 export const ADD_NOTE = `${API_URL}/note/add`
 export const GET_LIST_NOTE = (id) => `${API_URL}/note/${id}`
 export const GET_LIST_BID_HISTORY = (id) => `${API_URL}/bid-history/${id}`
+export const GET_LIST_TRADE_HISTORY = (id) => `${API_URL}/asset-trade/${id}`
+export const GET_LIST_AUCTION_HISTORY = (id) => `${API_URL}/auction/${id}`
 export const GET_LIST_AUCTION_TYPE = `${API_URL}/auction_type`
 export const CREATE_AUCTION = (id) => `${API_URL}/asset/auction/${id}`
 export const END_AUCTION = (id) => `${API_URL}/asset/end-auction/${id}`
@@ -59,6 +61,26 @@ export const endAuction = async (id: string | number): Promise<any> => {
 
 export function getListBidHistory(id: string | number, params) {
   let url = `${GET_LIST_BID_HISTORY(id)}?`
+  if (params) {
+    Object.keys(params).map((key) => {
+      url += key + '=' + params[key] + '&'
+    })
+  }
+  return axios.get(url)
+}
+
+export function getListTradeHistory(id: string | number, params) {
+  let url = `${GET_LIST_TRADE_HISTORY(id)}?`
+  if (params) {
+    Object.keys(params).map((key) => {
+      url += key + '=' + params[key] + '&'
+    })
+  }
+  return axios.get(url)
+}
+
+export function getListAuctionHistory(id: string | number, params) {
+  let url = `${GET_LIST_AUCTION_HISTORY(id)}?`
   if (params) {
     Object.keys(params).map((key) => {
       url += key + '=' + params[key] + '&'

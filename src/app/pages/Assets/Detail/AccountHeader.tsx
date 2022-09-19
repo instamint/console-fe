@@ -3,7 +3,8 @@ import React from 'react'
 import {useLocation} from 'react-router'
 import ReactTooltip from 'react-tooltip'
 import {KTSVG} from '../../../../_metronic/helpers'
-import {shortAddress, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
+import { openTab } from '../../../../_metronic/helpers/actions'
+import {shortAddress, shortAddressBehind, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
 import './style.scss'
 
 type Props = {
@@ -18,13 +19,16 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
     <div className='card mb-5 mb-xl-10'>
       <div className='card-body pt-9 pb-0'>
         <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
-          <div className='me-7'>
+          <div className='me-20'>
             <div className='d-flex justify-content-between align-items-start flex-wrap mb-2'>
               <div className='d-flex flex-column'>
                 <div className='d-flex align-items-center mb-2'>
                   <a className='text-gray-800 fs-2 fw-bolder me-1'>
                     Asset ID:{' '}
-                    <span className='text-hover-primary' data-tip={dataDetail?.asset?.instamintAssetHashid}>
+                    <span
+                      className='text-hover-primary'
+                      data-tip={dataDetail?.asset?.instamintAssetHashid}
+                    >
                       {shortAddress(dataDetail?.asset?.instamintAssetHashid)}
                     </span>
                   </a>
@@ -74,38 +78,18 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                 <div className='d-flex flex-wrap'>
                   <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                     <div className='d-flex align-items-center'>
-                      <KTSVG
-                        path='/media/icons/duotune/arrows/arr066.svg'
-                        className='svg-icon-3 svg-icon-success me-2'
-                      />
-                      <div className='fs-2 fw-bolder'>4500$</div>
+                      <div className='fs-2 fw-bolder'>${dataDetail?.asset?.balanceusd}</div>
                     </div>
 
-                    <div className='fw-bold fs-6 text-gray-400'>Earnings</div>
+                    <div className='fw-bold fs-6 text-gray-400'>USD</div>
                   </div>
 
                   <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                     <div className='d-flex align-items-center'>
-                      <KTSVG
-                        path='/media/icons/duotune/arrows/arr065.svg'
-                        className='svg-icon-3 svg-icon-danger me-2'
-                      />
-                      <div className='fs-2 fw-bolder'>75</div>
+                      <div className='fs-2 fw-bolder'>${dataDetail?.asset?.balanceusdc}</div>
                     </div>
 
-                    <div className='fw-bold fs-6 text-gray-400'>Projects</div>
-                  </div>
-
-                  <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
-                    <div className='d-flex align-items-center'>
-                      <KTSVG
-                        path='/media/icons/duotune/arrows/arr066.svg'
-                        className='svg-icon-3 svg-icon-success me-2'
-                      />
-                      <div className='fs-2 fw-bolder'>60%</div>
-                    </div>
-
-                    <div className='fw-bold fs-6 text-gray-400'>Success Rate</div>
+                    <div className='fw-bold fs-6 text-gray-400'>USDC</div>
                   </div>
                 </div>
               </div>
@@ -131,8 +115,11 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                   <tr>
                     <td className='text-gray-400'>METADATAURI:</td>
                     <td data-tip={dataDetail?.asset?.metadataUri} className='text-gray-800'>
-                      {dataDetail?.asset?.metadataUri &&
-                        shortAddressMaxLength(dataDetail?.asset?.metadataUri, 15)}
+                      <span>
+                        {dataDetail?.asset?.metadataUri &&
+                          shortAddressMaxLength(dataDetail?.asset?.metadataUri, 15)}
+                      </span>
+                      <ReactTooltip place='top' effect='solid' />
                     </td>
                   </tr>
                   <tr>
@@ -140,7 +127,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <span
                         data-tip={dataDetail?.asset?.transactionReceiptJson}
                         data-for='transactionReceiptJson'
-                        data-class={"tooltip-width"}
+                        data-class={'tooltip-width'}
                       >
                         TRANSACTION RECEIPTJSON
                       </span>
@@ -150,6 +137,21 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                         place='bottom'
                         effect='solid'
                       />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>EXPLORER URL:</td>
+                    <td className='text-gray-800'>
+                      <div className='d-flex justify-content-start flex-column'>
+                        <span
+                          data-tip={dataDetail?.asset?.explorerurl}
+                          className='text-dark fw-bold fs-7 text-hover-primary cursor-pointer'
+                          onClick={() => dataDetail?.asset?.explorerurl && openTab(dataDetail?.asset?.explorerurl)}
+                        >
+                          {dataDetail?.asset?.explorerurl && shortAddressBehind(dataDetail?.asset?.explorerurl)}
+                        </span>
+                        <ReactTooltip place='top' effect='solid' />
+                      </div>
                     </td>
                   </tr>
                 </tbody>

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { getListContracts } from '../../../../utils/api/contracts'
+import { openTab } from '../../../../_metronic/helpers/actions'
 import { shortAddress, shortAddressBehind } from '../../../../_metronic/helpers/format'
 import FilterSearch from '../../../components/FilterSearch'
 import { Loading } from '../../../components/Loading'
@@ -52,10 +53,6 @@ const TablesContracts: React.FC<Props> = ({className}) => {
       newListAssets = sortRows(newListAssets, sort)
     }
     return newListAssets
-  }
-
-  const openTab = (url) => {
-    window.open(url)
   }
 
   useEffect(() => {
