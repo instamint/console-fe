@@ -30,13 +30,13 @@ type Props = {
 const TablesAssets: React.FC<Props> = ({className}) => {
   const [listAssets, setListAssets] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listAssets, [
-    'hashId',
+    'instamintAssetHashid',
     'xref',
     'assetTypeName',
     'portfolioName',
     'mintCompletedStatus',
     'bestBid',
-    'auction',
+    'activeAuction',
     'chainName',
     'issuerName',
     'ownerName',
@@ -222,7 +222,11 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       Array.isArray(filterMintedAssetList(results, page)) &&
       filterMintedAssetList(results, page)?.map((item, index) => {
         return (
-          <TrTable key={index} onClick={() => navigateDetailAsset(item?.id)} className='cursor-pointer'>
+          <TrTable
+            key={index}
+            onClick={() => navigateDetailAsset(item?.id)}
+            className='cursor-pointer'
+          >
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
@@ -246,8 +250,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.hashId} className='text-dark fw-bold fs-7'>
-                    {item?.hashId && shortAddress(item?.hashId)}
+                  <span data-tip={item?.instamintAssetHashid} className='text-dark fw-bold fs-7'>
+                    {item?.instamintAssetHashid && shortAddress(item?.instamintAssetHashid)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
                 </div>
@@ -305,7 +309,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.auction ? 'TRUE' : 'FALSE'}</span>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.activeAuction ? 'TRUE' : 'FALSE'}
+                  </span>
                 </div>
               </div>
             </td>
@@ -330,16 +336,16 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 </div>
               </div>
             </td>
-            <td>
+            {/* <td>
               <ButtonAction
-                name={item?.auction ? 'End Auction' : 'Auction'}
+                name={item?.activeAuction ? 'End Auction' : 'Auction'}
                 handleClick={() =>
-                  item?.auction
+                  item?.activeAuction
                     ? !isLoadingAuction && handleEndAuction(item?.id)
                     : openModalAuction(item?.id)
                 }
               />
-            </td>
+            </td> */}
           </TrTable>
         )
       }),
@@ -376,10 +382,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 <th>
                   <SpanThTable
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('hashId')}
+                    onClick={() => !isLoading && handleSort('instamintAssetHashid')}
                   >
                     ASSET ID{' '}
-                    <ICSort type={sort.sort_name === 'hashId' ? sort.sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'instamintAssetHashid' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th className='min-w-150px'>
@@ -436,10 +442,10 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 <th>
                   <SpanThTable
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('auction')}
+                    onClick={() => !isLoading && handleSort('activeAuction')}
                   >
                     AUCTION
-                    <ICSort type={sort.sort_name === 'auction' ? sort.sort_type : 'default'} />
+                    <ICSort type={sort.sort_name === 'activeAuction' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -469,7 +475,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     <ICSort type={sort.sort_name === 'ownerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
-                <th>ACTION</th>
+                {/* <th>ACTION</th> */}
               </tr>
             </thead>
             <tbody>

@@ -1,4 +1,4 @@
-import ConnectStompComponent from "./SampleComponent";
+import ConnectStomp from "./ConnectStomp";
 
 export default function MonitoringPage() {
   return (
@@ -9,7 +9,7 @@ export default function MonitoringPage() {
         </h3>
       </div>
       <div className='pt-5'>
-        <ConnectStompComponent />
+        <ConnectStomp />
       </div>
     </div>
   )
