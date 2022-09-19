@@ -2,12 +2,16 @@ import { useState } from 'react'
 import { useAlert } from 'react-alert'
 import { endAuction } from '../../../../utils/api/assets'
 import { TablesTransactions } from '../../Transactions/Table/TablesTransactions'
+import AuctionHistory from './AuctionHistory'
 import BidHistory from './BidHistory/index'
 import Notes from './Notes/index'
+import TradeHistory from './TradeHistory'
 
 export default function Overview({dataDetail, setReloadPage}) {
   const alert = useAlert()
   const [isLoadingAuction, setIsLoadingAuction] = useState(false)
+  const listTabHistort = ['Bid History', 'Trade History', 'Auction History']
+  const [tabHistory, setTabHistory] = useState('Bid History')
 
   const handleEndAuction = async (id) => {
     setIsLoadingAuction(true)
@@ -20,6 +24,19 @@ export default function Overview({dataDetail, setReloadPage}) {
       alert.error('End Auction failed, please try again!')
       console.error({error})
       setIsLoadingAuction(false)
+    }
+  }
+
+  const showTableHistory = (tab) => {
+    switch (tab) {
+      case 'Bid History':
+        return <BidHistory idAsset={dataDetail?.asset?.id} />
+      case 'Trade History':
+        return <TradeHistory idAsset={dataDetail?.asset?.id} />
+      case 'Auction History':
+        return <AuctionHistory idAsset={dataDetail?.asset?.id} />
+      default:
+        return <BidHistory idAsset={dataDetail?.asset?.id} />
     }
   }
 
@@ -63,11 +80,11 @@ export default function Overview({dataDetail, setReloadPage}) {
                         data-kt-countup-value='80'
                         data-kt-initialized='1'
                       >
-                        80
+                        {dataDetail?.asset?.ask ?? 0}
                       </span>
                       %
                     </span>
-                    <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>Change</span>
+                    <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>Ask</span>
                   </div>
                   <div className='border border-dashed border-gray-300 rounded my-3 p-4 me-6'>
                     <span className='fs-2x fw-bold text-gray-800 lh-1'>
@@ -97,7 +114,23 @@ export default function Overview({dataDetail, setReloadPage}) {
                   ''
                 )} */}
               </div>
-              <BidHistory idAsset={dataDetail?.asset?.id} />
+              <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap mb-3'>
+                {listTabHistort?.map((item, index) => {
+                  return (
+                    <li className='nav-item' onClick={() => setTabHistory(item)}>
+                      <span
+                        className={
+                          `nav-link text-active-primary me-6 cursor-pointer ` +
+                          (tabHistory === item && 'active')
+                        }
+                      >
+                        {item}
+                      </span>
+                    </li>
+                  )
+                })}
+              </ul>
+              {showTableHistory(tabHistory)}
             </div>
           </div>
         </div>

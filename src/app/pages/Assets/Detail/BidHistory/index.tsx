@@ -1,8 +1,6 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import styled from 'styled-components'
-import {getListBidHistory} from '../../../../../utils/api/assets'
-import {convertTimeZone} from '../../../../../_metronic/helpers/format/datetime'
-import ICSort from '../../../../components/Sort'
+import { useCallback, useEffect, useState } from 'react'
+import { getListBidHistory } from '../../../../../utils/api/assets'
+import { convertTimeZone } from '../../../../../_metronic/helpers/format/datetime'
 
 export default function BidHistory({idAsset}) {
   const [listBidHistory, setListBidHistory] = useState([])
@@ -14,19 +12,6 @@ export default function BidHistory({idAsset}) {
     limit: '10',
   })
 
-  const handleSort = (name) => {
-    let sortTypeNow = sort_type === 'ASC' ? 'DESC' : 'ASC'
-    if (sort_name !== name) {
-      sortTypeNow = 'ASC'
-    }
-    setParams({
-      ...params,
-      sort_name: name,
-      sort_type: sortTypeNow,
-    })
-    set_sort_name(name)
-    set_sort_type(sortTypeNow)
-  }
   const fetchListBidHistory = async (id, params) => {
     try {
       const reps = await getListBidHistory(id, params)
@@ -57,9 +42,6 @@ export default function BidHistory({idAsset}) {
 
   return (
     <>
-      <h3 className='card-title align-items-start flex-column mb-5 mt-2'>
-        <span className='card-label fw-bold fs-3'>Bid History</span>
-      </h3>
       <div className='table-responsive'>
         <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
           <thead className='border-gray-200 fs-5 fw-semibold bg-lighten'>
@@ -93,9 +75,3 @@ export default function BidHistory({idAsset}) {
     </>
   )
 }
-
-const SpanThTable = styled.span`
-  width: max-content;
-  display: flex;
-  align-items: center;
-`
