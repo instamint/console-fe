@@ -78,7 +78,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                         className='counted'
                         data-kt-initialized='1'
                       >
-                        ${dataDetail?.asset?.auction ? (dataDetail?.asset?.reserve ?? 0) : 0}
+                        ${dataDetail?.asset?.activeAuction ? dataDetail?.asset?.reverse ?? 0 : 0}
                       </span>
                     </span>
                     <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>
@@ -86,7 +86,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                     </span>
                   </div>
                 </div>
-                {dataDetail?.asset?.auction ? (
+                {/* {dataDetail?.asset?.activeAuction ? (
                   <button
                     className='btn btn-primary px-6 flex-shrink-0 align-self-center'
                     onClick={() => !isLoadingAuction && handleEndAuction(dataDetail?.asset?.id)}
@@ -95,7 +95,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                   </button>
                 ) : (
                   ''
-                )}
+                )} */}
               </div>
               <BidHistory idAsset={dataDetail?.asset?.id} />
             </div>

@@ -24,8 +24,8 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                 <div className='d-flex align-items-center mb-2'>
                   <a className='text-gray-800 fs-2 fw-bolder me-1'>
                     Asset ID:{' '}
-                    <span className='text-hover-primary' data-tip={dataDetail?.asset?.hashId}>
-                      {shortAddress(dataDetail?.asset?.hashId)}
+                    <span className='text-hover-primary' data-tip={dataDetail?.asset?.instamintAssetHashid}>
+                      {shortAddress(dataDetail?.asset?.instamintAssetHashid)}
                     </span>
                   </a>
                   <ReactTooltip place='top' effect='solid' />

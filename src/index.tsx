@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client'
 import axios from 'axios'
 import {Chart, registerables} from 'chart.js'
 import {QueryClient, QueryClientProvider} from 'react-query'
-import {ReactQueryDevtools} from 'react-query/devtools'
+// import {ReactQueryDevtools} from 'react-query/devtools'
 // Apps
 import {MetronicI18nProvider} from './_metronic/i18n/Metronici18n'
 /**
@@ -41,6 +41,8 @@ const optionsAlert = {
 
 const queryClient = new QueryClient()
 const container = document.getElementById('root')
+const WEBSOCKET_URL = process.env.WEBSOCKET_URL
+
 if (container) {
   createRoot(container).render(
     <QueryClientProvider client={queryClient}>
@@ -48,7 +50,7 @@ if (container) {
         <AuthProvider>
           <Provider template={AlertTemplate} {...optionsAlert}>
             <StompSessionProvider
-              url={'ws://ws.instamint.network/ws'}
+              url={WEBSOCKET_URL}
               debug={(str) => {
                 console.log(str)
               }}
