@@ -7,9 +7,9 @@ import {useLocation} from 'react-router'
 import { useAuth } from '../auth'
 import { useCheckImage } from '../../hooks/useCheckImage'
 
-const AccountHeader: React.FC = () => {
+const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
   const location = useLocation()
-  const {currentUser} = useAuth() 
+  const {currentUser} = useAuth()
 
   return (
     <div className='card mb-5 mb-xl-10'>
@@ -17,7 +17,10 @@ const AccountHeader: React.FC = () => {
         <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
           <div className='me-7 mb-4'>
             <div className='symbol symbol-100px symbol-lg-160px symbol-fixed position-relative'>
-              <img src={useCheckImage(currentUser?.profileUrl)} alt='Metronic' />
+              <img
+                src={useCheckImage(dataProfile?.profileUrl || currentUser?.profileUrl)}
+                alt='Metronic'
+              />
               <div className='position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px'></div>
             </div>
           </div>
@@ -27,7 +30,7 @@ const AccountHeader: React.FC = () => {
               <div className='d-flex flex-column'>
                 <div className='d-flex align-items-center mb-2'>
                   <a href='#' className='text-gray-800 text-hover-primary fs-2 fw-bolder me-1'>
-                    {currentUser?.name}
+                    {dataProfile?.partyName || currentUser?.name}
                   </a>
                   <a href='#'>
                     <KTSVG
@@ -74,7 +77,7 @@ const AccountHeader: React.FC = () => {
                       path='/media/icons/duotune/communication/com011.svg'
                       className='svg-icon-4 me-1'
                     />
-                    {currentUser?.username}
+                    {dataProfile?.username || currentUser?.username}
                   </a>
                 </div>
               </div>
@@ -98,7 +101,7 @@ const AccountHeader: React.FC = () => {
                   data-bs-toggle='modal'
                   data-bs-target='#kt_modal_offer_a_deal'
                 >
-                  Hire Me
+                  Fund Account
                 </a>
                 <div className='me-0'>
                   <button
@@ -119,7 +122,7 @@ const AccountHeader: React.FC = () => {
                 <div className='d-flex flex-wrap'>
                   <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                     <div className='d-flex align-items-center'>
-                      <div className='fs-2 fw-bolder'>${currentUser?.balanceusd}</div>
+                      <div className='fs-2 fw-bolder'>${dataProfile?.usd || 0}</div>
                     </div>
 
                     <div className='fw-bold fs-6 text-gray-400'>USD</div>
@@ -127,25 +130,11 @@ const AccountHeader: React.FC = () => {
 
                   <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                     <div className='d-flex align-items-center'>
-                      <div className='fs-2 fw-bolder'>${currentUser?.balanceusdc}</div>
+                      <div className='fs-2 fw-bolder'>${dataProfile?.usdc || 0}</div>
                     </div>
 
                     <div className='fw-bold fs-6 text-gray-400'>USDC</div>
                   </div>
-                </div>
-              </div>
-
-              <div className='d-flex align-items-center w-200px w-sm-300px flex-column mt-3'>
-                <div className='d-flex justify-content-between w-100 mt-auto mb-2'>
-                  <span className='fw-bold fs-6 text-gray-400'>Profile Compleation</span>
-                  <span className='fw-bolder fs-6'>50%</span>
-                </div>
-                <div className='h-5px mx-3 w-100 bg-light mb-3'>
-                  <div
-                    className='bg-success rounded h-5px'
-                    role='progressbar'
-                    style={{width: '50%'}}
-                  ></div>
                 </div>
               </div>
             </div>
@@ -165,7 +154,7 @@ const AccountHeader: React.FC = () => {
                 Overview
               </Link>
             </li>
-            <li className='nav-item'>
+            {/* <li className='nav-item'>
               <Link
                 className={
                   `nav-link text-active-primary me-6 ` +
@@ -175,7 +164,7 @@ const AccountHeader: React.FC = () => {
               >
                 Settings
               </Link>
-            </li>
+            </li> */}
             <li className='nav-item'>
               <Link
                 className={

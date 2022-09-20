@@ -1,33 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Navigate, Route, Routes, Outlet} from 'react-router-dom'
-import {PageLink, PageTitle} from '../../../_metronic/layout/core'
+import {PageTitle} from '../../../_metronic/layout/core'
 import {Overview} from './components/Overview'
-import {Settings} from './components/settings/Settings'
 import {AccountHeader} from './AccountHeader'
 import { ApiKeysWrapper } from './components/ApiKeys/ApiKeysWrapper'
-
-const accountBreadCrumbs: Array<PageLink> = [
-  {
-    title: 'Account',
-    path: '/crafted/account/overview',
-    isSeparator: false,
-    isActive: false,
-  },
-  {
-    title: '',
-    path: '',
-    isSeparator: true,
-    isActive: false,
-  },
-]
+import { getDataProfile } from '../../../utils/api/acccount-setting'
 
 const AccountPage: React.FC = () => {
+  const [dataProfile, setDataProfile] = useState(null)
+
+  const fetchDataProfile = async () => {
+    try {
+      const reps = await getDataProfile()
+      reps && setDataProfile(reps)
+    } catch (error) {
+      console.error({error})
+    }
+  }
+
+  useEffect(() => {
+    fetchDataProfile()
+  }, [])
+  
+
   return (
     <Routes>
       <Route
         element={
           <>
-            <AccountHeader />
+            <AccountHeader dataProfile={dataProfile} />
             <Outlet />
           </>
         }
@@ -36,26 +37,26 @@ const AccountPage: React.FC = () => {
           path='overview'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Overview</PageTitle>
-              <Overview />
+              <PageTitle>Overview</PageTitle>
+              <Overview dataProfile={dataProfile} />
             </>
           }
         />
-        <Route
+        {/* <Route
           path='settings'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>Settings</PageTitle>
-              <Settings />
+              <PageTitle>Settings</PageTitle>
+              <Settings dataProfile={dataProfile} />
             </>
           }
-        />
+        /> */}
         <Route
           path='api-keys'
           element={
             <>
-              <PageTitle breadcrumbs={accountBreadCrumbs}>API Keys</PageTitle>
-              <ApiKeysWrapper />
+              <PageTitle>API Keys</PageTitle>
+              <ApiKeysWrapper dataProfile={dataProfile} />
             </>
           }
         />

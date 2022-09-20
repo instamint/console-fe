@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import * as Yup from 'yup'
 import {useState} from 'react'
-import { generateApiKey } from '../../../../../../utils/api/api-keys'
+import { generateApiKey } from '../../../../../../utils/api/acccount-setting/api-key'
 
 const validateSchema = Yup.object().shape({
 })
@@ -12,10 +12,7 @@ const validateSchema = Yup.object().shape({
 export default function CreateKey({
   setShowModalCreate,
   setShowModalKey,
-  currentUser,
-  setCurrentUser,
-  auth,
-  saveAuth,
+  handleSetApiKey,
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [scopes, setScopes] = useState({
@@ -72,17 +69,8 @@ export default function CreateKey({
           })
       })
       const reps = await generateApiKey(chooseScopes)
-      if (reps?.key) {
-        const newCurrentUser = {
-          ...currentUser,
-          apiKey: reps?.key,
-        }
-        setCurrentUser(newCurrentUser)
-        const newAuth = {
-          ...auth,
-          apiKey: reps?.key,
-        }
-        saveAuth(newAuth)
+      if (reps?.apiKey) {
+        handleSetApiKey(reps?.apiKey)
       }
     } catch (error) {
       console.error({error})
