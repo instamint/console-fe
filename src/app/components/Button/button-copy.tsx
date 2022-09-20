@@ -38,7 +38,7 @@ const ImageCopy = styled.img`
   cursor: pointer;
   width: 18px;
   height: 18px;
-  margin-left: 10px;
+  margin-left: 5px;
   margin-bottom: 4px;
   opacity: 0.5;
   &:hover {

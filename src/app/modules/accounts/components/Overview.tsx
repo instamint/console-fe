@@ -49,7 +49,11 @@ export function Overview({dataProfile}) {
             <label className='col-lg-4 fw-bold text-muted'>Algorand Address</label>
 
             <div className='col-lg-8 fv-row d-flex'>
-              <span data-tip={dataProfile?.algorandAddress} className='fw-bold fs-6'>
+              <span
+                data-tip={dataProfile?.algorandAddress}
+                className='fw-bold fs-6'
+                style={{minWidth: '85px'}}
+              >
                 {shortAddress(dataProfile?.algorandAddress)}
               </span>
               <ReactTooltip place='top' effect='solid' />
@@ -60,8 +64,12 @@ export function Overview({dataProfile}) {
           <div className='row mb-7'>
             <label className='col-lg-4 fw-bold text-muted'>Ethereum Address</label>
 
-            <div className='col-lg-8 fv-row'>
-              <span data-tip={dataProfile?.ethereumAddress} className='fw-bold fs-6'>
+            <div className='col-lg-8 fv-row d-flex'>
+              <span
+                data-tip={dataProfile?.ethereumAddress}
+                className='fw-bold fs-6'
+                style={{minWidth: '85px'}}
+              >
                 {shortAddress(dataProfile?.ethereumAddress)}
               </span>
               <ReactTooltip place='top' effect='solid' />
