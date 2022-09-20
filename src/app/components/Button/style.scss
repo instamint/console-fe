@@ -1,5 +1,5 @@
 .copy_tooltip {
-    display: block;
+    display: none;
     font-size: 80%;
     position: absolute;
     background: #3d3d3d;
@@ -7,19 +7,18 @@
     padding: 10px;
     border-radius: 8px;
     top: -45px;
-    left: -17px;
+    left: -20px;
     right: 20px;
     margin: auto;
     text-align: center;
     width: 73px;
     height: 35px;
     font-weight: 500;
-    opacity: 0;
 
     &.active {
         -webkit-animation: slide-up 0.15s cubic-bezier(0.51, 0.92, 0.265, 1.55) both;
         animation: slide-up 0.15s cubic-bezier(0.51, 0.92, 0.265, 1.55) both;
-        opacity: 1;
+        display: block;
     }
 
     &.inactive {
