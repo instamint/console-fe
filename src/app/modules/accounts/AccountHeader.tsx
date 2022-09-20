@@ -60,13 +60,13 @@ const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
               </div>
 
               <div className='d-flex my-4'>
-                <a href='#' className='btn btn-sm btn-light me-2' id='kt_user_follow_button'>
+                <a className='btn btn-sm btn-light me-2' id='kt_user_follow_button'>
                   <KTSVG
                     path='/media/icons/duotune/arrows/arr012.svg'
                     className='svg-icon-3 d-none'
                   />
 
-                  <span className='indicator-label'>Follow</span>
+                  <span className='indicator-label'>Buy ops</span>
                   <span className='indicator-progress'>
                     Please wait...
                     <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
@@ -115,7 +115,7 @@ const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
                     <div className='d-flex align-items-center'>
                       <div className='fs-2 fw-bolder'>{dataProfile?.ops || 0}</div>
                     </div>
-                    <div className='fw-bold fs-6 text-gray-400'>OPS USER</div>
+                    <div className='fw-bold fs-6 text-gray-400'>OPS USED</div>
                   </div>
                 </div>
               </div>
