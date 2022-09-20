@@ -1,16 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import clsx from 'clsx'
-import React from 'react'
+import { useEffect, useRef } from 'react'
 import {Link} from 'react-router-dom'
 import {useLayout} from '../../core'
 import {Header} from './Header'
-import {DefaultTitle} from './page-title/DefaultTitle'
 import {Topbar} from './Topbar'
 import logoInstamint from '../../../../app/images/logo-instamint.png'
+import useWindowSize from '../../../../app/hooks/useWindowSize'
 
 export function HeaderWrapper() {
   const {config, classes, attributes} = useLayout()
   const {header, aside} = config
+  const headerRef: any = useRef()
+  const windowSize = useWindowSize()
+  
+  useEffect(() => {
+    if (headerRef?.current?.childNodes && headerRef?.current?.childNodes?.length > 1) {
+      headerRef?.current?.removeChild(headerRef.current.children[1])
+    }
+  }, [windowSize])
 
   return (
     <div
@@ -31,14 +39,8 @@ export function HeaderWrapper() {
         {/* begin::Wrapper */}
         <div className='d-flex align-items-stretch justify-content-between flex-lg-grow-1'>
           {header.left === 'menu' && (
-            // <div className='d-flex align-items-stretch' id='kt_header_nav'>
+            <div className='d-flex align-items-stretch' id='kt_header_nav' ref={headerRef}>
               <Header />
-            // </div>
-          )}
-
-          {header.left === 'page-title' && (
-            <div className='d-flex align-items-center' id='kt_header_nav'>
-              <DefaultTitle />
             </div>
           )}
 
