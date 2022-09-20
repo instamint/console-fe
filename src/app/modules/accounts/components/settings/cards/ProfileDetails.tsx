@@ -3,6 +3,8 @@ import {toAbsoluteUrl} from '../../../../../../_metronic/helpers'
 import {IProfileDetails, profileDetailsInitValues as initialValues} from '../SettingsModel'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
+import { useAuth } from '../../../../auth'
+import { useCheckImage } from '../../../../../hooks/useCheckImage'
 
 const profileDetailsSchema = Yup.object().shape({
   fName: Yup.string().required('First name is required'),
@@ -22,6 +24,7 @@ const ProfileDetails: React.FC = () => {
     const updatedData = Object.assign(data, fieldsToUpdate)
     setData(updatedData)
   }
+  const {currentUser} = useAuth() 
 
   const [loading, setLoading] = useState(false)
   const formik = useFormik<IProfileDetails>({
@@ -68,7 +71,7 @@ const ProfileDetails: React.FC = () => {
                 >
                   <div
                     className='image-input-wrapper w-125px h-125px'
-                    style={{backgroundImage: `url(${toAbsoluteUrl(data.avatar)})`}}
+                    style={{backgroundImage: `url(${useCheckImage(currentUser?.profileUrl)})`}}
                   ></div>
                 </div>
               </div>

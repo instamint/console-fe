@@ -72,28 +72,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                 </div>
               </div>
             </div>
-
-            <div className='d-flex flex-wrap flex-stack mb-4'>
-              <div className='d-flex flex-column pe-8'>
-                <div className='d-flex flex-wrap'>
-                  <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
-                    <div className='d-flex align-items-center'>
-                      <div className='fs-2 fw-bolder'>${dataDetail?.asset?.balanceusd}</div>
-                    </div>
-
-                    <div className='fw-bold fs-6 text-gray-400'>USD</div>
-                  </div>
-
-                  <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
-                    <div className='d-flex align-items-center'>
-                      <div className='fs-2 fw-bolder'>${dataDetail?.asset?.balanceusdc}</div>
-                    </div>
-
-                    <div className='fw-bold fs-6 text-gray-400'>USDC</div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {dataDetail?.asset?.chainName === 'algorand-testnet' && (
