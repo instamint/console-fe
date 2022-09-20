@@ -1,9 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import { shortAddress } from '../../../../_metronic/helpers/format'
+import ButtonCopy from '../../../components/Button/button-copy'
 
 export function Overview({dataProfile}) {
+
+  useEffect(() => {
+    ReactTooltip.rebuild()
+  }, [dataProfile])
+
   return (
     <>
       <div className='card mb-5 mb-xl-10' id='kt_profile_details_view'>
@@ -12,7 +19,11 @@ export function Overview({dataProfile}) {
             <h3 className='fw-bolder m-0'>Profile Details</h3>
           </div>
 
-          <Link style={{pointerEvents: "none"}} to='/crafted/account/settings' className='btn btn-primary align-self-center'>
+          <Link
+            style={{pointerEvents: 'none'}}
+            to='/crafted/account/settings'
+            className='btn btn-primary align-self-center'
+          >
             Edit Profile
           </Link>
         </div>
@@ -22,7 +33,7 @@ export function Overview({dataProfile}) {
             <label className='col-lg-4 fw-bold text-muted'>Full Name</label>
 
             <div className='col-lg-8'>
-              <span className='fw-bolder fs-6 text-dark'>Jamiel Sheikh</span>
+              <span className='fw-bolder fs-6 text-dark'>{dataProfile?.partyName}</span>
             </div>
           </div>
 
@@ -37,11 +48,12 @@ export function Overview({dataProfile}) {
           <div className='row mb-7'>
             <label className='col-lg-4 fw-bold text-muted'>Algorand Address</label>
 
-            <div className='col-lg-8 fv-row'>
+            <div className='col-lg-8 fv-row d-flex'>
               <span data-tip={dataProfile?.algorandAddress} className='fw-bold fs-6'>
                 {shortAddress(dataProfile?.algorandAddress)}
               </span>
               <ReactTooltip place='top' effect='solid' />
+              <ButtonCopy text={dataProfile?.algorandAddress} />
             </div>
           </div>
 
@@ -53,6 +65,7 @@ export function Overview({dataProfile}) {
                 {shortAddress(dataProfile?.ethereumAddress)}
               </span>
               <ReactTooltip place='top' effect='solid' />
+              <ButtonCopy text={dataProfile?.ethereumAddress} />
             </div>
           </div>
         </div>

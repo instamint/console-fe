@@ -49,30 +49,7 @@ const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
                 </div>
 
                 <div className='d-flex flex-wrap fw-bold fs-6 mb-4 pe-2'>
-                  <a
-                    href='#'
-                    className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'
-                  >
-                    <KTSVG
-                      path='/media/icons/duotune/communication/com006.svg'
-                      className='svg-icon-4 me-1'
-                    />
-                    Developer
-                  </a>
-                  <a
-                    href='#'
-                    className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'
-                  >
-                    <KTSVG
-                      path='/media/icons/duotune/general/gen018.svg'
-                      className='svg-icon-4 me-1'
-                    />
-                    SF, Bay Area
-                  </a>
-                  <a
-                    href='#'
-                    className='d-flex align-items-center text-gray-400 text-hover-primary mb-2'
-                  >
+                  <a className='d-flex align-items-center text-gray-400 text-hover-primary mb-2'>
                     <KTSVG
                       path='/media/icons/duotune/communication/com011.svg'
                       className='svg-icon-4 me-1'
@@ -124,7 +101,6 @@ const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
                     <div className='d-flex align-items-center'>
                       <div className='fs-2 fw-bolder'>${dataProfile?.usd || 0}</div>
                     </div>
-
                     <div className='fw-bold fs-6 text-gray-400'>USD</div>
                   </div>
 
@@ -132,8 +108,14 @@ const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
                     <div className='d-flex align-items-center'>
                       <div className='fs-2 fw-bolder'>${dataProfile?.usdc || 0}</div>
                     </div>
-
                     <div className='fw-bold fs-6 text-gray-400'>USDC</div>
+                  </div>
+
+                  <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                    <div className='d-flex align-items-center'>
+                      <div className='fs-2 fw-bolder'>{dataProfile?.ops || 0}</div>
+                    </div>
+                    <div className='fw-bold fs-6 text-gray-400'>OPS USER</div>
                   </div>
                 </div>
               </div>

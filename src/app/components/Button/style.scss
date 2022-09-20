@@ -1,0 +1,50 @@
+.copy_tooltip {
+    display: block;
+    font-size: 80%;
+    position: absolute;
+    background: #3d3d3d;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    top: -45px;
+    left: -17px;
+    right: 20px;
+    margin: auto;
+    text-align: center;
+    width: 73px;
+    height: 35px;
+    font-weight: 500;
+    opacity: 0;
+
+    &.active {
+        -webkit-animation: slide-up 0.15s cubic-bezier(0.51, 0.92, 0.265, 1.55) both;
+        animation: slide-up 0.15s cubic-bezier(0.51, 0.92, 0.265, 1.55) both;
+        opacity: 1;
+    }
+
+    &.inactive {
+        -webkit-animation: slide-up 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both;
+        animation: slide-up 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both;
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        top: 98%;
+        left: 50%;
+        margin-left: -8px;
+        width: 0;
+        height: 0;
+        border-top: 8px solid #3d3d3d;
+        border-right: 8px solid transparent;
+        border-left: 8px solid transparent;
+    }
+}
+
+.copy-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 30px;
+    width: 100%;
+}
