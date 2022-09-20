@@ -6,7 +6,7 @@ import {useLayout} from '../../core'
 import {Header} from './Header'
 import {DefaultTitle} from './page-title/DefaultTitle'
 import {Topbar} from './Topbar'
-import Logo from '../../../../app/images/logo-instamint.png'
+import logoInstamin from '../../../../app/images/logo-instamint.png'
 
 export function HeaderWrapper() {
   const {config, classes, attributes} = useLayout()
@@ -25,7 +25,7 @@ export function HeaderWrapper() {
         )}
       >
         <Link to='/' className='d-flex align-items-center mr-2 me-5'>
-          <img alt='Logo' src={Logo} width={165} />
+          <img alt='Logo Header' src={logoInstamin} width={165} />
         </Link>
 
         {/* begin::Wrapper */}

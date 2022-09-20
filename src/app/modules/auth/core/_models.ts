@@ -10,6 +10,8 @@ export interface AuthModel {
   name?: string
   email?: string
   profileUrl?: string
+  balanceusd?: string | number
+  balanceusdc?: string | number
 }
 
 export interface UserAddressModel {
@@ -79,4 +81,6 @@ export interface UserModel {
   socialNetworks?: UserSocialNetworksModel
   apiKey?: string
   profileUrl?: string
+  balanceusd?: string | number
+  balanceusdc?: string | number
 }
