@@ -2,31 +2,35 @@
 import {FC, useEffect, useState} from 'react'
 import {Modal} from 'react-bootstrap'
 import {useIntl} from 'react-intl'
-import {generateApiKey} from '../../../../../utils/api/api-keys'
+import {generateApiKey} from '../../../../../utils/api/acccount-setting/api-key'
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {PageTitle} from '../../../../../_metronic/layout/core'
 import {useAuth} from '../../../auth'
 import CreateKey from './Modal/create-key'
 import {TablesApiKeys} from './Table/TablesApiKeys'
 
-const ApiKeysPage: FC = () => {
+const ApiKeysPage: FC<{dataProfile: any}> = ({dataProfile}) => {
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [showModalKey, setShowModalKey] = useState(false)
   const {currentUser, setCurrentUser, saveAuth, auth} = useAuth()
   const [apiKeyUser, setApiKeyUser] = useState(currentUser?.apiKey || '')
 
+  const handleSetApiKey = (api_key) => {
+    const newCurrentUser = {
+      ...currentUser,
+      apiKey: api_key,
+    }
+    const newAuth = {...auth, apiKey: api_key}
+    saveAuth(newAuth)
+    setCurrentUser(newCurrentUser)
+    setApiKeyUser(newCurrentUser?.apiKey)
+  }
+ 
   const fetchFirstApiKey = async () => {
     try {
       const reps = await generateApiKey({})
       if (reps?.key) {
-        const newCurrentUser = {
-          ...currentUser,
-          apiKey: reps?.key,
-        }
-        const newAuth = {...auth, apiKey: reps?.key}
-        saveAuth(newAuth)
-        setCurrentUser(newCurrentUser)
-        setApiKeyUser(newCurrentUser?.apiKey)
+        handleSetApiKey(reps?.key)
       }
     } catch (error) {
       console.error({error})
@@ -34,13 +38,12 @@ const ApiKeysPage: FC = () => {
   }
 
   useEffect(() => {
-    if (!currentUser?.apiKey) {
+    if (dataProfile?.apiKey && dataProfile?.apiKey !== '') {
+      handleSetApiKey(dataProfile?.apiKey)
+    } else  {
       fetchFirstApiKey()
-    } else {
-      setApiKeyUser(currentUser?.apiKey)
     }
-  }, [currentUser])
-  
+  }, [])
 
   return (
     <>
@@ -83,10 +86,7 @@ const ApiKeysPage: FC = () => {
             <CreateKey
               setShowModalCreate={setShowModalCreate}
               setShowModalKey={setShowModalKey}
-              currentUser={currentUser}
-              setCurrentUser={setCurrentUser}
-              auth={auth}
-              saveAuth={saveAuth}
+              handleSetApiKey={handleSetApiKey}
             />
           </Modal>
 
@@ -153,12 +153,12 @@ const ApiKeysPage: FC = () => {
   )
 }
 
-const ApiKeysWrapper: FC = () => {
+const ApiKeysWrapper: FC<{dataProfile: any}> = ({dataProfile}) => {
   const intl = useIntl()
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.API_KEYS'})}</PageTitle>
-      <ApiKeysPage />
+      <ApiKeysPage dataProfile={dataProfile} />
     </>
   )
 }

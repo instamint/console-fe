@@ -6,7 +6,7 @@ import {useLayout} from '../../core'
 import {Header} from './Header'
 import {DefaultTitle} from './page-title/DefaultTitle'
 import {Topbar} from './Topbar'
-import logoInstamin from '../../../../app/images/logo-instamint.png'
+import logoInstamint from '../../../../app/images/logo-instamint.png'
 
 export function HeaderWrapper() {
   const {config, classes, attributes} = useLayout()
@@ -25,16 +25,15 @@ export function HeaderWrapper() {
         )}
       >
         <Link to='/' className='d-flex align-items-center mr-2 me-5'>
-          <img alt='Logo Header' src={logoInstamin} width={165} />
+          <img alt='Logo Header' src={logoInstamint} width={165} />
         </Link>
 
         {/* begin::Wrapper */}
         <div className='d-flex align-items-stretch justify-content-between flex-lg-grow-1'>
-          {/* begin::Navbar */}
           {header.left === 'menu' && (
-            <div className='d-flex align-items-stretch' id='kt_header_nav'>
+            // <div className='d-flex align-items-stretch' id='kt_header_nav'>
               <Header />
-            </div>
+            // </div>
           )}
 
           {header.left === 'page-title' && (

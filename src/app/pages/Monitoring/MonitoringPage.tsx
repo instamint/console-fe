@@ -1,6 +1,9 @@
 import ConnectStomp from "./ConnectStomp";
+import {StompSessionProvider} from 'react-stomp-hooks'
 
 export default function MonitoringPage() {
+  const WEBSOCKET_URL = process.env.WEBSOCKET_URL
+
   return (
     <div className={`card card-xxl-stretch mb-5 mb-xl-8`}>
       <div className='card-header border-0 pt-5'>
@@ -9,7 +12,14 @@ export default function MonitoringPage() {
         </h3>
       </div>
       <div className='pt-5'>
-        <ConnectStomp />
+        <StompSessionProvider
+          url={WEBSOCKET_URL}
+          // debug={(str) => {
+          //   console.log(str)
+          // }}
+        >
+          <ConnectStomp />
+        </StompSessionProvider>
       </div>
     </div>
   )

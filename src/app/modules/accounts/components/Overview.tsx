@@ -1,15 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
 import {Link} from 'react-router-dom'
-import {KTSVG} from '../../../../_metronic/helpers'
-import {
-  ChartsWidget1,
-  TablesWidget1,
-  ListsWidget5,
-  TablesWidget5,
-} from '../../../../_metronic/partials/widgets'
+import ReactTooltip from 'react-tooltip'
+import { shortAddress } from '../../../../_metronic/helpers/format'
 
-export function Overview() {
+export function Overview({dataProfile}) {
   return (
     <>
       <div className='card mb-5 mb-xl-10' id='kt_profile_details_view'>
@@ -18,7 +12,7 @@ export function Overview() {
             <h3 className='fw-bolder m-0'>Profile Details</h3>
           </div>
 
-          <Link to='/crafted/account/settings' className='btn btn-primary align-self-center'>
+          <Link style={{pointerEvents: "none"}} to='/crafted/account/settings' className='btn btn-primary align-self-center'>
             Edit Profile
           </Link>
         </div>
@@ -39,26 +33,28 @@ export function Overview() {
               <span className='fw-bold fs-6'>Instamint</span>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className='row gy-10 gx-xl-10'>
-        <div className='col-xl-6'>
-          <ChartsWidget1 className='card-xxl-stretch mb-5 mb-xl-10' />
-        </div>
+          <div className='row mb-7'>
+            <label className='col-lg-4 fw-bold text-muted'>Algorand Address</label>
 
-        <div className='col-xl-6'>
-          <TablesWidget1 className='card-xxl-stretch mb-5 mb-xl-10' />
-        </div>
-      </div>
+            <div className='col-lg-8 fv-row'>
+              <span data-tip={dataProfile?.algorandAddress} className='fw-bold fs-6'>
+                {shortAddress(dataProfile?.algorandAddress)}
+              </span>
+              <ReactTooltip place='top' effect='solid' />
+            </div>
+          </div>
 
-      <div className='row gy-10 gx-xl-10'>
-        <div className='col-xl-6'>
-          <ListsWidget5 className='card-xxl-stretch mb-5 mb-xl-10' />
-        </div>
+          <div className='row mb-7'>
+            <label className='col-lg-4 fw-bold text-muted'>Ethereum Address</label>
 
-        <div className='col-xl-6'>
-          <TablesWidget5 className='card-xxl-stretch mb-5 mb-xl-10' />
+            <div className='col-lg-8 fv-row'>
+              <span data-tip={dataProfile?.ethereumAddress} className='fw-bold fs-6'>
+                {shortAddress(dataProfile?.ethereumAddress)}
+              </span>
+              <ReactTooltip place='top' effect='solid' />
+            </div>
+          </div>
         </div>
       </div>
     </>
