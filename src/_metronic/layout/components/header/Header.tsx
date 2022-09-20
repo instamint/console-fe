@@ -4,6 +4,7 @@ import {MenuInner} from './MenuInner'
 const Header: FC = () => {
   return (
     <div
+      id='group-item-menu-header'
       className='header-menu align-items-stretch'
       data-kt-drawer='true'
       data-kt-drawer-name='header-menu'
