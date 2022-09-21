@@ -4,7 +4,12 @@ import styled from 'styled-components'
 import IconCopy from '../../images/copy.png'
 import './style.scss'
 
-export default function ButtonCopy({text}) {
+type Props = {
+  text: string
+  width?: string | number
+}
+
+export const ButtonCopy: React.FC<Props> = ({text, width = 17}) => {
   const [isCopy, setIsCopy] = useState(false)
 
   return (
@@ -19,11 +24,15 @@ export default function ButtonCopy({text}) {
           }}
           text={text}
         >
-          <div style={{position: 'relative'}} className='copy-link cursor-pointer'>
+          <div
+            style={{position: 'relative'}}
+            className='copy-link cursor-pointer'
+            onClick={(e) => e.stopPropagation()}
+          >
             <span className={`${isCopy ? 'active' : 'inactive'} copy_tooltip`} role='tooltip'>
               Copied
             </span>
-            <ImageCopy src={IconCopy} alt='copy'></ImageCopy>
+            <ImageCopy width={width} height={width} src={IconCopy} alt='copy'></ImageCopy>
           </div>
         </CopyToClipboard>
       ) : (
@@ -36,9 +45,7 @@ export default function ButtonCopy({text}) {
 const ImageCopy = styled.img`
   border: none;
   cursor: pointer;
-  width: 18px;
-  height: 18px;
-  margin-left: 5px;
+  margin-left: 2px;
   margin-bottom: 4px;
   opacity: 0.5;
   &:hover {

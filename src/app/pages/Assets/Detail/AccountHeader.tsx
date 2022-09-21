@@ -2,9 +2,10 @@
 import React from 'react'
 import {useLocation} from 'react-router'
 import ReactTooltip from 'react-tooltip'
-import {KTSVG} from '../../../../_metronic/helpers'
+import styled from 'styled-components'
 import { openTab } from '../../../../_metronic/helpers/actions'
-import {shortAddress, shortAddressBehind, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
+import {shortAddress, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
+import { ButtonCopy } from '../../../components/Button/button-copy'
 import './style.scss'
 
 type Props = {
@@ -18,30 +19,29 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
   return (
     <div className='card mb-5 mb-xl-10'>
       <div className='card-body pt-9 pb-0'>
-        <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
-          <div className='me-20'>
+        <div className='d-flex flex-wrap mb-3'>
+          <div className='me-17'>
             <div className='d-flex justify-content-between align-items-start flex-wrap mb-2'>
               <div className='d-flex flex-column'>
-                <div className='d-flex align-items-center mb-2'>
-                  <a className='text-gray-800 fs-2 fw-bolder me-1'>
-                    Asset ID:{' '}
-                    <span
-                      className='text-hover-primary'
-                      data-tip={dataDetail?.asset?.instamintAssetHashid}
-                    >
-                      {shortAddress(dataDetail?.asset?.instamintAssetHashid)}
+                <div className='d-flex align-items-center mb-2 flex-wrap'>
+                  <div className='d-flex align-items-center me-2'>
+                    <span style={{width: '97px'}} className='text-gray-800 fs-2 fw-bolder'>
+                      Asset ID:{' '}
                     </span>
-                  </a>
+                    <a className='d-flex text-gray-800 fs-2 fw-bolder me-1'>
+                      <span
+                        className='text-hover-primary'
+                        data-tip={dataDetail?.asset?.instamintAssetHashid}
+                      >
+                        {shortAddress(dataDetail?.asset?.instamintAssetHashid)}
+                      </span>
+                    </a>
+                    <ButtonCopy text={dataDetail?.asset?.instamintAssetHashid} width={20} />
+                  </div>
                   <ReactTooltip place='top' effect='solid' />
-                  <a>
-                    <KTSVG
-                      path='/media/icons/duotune/general/gen026.svg'
-                      className='svg-icon-1 svg-icon-primary'
-                    />
-                  </a>
                   {dataDetail?.asset?.portfolioName ? (
                     <a
-                      className='btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3'
+                      className='btn btn-sm btn-light-success fw-bolder fs-8 py-1 px-3'
                       data-bs-toggle='modal'
                       data-bs-target='#kt_modal_upgrade_plan'
                     >
@@ -66,9 +66,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </span>
                     <ReactTooltip place='top' effect='solid' />
                   </a>
-                  <a className='d-flex align-items-center text-gray-400 text-hover-primary mb-2'>
-                    {dataDetail?.asset?.issuerName}
-                  </a>
                 </div>
               </div>
             </div>
@@ -80,35 +77,41 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                 <tbody>
                   <tr>
                     <td className='text-gray-400' style={{paddingTop: '0'}}>
-                      <span>MINT COMPLETED STATUS:</span>
+                      <span>Mint Completed:</span>
                     </td>
                     <td className='text-gray-800' style={{paddingTop: '0'}}>
                       <span>{dataDetail?.asset?.mintCompletedStatus ? 'TRUE' : 'FALSE'}</span>
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>METADATACID:</td>
-                    <td className='text-gray-800'>{dataDetail?.asset?.metadataCid}</td>
+                    <td className='text-gray-400'>Metadata CID:</td>
+                    <td className='text-gray-800 d-flex'>
+                      <SpanText data-tip={dataDetail?.asset?.metadataCid}>
+                        {dataDetail?.asset?.metadataCid &&
+                          shortAddressMaxLength(dataDetail?.asset?.metadataCid, 15)}
+                      </SpanText>
+                      <ButtonCopy text={dataDetail?.asset?.metadataCid} width={16} />
+                    </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>METADATAURI:</td>
-                    <td data-tip={dataDetail?.asset?.metadataUri} className='text-gray-800'>
-                      <span>
+                    <td className='text-gray-400'>Metadata URI:</td>
+                    <td className='text-gray-800 d-flex'>
+                      <SpanText data-tip={dataDetail?.asset?.metadataUri}>
                         {dataDetail?.asset?.metadataUri &&
                           shortAddressMaxLength(dataDetail?.asset?.metadataUri, 15)}
-                      </span>
-                      <ReactTooltip place='top' effect='solid' />
+                      </SpanText>
+                      <ButtonCopy text={dataDetail?.asset?.metadataUri} width={16} />
                     </td>
                   </tr>
                   <tr>
                     <td className='text-gray-400'>
-                      <span
+                      <SpanText
                         data-tip={dataDetail?.asset?.transactionReceiptJson}
                         data-for='transactionReceiptJson'
                         data-class={'tooltip-width'}
                       >
-                        TRANSACTION RECEIPTJSON
-                      </span>
+                        Tx Receipt JSON
+                      </SpanText>
                       <ReactTooltip
                         multiline={true}
                         id='transactionReceiptJson'
@@ -118,18 +121,79 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>EXPLORER URL:</td>
+                    <td className='text-gray-400'>Explorer URL:</td>
                     <td className='text-gray-800'>
-                      <div className='d-flex justify-content-start flex-column'>
-                        <span
+                      <div className='d-flex justify-content-start'>
+                        <SpanText
                           data-tip={dataDetail?.asset?.explorerurl}
-                          className='text-dark fw-bold fs-7 text-hover-primary cursor-pointer'
-                          onClick={() => dataDetail?.asset?.explorerurl && openTab(dataDetail?.asset?.explorerurl)}
+                          className='text-dark fs-6 text-hover-primary cursor-pointer'
+                          onClick={() =>
+                            dataDetail?.asset?.explorerurl &&
+                            openTab(dataDetail?.asset?.explorerurl)
+                          }
                         >
-                          {dataDetail?.asset?.explorerurl && shortAddressBehind(dataDetail?.asset?.explorerurl)}
-                        </span>
+                          {dataDetail?.asset?.explorerurl &&
+                            shortAddressMaxLength(dataDetail?.asset?.explorerurl, 15)}
+                        </SpanText>
+                        <ButtonCopy text={dataDetail?.asset?.explorerurl} width={16} />
                         <ReactTooltip place='top' effect='solid' />
                       </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>
+                      <span>Royalty To Issuer BPS:</span>
+                    </td>
+                    <td className='text-gray-800'>
+                      <span>{dataDetail?.asset?.royaltyToIssuerBasisPoints}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>
+                      <span>Royalties Active:</span>
+                    </td>
+                    <td className='text-gray-800'>
+                      <span>{dataDetail?.asset?.royaltiesActive ? 'TRUE' : 'FALSE'}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>
+                      <span>Royalties Tx Hash:</span>
+                    </td>
+                    <td className='text-gray-800'>
+                      <div className='d-flex justify-content-start'>
+                        <SpanText
+                          data-tip={dataDetail?.algorandAsset?.royaltiesTransactionHash}
+                          className='text-dark fs-6 text-hover-primary cursor-pointer'
+                        >
+                          {dataDetail?.algorandAsset?.royaltiesTransactionHash &&
+                            shortAddressMaxLength(
+                              dataDetail?.algorandAsset?.royaltiesTransactionHash,
+                              15
+                            )}
+                        </SpanText>
+                        <ButtonCopy
+                          text={dataDetail?.algorandAsset?.royaltiesTransactionHash}
+                          width={16}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='text-gray-400'>
+                      <span
+                        data-tip={dataDetail?.algorandAsset?.royaltiesTransactionReceiptjson}
+                        data-for='royaltiesTransactionReceiptjson'
+                        data-class={'tooltip-width'}
+                      >
+                        Royalties Tx Receipt JSON
+                      </span>
+                      <ReactTooltip
+                        multiline={true}
+                        id='royaltiesTransactionReceiptjson'
+                        place='bottom'
+                        effect='solid'
+                      />
                     </td>
                   </tr>
                 </tbody>
@@ -143,26 +207,26 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                 <tbody>
                   <tr>
                     <td className='text-gray-400 min-w-150px' style={{paddingTop: '0'}}>
-                      ALOGRAND ASSETID:
+                      Algorand Asset ID:
                     </td>
                     <td className='text-gray-800' style={{paddingTop: '0'}}>
                       <span>{dataDetail?.algorandAsset?.algorandAssetId}</span>
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>ASSET NAME:</td>
+                    <td className='text-gray-400'>Asset Name:</td>
                     <td className='text-gray-800'>{dataDetail?.algorandAsset?.assetName}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>UNIT NAME:</td>
-                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.unit_name}</td>
+                    <td className='text-gray-400'>Unit Name:</td>
+                    <td className='text-gray-800'>{dataDetail?.algorandAsset?.unitName}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>TOTAL:</td>
+                    <td className='text-gray-400'>Total:</td>
                     <td className='text-gray-800'>{dataDetail?.algorandAsset?.total}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>CLAWBACKPK:</td>
+                    <td className='text-gray-400'>Clawback:</td>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.clawBackPk}>
                         {shortAddress(dataDetail?.algorandAsset?.clawBackPk)}
@@ -171,7 +235,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'> MANAGERPK:</td>
+                    <td className='text-gray-400'> Manager:</td>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.managerpk}>
                         {shortAddress(dataDetail?.algorandAsset?.managerpk)}
@@ -180,7 +244,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>RESERVEPK:</td>
+                    <td className='text-gray-400'>Reserve:</td>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.reservepk}>
                         {shortAddress(dataDetail?.algorandAsset?.reservepk)}
@@ -189,7 +253,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>SENDERPK:</td>
+                    <td className='text-gray-400'>Sender:</td>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.senderpk}>
                         {shortAddress(dataDetail?.algorandAsset?.senderpk)}
@@ -224,3 +288,9 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
 }
 
 export {AccountHeader}
+
+
+const SpanText = styled.span`
+  width: fit-content;
+  min-width: 150px;
+`
