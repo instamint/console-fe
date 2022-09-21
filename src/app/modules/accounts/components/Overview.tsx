@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import { shortAddress } from '../../../../_metronic/helpers/format'
-import ButtonCopy from '../../../components/Button/button-copy'
+import { ButtonCopy } from '../../../components/Button/button-copy'
 
 export function Overview({dataProfile}) {
 

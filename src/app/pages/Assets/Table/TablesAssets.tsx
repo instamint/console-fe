@@ -22,6 +22,7 @@ import styled from 'styled-components'
 import {Search} from '../../../components/FilterSearch/search'
 import Pagination from '../../../components/Pagination'
 import ButtonAction from '../../../components/Button/button-action'
+import { ButtonCopy } from '../../../components/Button/button-copy'
 
 type Props = {
   className: string
@@ -249,20 +250,25 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             </td>
             <td>
               <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.instamintAssetHashid} className='text-dark fw-bold fs-7'>
+                <div className='d-flex justify-content-start'>
+                  <SpanTextCopy
+                    data-tip={item?.instamintAssetHashid}
+                    className='text-dark fw-bold fs-7'
+                  >
                     {item?.instamintAssetHashid && shortAddress(item?.instamintAssetHashid)}
-                  </span>
+                  </SpanTextCopy>
+                  <ButtonCopy text={item?.instamintAssetHashid} width={16} />
                   <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.xref} className='text-dark fw-bold fs-7'>
+                <div className='d-flex justify-content-start'>
+                  <SpanTextCopy data-tip={item?.xref} className='text-dark fw-bold fs-7'>
                     {item?.xref && shortAddress(item?.xref)}
-                  </span>
+                  </SpanTextCopy>
+                  <ButtonCopy text={item?.xref} width={16} />
                   <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
@@ -546,4 +552,8 @@ const TrTable = styled.tr`
   &:hover {
     background-color: rgba(230, 246, 255, 0.5);
   }
+`
+
+const SpanTextCopy = styled.span`
+  min-width: 74px;
 `
