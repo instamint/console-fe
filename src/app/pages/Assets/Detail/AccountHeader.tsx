@@ -20,7 +20,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
     <div className='card mb-5 mb-xl-10'>
       <div className='card-body pt-9 pb-0'>
         <div className='d-flex flex-wrap mb-3'>
-          <div className='me-17'>
+          <div className='me-20'>
             <div className='d-flex justify-content-between align-items-start flex-wrap mb-2'>
               <div className='d-flex flex-column'>
                 <div className='d-flex align-items-center mb-2 flex-wrap'>
@@ -62,7 +62,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                   <a className='d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2'>
                     <span data-tip={dataDetail?.asset?.assetTypeName}>
                       {dataDetail?.asset?.assetTypeName &&
-                        shortAddressMaxLength(dataDetail?.asset?.assetTypeName, 15)}
+                        shortAddressMaxLength(dataDetail?.asset?.assetTypeName, 20)}
                     </span>
                     <ReactTooltip place='top' effect='solid' />
                   </a>
@@ -72,19 +72,19 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
           </div>
 
           {dataDetail?.asset?.chainName === 'algorand-testnet' && (
-            <div className='flex-equal me-8'>
+            <div className='flex-equal me-20'>
               <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
                 <tbody>
                   <tr>
-                    <td className='text-gray-400' style={{paddingTop: '0'}}>
+                    <TdTitle className='text-gray-400' style={{paddingTop: '0'}}>
                       <span>Mint Completed:</span>
-                    </td>
+                    </TdTitle>
                     <td className='text-gray-800' style={{paddingTop: '0'}}>
                       <span>{dataDetail?.asset?.mintCompletedStatus ? 'TRUE' : 'FALSE'}</span>
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Metadata CID:</td>
+                    <TdTitle className='text-gray-400'>Metadata CID:</TdTitle>
                     <td className='text-gray-800 d-flex'>
                       <SpanText data-tip={dataDetail?.asset?.metadataCid}>
                         {dataDetail?.asset?.metadataCid &&
@@ -94,7 +94,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Metadata URI:</td>
+                    <TdTitle className='text-gray-400'>Metadata URI:</TdTitle>
                     <td className='text-gray-800 d-flex'>
                       <SpanText data-tip={dataDetail?.asset?.metadataUri}>
                         {dataDetail?.asset?.metadataUri &&
@@ -104,7 +104,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>
+                    <TdTitle className='text-gray-400'>
                       <SpanText
                         data-tip={dataDetail?.asset?.transactionReceiptJson}
                         data-for='transactionReceiptJson'
@@ -118,10 +118,10 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                         place='bottom'
                         effect='solid'
                       />
-                    </td>
+                    </TdTitle>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Explorer URL:</td>
+                    <TdTitle className='text-gray-400'>Explorer URL:</TdTitle>
                     <td className='text-gray-800'>
                       <div className='d-flex justify-content-start'>
                         <SpanText
@@ -141,25 +141,25 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>
+                    <TdTitle className='text-gray-400'>
                       <span>Royalty To Issuer BPS:</span>
-                    </td>
+                    </TdTitle>
                     <td className='text-gray-800'>
-                      <span>{dataDetail?.asset?.royaltyToIssuerBasisPoints}</span>
+                      <span>{dataDetail?.algorandAsset?.royaltiesBasisPoints}</span>
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>
+                    <TdTitle className='text-gray-400'>
                       <span>Royalties Active:</span>
-                    </td>
+                    </TdTitle>
                     <td className='text-gray-800'>
                       <span>{dataDetail?.asset?.royaltiesActive ? 'TRUE' : 'FALSE'}</span>
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>
+                    <TdTitle className='text-gray-400'>
                       <span>Royalties Tx Hash:</span>
-                    </td>
+                    </TdTitle>
                     <td className='text-gray-800'>
                       <div className='d-flex justify-content-start'>
                         <SpanText
@@ -180,7 +180,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>
+                    <TdTitle className='text-gray-400'>
                       <span
                         data-tip={dataDetail?.algorandAsset?.royaltiesTransactionReceiptjson}
                         data-for='royaltiesTransactionReceiptjson'
@@ -194,7 +194,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                         place='bottom'
                         effect='solid'
                       />
-                    </td>
+                    </TdTitle>
                   </tr>
                 </tbody>
               </table>
@@ -206,59 +206,59 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
               <table className='table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0'>
                 <tbody>
                   <tr>
-                    <td className='text-gray-400 min-w-150px' style={{paddingTop: '0'}}>
+                    <TdTitleRight className='text-gray-400 min-w-150px' style={{paddingTop: '0'}}>
                       Algorand Asset ID:
-                    </td>
+                    </TdTitleRight>
                     <td className='text-gray-800' style={{paddingTop: '0'}}>
                       <span>{dataDetail?.algorandAsset?.algorandAssetId}</span>
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Asset Name:</td>
+                    <TdTitleRight className='text-gray-400'>Asset Name:</TdTitleRight>
                     <td className='text-gray-800'>{dataDetail?.algorandAsset?.assetName}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Unit Name:</td>
+                    <TdTitleRight className='text-gray-400'>Unit Name:</TdTitleRight>
                     <td className='text-gray-800'>{dataDetail?.algorandAsset?.unitName}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Total:</td>
+                    <TdTitleRight className='text-gray-400'>Total:</TdTitleRight>
                     <td className='text-gray-800'>{dataDetail?.algorandAsset?.total}</td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Clawback:</td>
+                    <TdTitleRight className='text-gray-400'>Clawback:</TdTitleRight>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.clawBackPk}>
                         {shortAddress(dataDetail?.algorandAsset?.clawBackPk)}
                       </span>
-                      <ReactTooltip place='top' effect='solid' />
+                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'> Manager:</td>
+                    <TdTitleRight className='text-gray-400'> Manager:</TdTitleRight>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.managerpk}>
                         {shortAddress(dataDetail?.algorandAsset?.managerpk)}
                       </span>
-                      <ReactTooltip place='top' effect='solid' />
+                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Reserve:</td>
+                    <TdTitleRight className='text-gray-400'>Reserve:</TdTitleRight>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.reservepk}>
                         {shortAddress(dataDetail?.algorandAsset?.reservepk)}
                       </span>
-                      <ReactTooltip place='top' effect='solid' />
+                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                   <tr>
-                    <td className='text-gray-400'>Sender:</td>
+                    <TdTitleRight className='text-gray-400'>Sender:</TdTitleRight>
                     <td className='text-gray-800'>
                       <span data-tip={dataDetail?.algorandAsset?.senderpk}>
                         {shortAddress(dataDetail?.algorandAsset?.senderpk)}
                       </span>
-                      <ReactTooltip place='top' effect='solid' />
+                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                 </tbody>
@@ -293,4 +293,11 @@ export {AccountHeader}
 const SpanText = styled.span`
   width: fit-content;
   min-width: 150px;
+`
+
+const TdTitle = styled.td`
+  width: 220px;
+`
+const TdTitleRight = styled.td`
+  width: 170px;
 `
