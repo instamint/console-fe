@@ -3,9 +3,9 @@ import React from 'react'
 import {useLocation} from 'react-router'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
-import { openTab } from '../../../../_metronic/helpers/actions'
+import {openTab} from '../../../../_metronic/helpers/actions'
 import {shortAddress, shortAddressMaxLength} from '../../../../_metronic/helpers/format'
-import { ButtonCopy } from '../../../components/Button/button-copy'
+import {ButtonCopy} from '../../../components/Button/button-copy'
 import './style.scss'
 
 type Props = {
@@ -38,7 +38,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                     </a>
                     <ButtonCopy text={dataDetail?.asset?.instamintAssetHashid} width={20} />
                   </div>
-                  <ReactTooltip place='top' effect='solid' />
                   {dataDetail?.asset?.portfolioName ? (
                     <a
                       className='btn btn-sm btn-light-success fw-bolder fs-8 py-1 px-3'
@@ -64,7 +63,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       {dataDetail?.asset?.assetTypeName &&
                         shortAddressMaxLength(dataDetail?.asset?.assetTypeName, 20)}
                     </span>
-                    <ReactTooltip place='top' effect='solid' />
                   </a>
                 </div>
               </div>
@@ -136,7 +134,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                             shortAddressMaxLength(dataDetail?.asset?.explorerurl, 15)}
                         </SpanText>
                         <ButtonCopy text={dataDetail?.asset?.explorerurl} width={16} />
-                        <ReactTooltip place='top' effect='solid' />
                       </div>
                     </td>
                   </tr>
@@ -164,7 +161,7 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <div className='d-flex justify-content-start'>
                         <SpanText
                           data-tip={dataDetail?.algorandAsset?.royaltiesTransactionHash}
-                          className='text-dark fs-6 text-hover-primary cursor-pointer'
+                          className='text-dark fs-6'
                         >
                           {dataDetail?.algorandAsset?.royaltiesTransactionHash &&
                             shortAddressMaxLength(
@@ -194,6 +191,18 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                         place='bottom'
                         effect='solid'
                       />
+                    </TdTitle>
+                  </tr>
+                  <tr>
+                    <TdTitle className='text-gray-400'>
+                      <span
+                        data-tip={dataDetail?.asset?.errorjson}
+                        data-for='errorjson'
+                        data-class={'tooltip-width'}
+                      >
+                        Error JSON
+                      </span>
+                      <ReactTooltip multiline={true} id='errorjson' place='bottom' effect='solid' />
                     </TdTitle>
                   </tr>
                 </tbody>
@@ -231,7 +240,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <span data-tip={dataDetail?.algorandAsset?.clawBackPk}>
                         {shortAddress(dataDetail?.algorandAsset?.clawBackPk)}
                       </span>
-                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                   <tr>
@@ -240,7 +248,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <span data-tip={dataDetail?.algorandAsset?.managerpk}>
                         {shortAddress(dataDetail?.algorandAsset?.managerpk)}
                       </span>
-                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                   <tr>
@@ -249,7 +256,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <span data-tip={dataDetail?.algorandAsset?.reservepk}>
                         {shortAddress(dataDetail?.algorandAsset?.reservepk)}
                       </span>
-                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                   <tr>
@@ -258,7 +264,6 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
                       <span data-tip={dataDetail?.algorandAsset?.senderpk}>
                         {shortAddress(dataDetail?.algorandAsset?.senderpk)}
                       </span>
-                      {/* <ReactTooltip place='top' effect='solid' /> */}
                     </td>
                   </tr>
                 </tbody>
@@ -283,12 +288,12 @@ const AccountHeader: React.FC<Props> = ({id, dataDetail}) => {
           </ul>
         </div>
       </div>
+      <ReactTooltip place='top' effect='solid' />
     </div>
   )
 }
 
 export {AccountHeader}
-
 
 const SpanText = styled.span`
   width: fit-content;
@@ -299,5 +304,5 @@ const TdTitle = styled.td`
   width: 220px;
 `
 const TdTitleRight = styled.td`
-  width: 170px;
+  width: 180px;
 `
