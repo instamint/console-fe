@@ -1,4 +1,4 @@
-##  [Instamint for Enterprise](console.instamint.com)  
+##  [Instamint for Enterprise](http://console.instamint.com)  
 
 ![image desc](./public//media//logos/logo-instamint.png)
 
