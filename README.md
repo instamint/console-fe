@@ -1,6 +1,6 @@
-##  [Instamint for Enterprise](http://console.instamint.com)  
+##  [Instamint Console-FE](http://console.instamint.com)  
 
-![image desc](./public//media//logos/logo-instamint.png)
+![<img src="./public/media/logos/logo-instamint.png" alt="image desc" style="max-width: 40%;" />](./public/media/logos/logo-instamint.png)
 
 
 ​
