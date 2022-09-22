@@ -3,10 +3,6 @@
 ![image desc](./public//media//logos/logo-instamint.png)
 
 
-
-## ⭐︎ Version: 
->1.0.0
-
 ​
 >**Instamint  -  Is an enterprise (think: companies and organizations) platform for minting, managing, auctioning, staking, fractionalizing and trading digital business assets with each other in a B2B fashion. The platform is unbiased, works with multiple chains and has a growing library of types of assets it can handle. It is a B2B platform, and thus a platform to/for other platforms. It combines extensive off-chain value propositions and capabilities with on-chain tokens. The goal of Instamint is to help enterprises go to market with applications faster and with significant ease.**
 
