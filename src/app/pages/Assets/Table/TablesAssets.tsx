@@ -325,7 +325,29 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.activeAuction ? 'TRUE' : 'FALSE'}
+                    {item?.reserve && `$${showTwoDecimalPlaces(item?.reserve)}`}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.ask && `$${showTwoDecimalPlaces(item?.ask)}`}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.activeAuction ? (
+                      <img width={19} src={IconCompleted} alt='icon-completed' />
+                    ) : (
+                      ''
+                    )}
                   </span>
                 </div>
               </div>
@@ -348,24 +370,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.ownerName}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>
-                    {item?.reserve && `$${showTwoDecimalPlaces(item?.reserve)}`}
-                  </span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>
-                    {item?.ask && `$${showTwoDecimalPlaces(item?.ask)}`}
-                  </span>
                 </div>
               </div>
             </td>
@@ -477,6 +481,24 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 <th>
                   <SpanThTable
                     className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('reserve')}
+                  >
+                    RESERVE
+                    <ICSort type={sort.sort_name === 'reserve' ? sort.sort_type : 'default'} />
+                  </SpanThTable>
+                </th>
+                <th>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('ask')}
+                  >
+                    ASK
+                    <ICSort type={sort.sort_name === 'ask' ? sort.sort_type : 'default'} />
+                  </SpanThTable>
+                </th>
+                <th>
+                  <SpanThTable
+                    className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('activeAuction')}
                   >
                     AUCTION
@@ -503,31 +525,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     <ICSort type={sort.sort_name === 'issuerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
-                <th className='min-w-100px'>
+                <th>
                   <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('ownerName')}
                   >
                     OWNER
                     <ICSort type={sort.sort_name === 'ownerName' ? sort.sort_type : 'default'} />
-                  </SpanThTable>
-                </th>
-                <th>
-                  <SpanThTable
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('reserve')}
-                  >
-                    RESERVE
-                    <ICSort type={sort.sort_name === 'reserve' ? sort.sort_type : 'default'} />
-                  </SpanThTable>
-                </th>
-                <th>
-                  <SpanThTable
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('ask')}
-                  >
-                    ASK
-                    <ICSort type={sort.sort_name === 'ask' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 {/* <th>ACTION</th> */}
