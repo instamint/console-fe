@@ -113,8 +113,19 @@ const HeaderUserMenu: FC = () => {
 
       <div className='menu-item px-5 my-1'>
         <Link to='/crafted/account/overview' className='menu-link px-5'>
-          Account Settings
+          Settings
         </Link>
+      </div>
+
+      <div className='menu-item px-5 my-1'>
+        <a
+          href='https://docs.instamint.com'
+          target='_blank'
+          className='menu-link px-5'
+          rel='noreferrer'
+        >
+          Documentation
+        </a>
       </div>
 
       <div className='menu-item px-5'>
