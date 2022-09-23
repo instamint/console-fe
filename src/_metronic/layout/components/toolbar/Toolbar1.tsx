@@ -14,7 +14,7 @@ const Toolbar1: FC = () => {
     if (headerRef?.current?.childNodes && headerRef?.current?.childNodes?.length > 1) {
       headerRef?.current?.removeChild(headerRef.current.children[0])
     }
-  }, [windowSize])
+  }, [windowSize, headerRef])
 
   return (
     <div className='toolbar' id='kt_toolbar'>

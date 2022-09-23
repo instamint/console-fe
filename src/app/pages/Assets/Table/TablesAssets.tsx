@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import {createAuction, endAuction, getListAsset} from '../../../../utils/api/assets'
 import FilterSearch from '../FilterSearch/index'
 import {Loading} from '../../../components/Loading'
@@ -21,8 +21,9 @@ import {useAlert} from 'react-alert'
 import styled from 'styled-components'
 import {Search} from '../../../components/FilterSearch/search'
 import Pagination from '../../../components/Pagination'
-import ButtonAction from '../../../components/Button/button-action'
 import { ButtonCopy } from '../../../components/Button/button-copy'
+import IconCompleted from '../../../images/icon-completed.svg'
+import { showTwoDecimalPlaces } from '../../../../_metronic/helpers/format/number'
 
 type Props = {
   className: string
@@ -41,6 +42,8 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     'chainName',
     'issuerName',
     'ownerName',
+    'reserve',
+    'ask',
   ])
   const [isLoading, setIsLoading] = useState(true)
   const [selectAsset, setSelectAsset] = useState([])
@@ -300,7 +303,11 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.mintCompletedStatus ? 'TRUE' : 'FALSE'}
+                    {item?.mintCompletedStatus ? (
+                      <img width={19} src={IconCompleted} alt='icon-completed' />
+                    ) : (
+                      ''
+                    )}
                   </span>
                 </div>
               </div>
@@ -308,7 +315,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.bestBid && `$${item?.bestBid}`}</span>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.bestBid && `$${showTwoDecimalPlaces(item?.bestBid)}`}
+                  </span>
                 </div>
               </div>
             </td>
@@ -339,6 +348,24 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{item?.ownerName}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.reserve && `$${showTwoDecimalPlaces(item?.reserve)}`}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.ask && `$${showTwoDecimalPlaces(item?.ask)}`}
+                  </span>
                 </div>
               </div>
             </td>
@@ -375,7 +402,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
       {/* begin::Body */}
       <div className='card-body py-4'>
         {/* begin::Table container */}
-        <div className='table-responsive' style={{paddingBottom: "30px"}}>
+        <div className='table-responsive' style={{paddingBottom: '30px'}}>
           {/* begin::Table */}
 
           <table
@@ -391,7 +418,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('instamintAssetHashid')}
                   >
                     ASSET ID{' '}
-                    <ICSort type={sort.sort_name === 'instamintAssetHashid' ? sort.sort_type : 'default'} />
+                    <ICSort
+                      type={sort.sort_name === 'instamintAssetHashid' ? sort.sort_type : 'default'}
+                    />
                   </SpanThTable>
                 </th>
                 <th className='min-w-150px'>
@@ -451,7 +480,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('activeAuction')}
                   >
                     AUCTION
-                    <ICSort type={sort.sort_name === 'activeAuction' ? sort.sort_type : 'default'} />
+                    <ICSort
+                      type={sort.sort_name === 'activeAuction' ? sort.sort_type : 'default'}
+                    />
                   </SpanThTable>
                 </th>
                 <th>
@@ -472,13 +503,31 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     <ICSort type={sort.sort_name === 'issuerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
-                <th>
+                <th className='min-w-100px'>
                   <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('ownerName')}
                   >
                     OWNER
                     <ICSort type={sort.sort_name === 'ownerName' ? sort.sort_type : 'default'} />
+                  </SpanThTable>
+                </th>
+                <th>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('reserve')}
+                  >
+                    RESERVE
+                    <ICSort type={sort.sort_name === 'reserve' ? sort.sort_type : 'default'} />
+                  </SpanThTable>
+                </th>
+                <th>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('ask')}
+                  >
+                    ASK
+                    <ICSort type={sort.sort_name === 'ask' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 {/* <th>ACTION</th> */}
