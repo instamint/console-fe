@@ -84,6 +84,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
           name: name,
         }
         await addParty(param)
+        setReloadList((preState) => !preState)
         setModalAddParty(false)
         setIdClient(null)
         alert.success('Successful add party!')
@@ -109,14 +110,18 @@ const TablesClients: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.namespace}</span>
+                  <span style={{maxWidth: '400px'}} className='text-dark fw-bold fs-7'>
+                    {item?.namespace}
+                  </span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
+                  <span style={{maxWidth: '400px'}} className='text-dark fw-bold fs-7'>
+                    {item?.name}
+                  </span>
                 </div>
               </div>
             </td>
