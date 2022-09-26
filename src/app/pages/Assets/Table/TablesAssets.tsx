@@ -544,7 +544,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                 renderList()
               ) : (
                 <tr>
-                  <td colSpan={21} className='text-center'>
+                  <td colSpan={12} className='text-center'>
                     <h4 className='mt-5 d-flex justify-content-center'>
                       There is currently no data available
                     </h4>
