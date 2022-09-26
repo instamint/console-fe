@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { KTSVG } from '../../../../../_metronic/helpers'
 
 const PoolSchema = Yup.object().shape({
-  name: Yup.string().trim().max(5000, 'Maximum 5000 symbols').required('Name is required'),
+  name: Yup.string().trim().max(255, 'Maximum 255 symbols').required('Name is required'),
 })
 
 interface MyFormValues {
