@@ -4,6 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL
 
 export const GET_LIST_CLIENTS = `${API_URL}/client`
 export const CHANGE_REVOKED = (id) => `${API_URL}/client/change-revoked/${id}`
+export const ADD_PARTY = `${API_URL}/party/update`
 
 export const getListClients = async (params): Promise<any> => {
   let url = `${GET_LIST_CLIENTS}?`
@@ -17,4 +18,8 @@ export const getListClients = async (params): Promise<any> => {
 
 export const changeRevoked = async (id: string | number) => {
   return axios.patch(CHANGE_REVOKED(id))
+}
+
+export const addParty = async (param: any) => {
+  return axios.put(ADD_PARTY, param)
 }

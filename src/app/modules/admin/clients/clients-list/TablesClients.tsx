@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
 import styled from 'styled-components'
-import {changeRevoked, getListClients} from '../../../../../utils/api/clients'
-import FilterSearch from '../../../../components/FilterSearch'
-import ICSort, { sortRows } from '../../../../components/Sort'
+import {addParty, changeRevoked, getListClients} from '../../../../../utils/api/clients'
+import ICSort, {sortRows} from '../../../../components/Sort'
 import useSearch from '../../../../hooks/useSearch'
 import {useAlert} from 'react-alert'
 import {Loading} from '../../../../components/Loading'
+import {Modal} from 'react-bootstrap'
+import ModalAddParty from '../Modal/add-party'
 
 type Props = {
   className: string
@@ -25,6 +26,9 @@ const TablesClients: React.FC<Props> = ({className}) => {
     sort_type: '',
   })
   const [sort, setSort] = useState({sort_type: '', sort_name: ''})
+  const [modalAddParty, setModalAddParty] = useState(false)
+  const [idClient, setIdClient] = useState(null)
+  const [loadingAddParty, setLoadingAddParty] = useState(false)
 
   const fetchListClients = async (params) => {
     try {
@@ -71,6 +75,27 @@ const TablesClients: React.FC<Props> = ({className}) => {
     return newListAssets
   }
 
+  const handleAddParty = async (name) => {
+    setLoadingAddParty(true)
+    if (!loadingAddParty) {
+      try {
+        const param = {
+          clientId: idClient,
+          name: name,
+        }
+        await addParty(param)
+        setModalAddParty(false)
+        setIdClient(null)
+        alert.success('Successful add party!')
+      } catch (error) {
+        console.error({error})
+        alert.error('An error occurred, please try again!')
+      } finally {
+        setLoadingAddParty(false)
+      }
+    }
+  }
+
   useEffect(() => {
     fetchListClients(params)
   }, [params, reloadList])
@@ -103,6 +128,20 @@ const TablesClients: React.FC<Props> = ({className}) => {
               </div>
             </td>
             <td>
+              <div className='d-flex align-items-center justify-content-start'>
+                <button
+                  type='button'
+                  className='btn btn-danger btn-sm'
+                  onClick={() => {
+                    setModalAddParty(true)
+                    setIdClient(item?.id)
+                  }}
+                >
+                  Add Party
+                </button>
+              </div>
+            </td>
+            <td>
               <div className='d-flex form-check form-switch form-switch-sm form-check-custom form-check-solid'>
                 <span className='text-dark fw-bold fs-7 me-2'>Revoked</span>
                 <input
@@ -127,7 +166,6 @@ const TablesClients: React.FC<Props> = ({className}) => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Clients List</span>
         </h3>
-        <FilterSearch setSearch={setSearch} />
       </div>
       <div className='card-body py-4'>
         <div className='table-responsive'>
@@ -161,6 +199,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
                   </SpanThTable>
                 </th>
                 <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -170,7 +209,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
                 renderList()
               ) : (
                 <tr>
-                  <td colSpan={3} className='text-center'>
+                  <td colSpan={5} className='text-center'>
                     <h4 className='mt-5 d-flex justify-content-center'>
                       There is currently no data available
                     </h4>
@@ -181,6 +220,25 @@ const TablesClients: React.FC<Props> = ({className}) => {
           </table>
         </div>
       </div>
+      {modalAddParty && idClient && (
+        <Modal
+          className='modal fade'
+          id='kt_modal_select_location'
+          data-backdrop='static'
+          tabIndex={-1}
+          role='dialog'
+          show={modalAddParty}
+          dialogClassName='modal-ml modal-dialog-500'
+          aria-hidden='true'
+        >
+          <ModalAddParty
+            modalAddParty={modalAddParty}
+            setModalAddParty={setModalAddParty}
+            handleAddParty={handleAddParty}
+            setIdClient={setIdClient}
+          />
+        </Modal>
+      )}
     </div>
   )
 }
