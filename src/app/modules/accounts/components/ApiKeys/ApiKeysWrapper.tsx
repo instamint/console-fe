@@ -2,7 +2,6 @@
 import {FC, useEffect, useState} from 'react'
 import {Modal} from 'react-bootstrap'
 import {useIntl} from 'react-intl'
-import {generateApiKey} from '../../../../../utils/api/acccount-setting/api-key'
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {PageTitle} from '../../../../../_metronic/layout/core'
 import {useAuth} from '../../../auth'
@@ -25,25 +24,12 @@ const ApiKeysPage: FC<{dataProfile: any}> = ({dataProfile}) => {
     setCurrentUser(newCurrentUser)
     setApiKeyUser(newCurrentUser?.apiKey)
   }
- 
-  const fetchFirstApiKey = async () => {
-    try {
-      const reps = await generateApiKey({})
-      if (reps?.key) {
-        handleSetApiKey(reps?.key)
-      }
-    } catch (error) {
-      console.error({error})
-    }
-  }
 
   useEffect(() => {
     if (dataProfile?.apiKey && dataProfile?.apiKey !== '') {
       handleSetApiKey(dataProfile?.apiKey)
-    } else  {
-      fetchFirstApiKey()
     }
-  }, [])
+  }, [dataProfile])
 
   return (
     <>
@@ -87,6 +73,7 @@ const ApiKeysPage: FC<{dataProfile: any}> = ({dataProfile}) => {
               setShowModalCreate={setShowModalCreate}
               setShowModalKey={setShowModalKey}
               handleSetApiKey={handleSetApiKey}
+              oldKey={currentUser?.apiKey}
             />
           </Modal>
 
