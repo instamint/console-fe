@@ -18,22 +18,23 @@ type Props = {
 
 const TablesParties: React.FC<Props> = ({className}) => {
   const [listParties, setListParties] = useState<Array<any>>([])
-  const {searched, setSearch, results} = useSearch(listParties, ['name', 'uuid', 'createdAt'])
+  const {searched, setSearch, results} = useSearch(listParties, [
+    'partyName',
+    'partyID',
+    'algorandAddress',
+    'ethereumAddress',
+  ])
   const [isLoading, setIsLoading] = useState(true)
   const [paginate, setPaginate] = useState(null)
-  const [params, setParams] = useState({
-    sort_name: '',
-    sort_type: '',
-    limit: '',
-  })
+  
   const [sort, setSort] = useState({sort_type: '', sort_name: ''})
   const [page, setPage] = useState<string | number>(1)
 
-  const fetchListParties = async (params) => {
+  const fetchListParties = async () => {
     try {
-      let responsive = await getListParties(params)
+      let responsive = await getListParties()
       if (responsive) {
-        setListParties(responsive?.data || [])
+        setListParties(responsive?.data?.parties || [])
       }
     } catch (error) {
       console.error({error})
@@ -77,8 +78,8 @@ const TablesParties: React.FC<Props> = ({className}) => {
   }, [results, page])
 
   useEffect(() => {
-    fetchListParties(params)
-  }, [params])
+    fetchListParties()
+  }, [])
 
   const renderList = useCallback(
     () =>
@@ -89,15 +90,15 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.name}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.partyName}</span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.uuid} className='text-dark fw-bold fs-7'>
-                    {shortAddress(item?.uuid)}
+                  <span data-tip={item?.partyID} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.partyID)}
                   </span>
                   <ReactTooltip place='top' effect='solid' />
                 </div>
@@ -106,9 +107,20 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>
-                    {item?.createdAt && convertTimeZone(item?.createdAt)}
+                  <span data-tip={item?.algorandAddress} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.algorandAddress)}
                   </span>
+                  <ReactTooltip place='top' effect='solid' />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span data-tip={item?.ethereumAddress} className='text-dark fw-bold fs-7'>
+                    {shortAddress(item?.ethereumAddress)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
                 </div>
               </div>
             </td>
@@ -116,7 +128,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
               <div className='d-flex justify-content-start flex-shrink-0'>
                 <Link
                   to={{
-                    pathname: `detail/${item?.id}`,
+                    pathname: `detail/${item?.partyID}`,
                   }}
                   className='btn btn-sm fw-bold btn-primary'
                 >
@@ -170,21 +182,38 @@ const TablesParties: React.FC<Props> = ({className}) => {
             <thead>
               <tr className='fw-bold text-muted'>
                 <th>
-                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('name')}>
-                    NAME <ICSort type={sort.sort_name === 'name' ? sort.sort_type : 'default'} />
-                  </span>
-                </th>
-                <th>
-                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('uuid')}>
-                    UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('partyName')}
+                  >
+                    NAME{' '}
+                    <ICSort type={sort.sort_name === 'partyName' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
                   <span
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('createdAt')}
+                    onClick={() => !isLoading && handleSort('partyID')}
                   >
-                    TIMESTAMP <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
+                    ID <ICSort type={sort.sort_name === 'partyID' ? sort.sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('algorandAddress')}
+                  >
+                    ALGORAND ADDRESS{' '}
+                    <ICSort type={sort.sort_name === 'algorandAddress' ? sort.sort_type : 'default'} />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('ethereumAddress')}
+                  >
+                    ETHEREUM ADDRESS{' '}
+                    <ICSort type={sort.sort_name === 'ethereumAddress' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>ACTION</th>
@@ -199,7 +228,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                 renderList()
               ) : (
                 <tr>
-                  <td colSpan={7} className='text-left'>
+                  <td colSpan={5} className='text-left'>
                     <h4 className='mt-5 d-flex justify-content-center'>
                       There is currently no data available
                     </h4>
@@ -214,11 +243,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
         </div>
         {paginate?.total_page > 0 && (
           <div className='card-footer-v2'>
-            <Pagination
-              setIsLoading={setIsLoading}
-              paginate={paginate}
-              setPage={setPage}
-            />
+            <Pagination setIsLoading={setIsLoading} paginate={paginate} setPage={setPage} />
           </div>
         )}
         {/* end::Table container */}
