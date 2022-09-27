@@ -5,6 +5,7 @@ import {KTSVG} from '../../../../../../_metronic/helpers'
 import * as Yup from 'yup'
 import {useState} from 'react'
 import { generateApiKey } from '../../../../../../utils/api/acccount-setting/api-key'
+import {useAlert} from 'react-alert'
 
 const validateSchema = Yup.object().shape({
 })
@@ -13,6 +14,7 @@ export default function CreateKey({
   setShowModalCreate,
   setShowModalKey,
   handleSetApiKey,
+  oldKey
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [scopes, setScopes] = useState({
@@ -57,6 +59,7 @@ export default function CreateKey({
       },
     ],
   })
+  const alert = useAlert()
 
   const handleSubmit = async (values) => {
     setIsLoading(true)
@@ -68,15 +71,20 @@ export default function CreateKey({
             chooseScopes[i.key] = i?.checked
           })
       })
-      const reps = await generateApiKey(chooseScopes)
+      const reps = await generateApiKey({
+        ...chooseScopes,
+        oldKey: oldKey,
+      })
       if (reps?.apiKey) {
         handleSetApiKey(reps?.apiKey)
       }
-    } catch (error) {
-      console.error({error})
-    } finally {
       setShowModalCreate(false)
       setShowModalKey(true)
+    } catch (error) {
+      console.error({error})
+      setShowModalCreate(false)
+      alert.error("Can't create Generate API Key, please try again")
+    } finally {
       setIsLoading(false)
     }
   }
