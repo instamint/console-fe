@@ -94,7 +94,7 @@ export default function Notes({idAsset}) {
         <div className='card-body'>
           <div className='table-responsive'>
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-              <thead className='border-gray-200 fs-5 fw-semibold bg-lighten'>
+              <thead style={{verticalAlign: 'top'}}>
                 <tr className='fw-bold text-muted'>
                   <th className='w-250px' style={{paddingTop: '0px'}}>
                     <span>TIMESTAMP</span>

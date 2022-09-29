@@ -188,7 +188,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   const navigateDetailAsset = (id) => {
     if(id) {
-      navigate(`detail/overview/${id}`)
+      navigate(`/assets/detail/overview/${id}`)
     } 
   }
 

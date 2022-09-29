@@ -18,8 +18,10 @@
   "MENU.ADMIN": "Admin",
   "MENU.CONTRACTS": "Contracts",
   "MENU.MONITORING": "Monitoring",
+  "MENU.DELEGATED_USERS": "Delegated Users",
+  "MENU.LOGIN_ACTIVITY": "Login Activity",
+  "MENU.TRADES": "Trades",
 
-  
   "AUTH.GENERAL.OR": "Or",
   "AUTH.GENERAL.SUBMIT_BUTTON": "Submit",
   "AUTH.GENERAL.NO_ACCOUNT": "Don't have an account?",

@@ -66,5 +66,5 @@ const MenuItem: React.FC<Props> = ({
 export {MenuItem}
 
 const LabelItem = styled.span`
-  font-size: 9px;
+  font-size: 8px;
 `

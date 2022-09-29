@@ -6,7 +6,7 @@ import { TablesTransactions } from '../../Transactions/Table/TablesTransactions'
 import AuctionHistory from './AuctionHistory'
 import BidHistory from './BidHistory/index'
 import Notes from './Notes/index'
-import TradeHistory from './TradeHistory'
+import {TradeHistory} from './TradeHistory'
 
 export default function Overview({dataDetail, setReloadPage}) {
   const alert = useAlert()
