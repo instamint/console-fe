@@ -6,6 +6,7 @@ import { useAuth } from '../../../../app/modules/auth'
 export function MenuInner() {
   const {currentUser} = useAuth()
   const intl = useIntl()
+  const IconPlatform = '/media/icons/icon/platform.svg'
   return (
     <>
       <MenuItem title={intl.formatMessage({id: 'MENU.ASEETS'})} to='/assets' />
@@ -34,6 +35,24 @@ export function MenuInner() {
             title='Logins'
           />
           <MenuItem to='/admin/admin-transactions' title='Transactions' fontIcon='bi-layers' />
+        </MenuInnerWithSub>
+      ) : (
+        ''
+      )}
+      {currentUser?.platformAdmin ? (
+        <MenuInnerWithSub
+          title='Platform'
+          to='/platform'
+          menuPlacement='bottom-start'
+          menuTrigger={`{default:'click', lg: 'hover'}`}
+        >
+          <MenuItem to='/platform/platform-assets' title='Assets' icon={IconPlatform} />
+          <MenuItem to='/platform/clients' title='Clients' icon={IconPlatform} />
+          <MenuItem to='/platform/delegated-users' title='Delegated Users' icon={IconPlatform} />
+          <MenuItem to='/platform/platform-parties' title='Parties' icon={IconPlatform} />
+          <MenuItem to='/platform/login-activity' title='Login Activity' icon={IconPlatform} />
+          <MenuItem to='/platform/platform-transactions' title='Transactions' icon={IconPlatform} />
+          <MenuItem to='/platform/trades' title='Trades' icon={IconPlatform} />
         </MenuInnerWithSub>
       ) : (
         ''

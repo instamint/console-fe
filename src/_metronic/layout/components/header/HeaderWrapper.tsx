@@ -16,9 +16,16 @@ export function HeaderWrapper() {
   
   useEffect(() => {
     if (headerRef?.current?.childNodes && headerRef?.current?.childNodes?.length > 1) {
-      headerRef?.current?.removeChild(headerRef.current.children[1])
+      headerRef?.current?.removeChild(headerRef.current.children[0])
     }
-  }, [windowSize])
+    if (windowSize?.width < 1440 && headerRef?.current) {
+      headerRef.current.style.maxWidth = windowSize?.width < 1309 ? '640px' : '800px'
+      headerRef.current.style.overflowX = 'auto'
+    } else {
+      headerRef.current.style.maxWidth = 'unset'
+      headerRef.current.style.overflowX = 'hidden'
+    }
+  }, [windowSize, headerRef])
 
   return (
     <div

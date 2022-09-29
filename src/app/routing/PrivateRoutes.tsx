@@ -24,9 +24,14 @@ const PrivateRoutes = () => {
   // const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
   // const WidgetsPage = lazy(() => import('../modules/widgets/WidgetsPage'))
   // const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
+  const AssetsPage = lazy(() => import('../../app/pages/Assets/index'))
+  const PartiesPage = lazy(() => import('../../app/pages/Parties/index'))
   const ClientsPage = lazy(() => import('../modules/admin/clients/ClientsPage'))
   const LoginsPage = lazy(() => import('../modules/admin/logins/LoginsPage'))
-  const TransactionsPage = lazy(() => import('../modules/admin/transactions/TransactionsPage'))
+  const TransactionsPage = lazy(() => import('../../app/pages/Transactions/index'))
+  const DelegatedUsersPage = lazy(() => import('../../app/pages/DelegatedUsers/index'))
+  const LoginActivityPage = lazy(() => import('../../app/pages/LoginActivity/index'))
+  const TradesPage = lazy(() => import('../../app/pages/Trades/index'))
 
   return (
     <Routes>
@@ -59,6 +64,24 @@ const PrivateRoutes = () => {
                 <ClientsPage />
                 <LoginsPage />
                 <TransactionsPage />
+              </SuspensedView>
+            }
+          />
+        ) : (
+          ''
+        )}
+        {currentUser?.platformAdmin ? (
+          <Route
+            path='platform/*'
+            element={
+              <SuspensedView>
+                <AssetsPage />
+                <ClientsPage />
+                <DelegatedUsersPage />
+                <PartiesPage />
+                <LoginActivityPage />
+                <TransactionsPage />
+                <TradesPage />
               </SuspensedView>
             }
           />
