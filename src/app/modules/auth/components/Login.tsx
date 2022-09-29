@@ -45,14 +45,18 @@ export function Login() {
       setLoading(true)
       try {
         const {data: auth} = await login(values.email, values.password)
-        saveAuth(auth)
-        setCurrentUser(auth)
+        if (auth) {
+          saveAuth(auth)
+          setCurrentUser(auth)
+        }
       } catch (error) {
         console.error(error)
         saveAuth(undefined)
-        setStatus(
-          error?.response?.data || 'Login information is incorrect, please try again'
-        )
+        if (error?.response?.data && typeof error?.response?.data === 'string') {
+          setStatus(error?.response?.data)
+        } else {
+          setStatus('Login information is incorrect, please try again')
+        }
         setSubmitting(false)
         setLoading(false)
       }
