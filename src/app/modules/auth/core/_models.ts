@@ -12,6 +12,7 @@ export interface AuthModel {
   profileUrl?: string
   balanceusd?: string | number
   balanceusdc?: string | number
+  platformAdmin?: boolean
 }
 
 export interface UserAddressModel {
@@ -83,4 +84,5 @@ export interface UserModel {
   profileUrl?: string
   balanceusd?: string | number
   balanceusdc?: string | number
+  platformAdmin?: boolean
 }
