@@ -22,6 +22,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
     'partyID',
     'algorandAddress',
     'ethereumAddress',
+    'opsIncurred',
   ])
   const [isLoading, setIsLoading] = useState(true)
   const [paginate, setPaginate] = useState(null)
@@ -124,6 +125,15 @@ const TablesParties: React.FC<Props> = ({className}) => {
               </div>
             </td>
             <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.opsIncurred}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td>
               <div className='d-flex justify-content-start flex-shrink-0'>
                 <Link
                   to={{
@@ -203,7 +213,9 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('algorandAddress')}
                   >
                     ALGORAND ADDRESS{' '}
-                    <ICSort type={sort.sort_name === 'algorandAddress' ? sort.sort_type : 'default'} />
+                    <ICSort
+                      type={sort.sort_name === 'algorandAddress' ? sort.sort_type : 'default'}
+                    />
                   </span>
                 </th>
                 <th>
@@ -212,7 +224,20 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('ethereumAddress')}
                   >
                     ETHEREUM ADDRESS{' '}
-                    <ICSort type={sort.sort_name === 'ethereumAddress' ? sort.sort_type : 'default'} />
+                    <ICSort
+                      type={sort.sort_name === 'ethereumAddress' ? sort.sort_type : 'default'}
+                    />
+                  </span>
+                </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('opsIncurred')}
+                  >
+                    OPS INCURRED{' '}
+                    <ICSort
+                      type={sort.sort_name === 'opsIncurred' ? sort.sort_type : 'default'}
+                    />
                   </span>
                 </th>
                 <th>ACTION</th>
