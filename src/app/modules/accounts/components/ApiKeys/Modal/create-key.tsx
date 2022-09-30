@@ -42,19 +42,19 @@ export default function CreateKey({
       {
         id: 4,
         name: 'Websocket',
-        key: 'websockets',
+        key: 'accessWebsockets',
         checked: false,
       },
       {
         id: 5,
         name: 'Tableau',
-        key: 'tableau',
+        key: 'accessTableau',
         checked: false,
       },
       {
         id: 6,
         name: 'GraphQL',
-        key: 'graphQL',
+        key: 'accessGraphql',
         checked: false,
       },
     ],
