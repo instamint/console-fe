@@ -1,7 +1,10 @@
 import {FC, useCallback, useEffect, useState} from 'react'
 import {useLocation} from 'react-router-dom'
+import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {getListTrade, getListTradeHistory} from '../../../../../utils/api/assets'
+import { shortAddress } from '../../../../../_metronic/helpers/format'
+import { convertTimeZone } from '../../../../../_metronic/helpers/format/datetime'
 import {Loading} from '../../../../components/Loading'
 import ICSort, {sortRows} from '../../../../components/Sort'
 
@@ -59,11 +62,20 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
       filterList(listTradeHistory)?.map((item, index) => {
         return (
           <tr key={index}>
+            {!idAsset && (
+              <td className=''>
+                <span data-tip={item?.uuid}>{shortAddress(item?.uuid)}</span>
+                <ReactTooltip place='top' effect='solid' />
+              </td>
+            )}
             <td className=''>{item?.buyerName}</td>
             <td className=''>{item?.sellerName}</td>
             <td className=''>${item?.fee || 0}</td>
+            {!idAsset && <td className=''>${item?.clientFee || 0}</td>}
             <td className=''>${item?.instamintPlatformFee || 0}</td>
             <td className=''>${item?.tradeAmount || 0}</td>
+            {!idAsset && <td className=''>${item?.royaltyAmountToIssuer || 0}</td>}
+            {!idAsset && <td className=''>{convertTimeZone(item?.createdAt)}</td>}
           </tr>
         )
       }),
@@ -77,6 +89,15 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
           <thead style={{verticalAlign: 'top'}}>
             {path === 'platform' ? (
               <tr className='fw-bold text-muted'>
+                <th className='min-w-150px'>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('uuid')}
+                  >
+                    UUID
+                    <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
+                  </SpanThTable>
+                </th>
                 <th className='min-w-150px'>
                   <SpanThTable
                     className='cursor-pointer'
@@ -104,6 +125,15 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     <ICSort type={sort.sort_name === 'fee' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
+                <th>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('clientFee')}
+                  >
+                    CLIENT FEE
+                    <ICSort type={sort.sort_name === 'clientFee' ? sort.sort_type : 'default'} />
+                  </SpanThTable>
+                </th>
                 <th className='min-w-150px'>
                   <SpanThTable
                     className='cursor-pointer'
@@ -122,6 +152,26 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                   >
                     TRADE AMOUNT
                     <ICSort type={sort.sort_name === 'tradeAmount' ? sort.sort_type : 'default'} />
+                  </SpanThTable>
+                </th>
+                <th className='min-w-150px'>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('royaltyAmountToIssuer')}
+                  >
+                    ROYALTY AMOUNT TO ISSUER
+                    <ICSort
+                      type={sort.sort_name === 'royaltyAmountToIssuer' ? sort.sort_type : 'default'}
+                    />
+                  </SpanThTable>
+                </th>
+                <th className='min-w-150px'>
+                  <SpanThTable
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('createdAt')}
+                  >
+                    CREATE AT
+                    <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
               </tr>
@@ -152,7 +202,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
               renderListTradeHistory()
             ) : (
               <tr>
-                <td colSpan={5} className='text-center'>
+                <td colSpan={idAsset ? 5 : 9} className='text-center'>
                   <h4 className='mt-5 d-flex justify-content-center'>
                     There is currently no data available
                   </h4>
