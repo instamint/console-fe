@@ -1,6 +1,6 @@
 {
   "name": "Instamint",
-  "version": "8.1.0",
+  "version": "8.1.5",
   "private": true,
   "homepage": "",
   "dependencies": {
@@ -12,7 +12,7 @@
     "apexcharts": "3.35.0",
     "axios": "0.26.1",
     "bignumber.js": "^9.1.0",
-    "bootstrap": "5.2.0-beta1",
+    "bootstrap": "5.2.2",
     "bootstrap-icons": "^1.5.0",
     "chart.js": "3.7.1",
     "clsx": "1.1.1",
