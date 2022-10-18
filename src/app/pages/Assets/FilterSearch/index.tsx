@@ -5,6 +5,7 @@ import {useAlert} from 'react-alert'
 export type FilterSearchProps = {
   setSearch: (value: string | null) => void
   openModalPool: (value: boolean) => void
+  openModalStake: (value: boolean) => void
   selectAsset: Array<any>
   setMinted: (value: any) => void
   minted: boolean
@@ -12,6 +13,7 @@ export type FilterSearchProps = {
 const FilterSearch = ({
   setSearch,
   openModalPool,
+  openModalStake,
   selectAsset,
   setMinted,
   minted,
@@ -68,6 +70,9 @@ const FilterSearch = ({
                 Assign To Portfolio
               </NameDropdow>
               <NameDropdow>Enable Auction</NameDropdow>
+              <NameDropdow onClick={() => selectAsset?.length > 0 && openModalStake(true)}>
+                Stake
+              </NameDropdow>
             </div>
           </div>
         </div>
