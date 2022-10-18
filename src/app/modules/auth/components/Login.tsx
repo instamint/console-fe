@@ -3,7 +3,7 @@ import {useState} from 'react'
 import * as Yup from 'yup'
 import clsx from 'clsx'
 import {Link} from 'react-router-dom'
-import {useFormik} from 'formik'
+import {Field, Form, Formik} from 'formik'
 import {login} from '../core/_requests'
 import {useAuth} from '../core/Auth'
 import AmericanFlag from '../../../images/american-flag.svg'
@@ -23,11 +23,6 @@ const loginSchema = Yup.object().shape({
     .required('Password is required'),
 })
 
-const initialValues = {
-  email: 'jamiel@chainhaus.com',
-  password: 'jamiel123',
-}
-
 /*
   Formik+YUP+Typescript:
   https://jaredpalmer.com/formik/docs/tutorial#getfieldprops
@@ -38,30 +33,26 @@ export function Login() {
   const [loading, setLoading] = useState(false)
   const {saveAuth, setCurrentUser} = useAuth()
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema: loginSchema,
-    onSubmit: async (values, {setStatus, setSubmitting}) => {
-      setLoading(true)
-      try {
-        const {data: auth} = await login(values.email, values.password)
-        if (auth) {
-          saveAuth(auth)
-          setCurrentUser(auth)
-        }
-      } catch (error) {
-        console.error(error)
-        saveAuth(undefined)
-        if (error?.response?.data && typeof error?.response?.data === 'string') {
-          setStatus(error?.response?.data)
-        } else {
-          setStatus('Login information is incorrect, please try again')
-        }
-        setSubmitting(false)
-        setLoading(false)
+  const onSubmit = async (values, {setStatus, setSubmitting}) => {
+    setLoading(true)
+    try {
+      const {data: auth} = await login(values.email, values.password)
+      if (auth) {
+        saveAuth(auth)
+        setCurrentUser(auth)
       }
-    },
-  })
+    } catch (error) {
+      console.error(error)
+      saveAuth(undefined)
+      if (error?.response?.data && typeof error?.response?.data === 'string') {
+        setStatus(error?.response?.data)
+      } else {
+        setStatus('Login information is incorrect, please try again')
+      }
+      setSubmitting(false)
+      setLoading(false)
+    }
+  }
 
   return (
     <div className='d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px'>
@@ -81,89 +72,99 @@ export function Login() {
         </div>
       </div>
       <div className='py-20'>
-        <form className='form' onSubmit={formik.handleSubmit} noValidate id='kt_login_signin_form'>
-          <div className='card-body'>
-            <div className='text-start mb-10'>
-              <h1 className='text-dark mb-3 fs-3x' data-kt-translate='sign-in-title'>
-                Sign In
-              </h1>
-              <div className='text-gray-400 fw-semibold fs-6' data-kt-translate='general-desc'>
-                Instamint is for tokens what Stripe is for payments
-              </div>
-            </div>
-            <div className='fv-row mb-8 fv-plugins-icon-container'>
-              <input
-                placeholder='Email'
-                {...formik.getFieldProps('email')}
-                className={clsx('form-control form-control-lg form-control-solid')}
-                type='text'
-                name='email'
-                autoComplete='off'
-              />
-              {formik.touched.email && formik.errors.email && (
-                <div className='fv-plugins-message-container mt-2'>
-                  <div className='fv-help-block'>
-                    <span role='alert'>{formik.errors.email}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className='fv-row mb-7 fv-plugins-icon-container'>
-              <input
-                type='password'
-                placeholder='Password'
-                autoComplete='off'
-                {...formik.getFieldProps('password')}
-                className={clsx('form-control form-control-lg form-control-solid')}
-              />
-              {formik.touched.password && formik.errors.password && (
-                <div className='fv-plugins-message-container mt-2'>
-                  <div className='fv-help-block'>
-                    <span role='alert'>{formik.errors.password}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-            {formik?.status && formik?.status && (
-              <div className='fv-plugins-message-container mb-2'>
-                <span className='fv-help-block' role='alert'>
-                  {formik?.status}
-                </span>
-              </div>
-            )}
-            <div className='d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10'>
-              <div />
-              <Link
-                to={'/auth/forgot-password'}
-                className='link-primary'
-                data-kt-translate='sign-in-forgot-password'
-              >
-                Forgot Password ?
-              </Link>
-            </div>
-
-            <div className='d-flex flex-stack'>
-              <button
-                type='submit'
-                id='kt_sign_in_submit'
-                className='btn btn-primary me-2 flex-shrink-0'
-              >
-                {!loading && (
-                  <span className='indicator-label' data-kt-translate='sign-in-submit'>
+        <Formik
+          initialValues={{
+            email: '',
+            password: '',
+          }}
+          validationSchema={loginSchema}
+          onSubmit={onSubmit}
+        >
+          {({errors, touched, status}) => (
+            <Form>
+              <div className='card-body'>
+                <div className='text-start mb-10'>
+                  <h1 className='text-dark mb-3 fs-3x' data-kt-translate='sign-in-title'>
                     Sign In
-                  </span>
+                  </h1>
+                  <div className='text-gray-400 fw-semibold fs-6' data-kt-translate='general-desc'>
+                    Instamint is for tokens what Stripe is for payments
+                  </div>
+                </div>
+                <div className='fv-row mb-8 fv-plugins-icon-container'>
+                  <Field
+                    placeholder='Email'
+                    className={clsx('form-control form-control-lg form-control-solid')}
+                    type='text'
+                    name='email'
+                    autoComplete={`email`}
+                  />
+                  {touched.email && errors.email && (
+                    <div className='fv-plugins-message-container mt-2'>
+                      <div className='fv-help-block'>
+                        <span role='alert'>{errors.email as String}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className='fv-row mb-7 fv-plugins-icon-container'>
+                  <Field
+                    type='password'
+                    placeholder='Password'
+                    autoComplete={`new-password`}
+                    name='password'
+                    className={clsx('form-control form-control-lg form-control-solid')}
+                  />
+                  {touched.password && errors.password && (
+                    <div className='fv-plugins-message-container mt-2'>
+                      <div className='fv-help-block'>
+                        <span role='alert'>{errors.password as String}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {status && status && (
+                  <div className='fv-plugins-message-container mb-2'>
+                    <span className='fv-help-block' role='alert'>
+                      {status}
+                    </span>
+                  </div>
                 )}
-                {loading && (
-                  <span className='indicator-progress' style={{display: 'block'}}>
-                    Processing...
-                    <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
-          <div />
-        </form>
+                <div className='d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10'>
+                  <div />
+                  <Link
+                    to={'/auth/forgot-password'}
+                    className='link-primary'
+                    data-kt-translate='sign-in-forgot-password'
+                  >
+                    Forgot Password ?
+                  </Link>
+                </div>
+
+                <div className='d-flex flex-stack'>
+                  <button
+                    type='submit'
+                    id='kt_sign_in_submit'
+                    className='btn btn-primary me-2 flex-shrink-0'
+                  >
+                    {!loading && (
+                      <span className='indicator-label' data-kt-translate='sign-in-submit'>
+                        Sign In
+                      </span>
+                    )}
+                    {loading && (
+                      <span className='indicator-progress' style={{display: 'block'}}>
+                        Processing...
+                        <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div />
+            </Form>
+          )}
+        </Formik>
       </div>
       <div className='m-0'>
         <button

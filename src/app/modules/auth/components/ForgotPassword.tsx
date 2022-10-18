@@ -7,7 +7,7 @@ import {requestPassword} from '../core/_requests'
 import AmericanFlag from '../../../images/american-flag.svg'
 
 const initialValues = {
-  email: 'jamiel@instamint.com',
+  email: '',
 }
 
 const forgotPasswordSchema = Yup.object().shape({

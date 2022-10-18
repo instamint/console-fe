@@ -10,7 +10,7 @@ import useWindowSize from '../../../../app/hooks/useWindowSize'
 
 export function HeaderWrapper() {
   const {config, classes, attributes} = useLayout()
-  const {header, aside} = config
+  const {header} = config
   const headerRef: any = useRef()
   const windowSize = useWindowSize()
   
@@ -18,8 +18,13 @@ export function HeaderWrapper() {
     if (headerRef?.current?.childNodes && headerRef?.current?.childNodes?.length > 1) {
       headerRef?.current?.removeChild(headerRef.current.children[0])
     }
-    if (windowSize?.width < 1440 && headerRef?.current) {
-      headerRef.current.style.maxWidth = windowSize?.width < 1309 ? '640px' : '800px'
+    if (windowSize?.width <= 1440 && headerRef?.current) {
+      let width = "unset"
+      if (windowSize?.width < 1309) width = '640px' 
+      else if (windowSize?.width > 1309) width = '920px'
+      else if (windowSize?.width === 1309)  width = '800px'
+
+      headerRef.current.style.maxWidth = width
       headerRef.current.style.overflowX = 'auto'
     } else {
       headerRef.current.style.maxWidth = 'unset'

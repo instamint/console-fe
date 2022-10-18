@@ -10,6 +10,7 @@ import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
 import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
 import AssetsDetail from '../pages/Assets/Detail'
 import { ContractsWrapper } from '../pages/Contracts/ContractsWrapper'
+import { DeFiWrapper } from '../pages/DeFi/DeFiWrapper'
 import { DesignerWrapper } from '../pages/Designer/index'
 import { MonitoringWrapper } from '../pages/Monitoring/MonitoringPageWrapper'
 import PartiesDetail from '../pages/Parties/Detail'
@@ -56,6 +57,7 @@ const PrivateRoutes = () => {
         <Route path='transactions' element={<TransactionsWrapper />} />
         <Route path='contracts' element={<ContractsWrapper />} />
         <Route path='monitoring' element={<MonitoringWrapper />} />
+        <Route path='defi' element={<DeFiWrapper />} />
         {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
           <Route
             path='admin/*'

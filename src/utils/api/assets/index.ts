@@ -13,6 +13,7 @@ export const GET_LIST_AUCTION_HISTORY = (id) => `${API_URL}/auction/${id}`
 export const GET_LIST_AUCTION_TYPE = `${API_URL}/auction_type`
 export const CREATE_AUCTION = (id) => `${API_URL}/asset/auction/${id}`
 export const END_AUCTION = (id) => `${API_URL}/asset/end-auction/${id}`
+export const STAKE = `${API_URL}/asset/stake`
 
 // get all list assets
 export function getListAsset(params) {
@@ -92,4 +93,12 @@ export function getListAuctionHistory(id: string | number, params) {
     })
   }
   return axios.get(url)
+}
+
+export const stakeAssets = async (
+  stake: Object,
+  list_assets_id: Array<string | number>
+): Promise<any> => {
+  const response = await axios.patch<any>(STAKE, list_assets_id)
+  return response.data
 }
