@@ -319,7 +319,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     data-tip={item?.instamintAssetHashid}
                     className='text-dark fw-bold fs-7'
                   >
-                    <span style={{color: item?.staked ? '#006199' : ''}}>
+                    <span style={{color: item?.staked ? '#0071b3' : ''}}>
                       {item?.instamintAssetHashid && shortAddress(item?.instamintAssetHashid)}
                     </span>
                   </SpanTextCopy>
@@ -485,7 +485,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('instamintAssetHashid')}
                   >
-                    Aseet Id{' '}
+                    Asset Id{' '}
                     <ICSort
                       type={sort.sort_name === 'instamintAssetHashid' ? sort.sort_type : 'default'}
                     />
@@ -522,7 +522,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     />
                   </SpanThTable>
                 </th>
-                <th className='min-w-150px'>
+                <th>
                   <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('mintCompletedStatus')}
@@ -533,7 +533,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     />
                   </SpanThTable>
                 </th>
-                <th className='min-w-100px'>
+                <th>
                   <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('bestBid')}
@@ -580,16 +580,16 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     <ICSort type={sort.sort_name === 'chainName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
-                <th>
+                <th className='min-w-100px'>
                   <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('issuerName')}
                   >
-                    Isseer
+                    Issuer
                     <ICSort type={sort.sort_name === 'issuerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
-                <th>
+                <th className='min-w-100px'>
                   <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('ownerName')}
