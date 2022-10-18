@@ -64,15 +64,15 @@ const FilterSearch = ({
           </div>
           <div className='menu menu-sub menu-sub-dropdown w-180px p-4' data-kt-menu='true'>
             <div className='d-flex flex-column'>
+              <NameDropdow onClick={() => selectAsset?.length > 0 && openModalStake(true)}>
+                Stake
+              </NameDropdow>
               <NameDropdow
                 onClick={() => selectAsset?.length > 0 && handleOpenModalPool(selectAsset)}
               >
                 Assign To Portfolio
               </NameDropdow>
               <NameDropdow>Enable Auction</NameDropdow>
-              <NameDropdow onClick={() => selectAsset?.length > 0 && openModalStake(true)}>
-                Stake
-              </NameDropdow>
             </div>
           </div>
         </div>
