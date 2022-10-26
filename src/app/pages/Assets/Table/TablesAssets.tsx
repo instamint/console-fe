@@ -141,14 +141,13 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         if (reps) {
           alert.success('Stake successful!')
           setReloadList((preState) => !preState)
-          setSelectAsset([])
-          setModalShow(false)
         }
-        setIsLoadingAuction(false)
       } catch (error) {
-        alert.error('An error occurred,, please try again')
-        setModalShow(false)
+        alert.error('An error occurred, please try again')
         console.error({error})
+      } finally {
+        setSelectAsset([])
+        setModalShow(false)
         setIsLoadingAuction(false)
       }
     }
@@ -214,9 +213,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   }
 
   const navigateDetailAsset = (id) => {
-    if(id) {
+    if (id) {
       navigate(`/assets/detail/overview/${id}`)
-    } 
+    }
   }
 
   const showModal = (type: string) => {
@@ -233,11 +232,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
         )
       case 'stake':
         return (
-          <ModalStake
-            setModalShow={setModalShow}
-            handleStake={handleStake}
-            setError={setError}
-          />
+          <ModalStake setModalShow={setModalShow} handleStake={handleStake} setError={setError} />
         )
       default:
         return (

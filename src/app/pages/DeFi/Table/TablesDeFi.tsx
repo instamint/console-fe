@@ -1,9 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useState } from 'react'
-// import styled from 'styled-components'
-import { Loading } from '../../../components/Loading'
+import React, {useCallback, useEffect, useState} from 'react'
+import {getListDefi} from '../../../../utils/api/defi'
+import {Loading} from '../../../components/Loading'
 import Pagination from '../../../components/Pagination'
 import useSearch from '../../../hooks/useSearch'
+import {DataDeFi} from './data'
+import ICSort, { sortRows } from '../../../components/Sort'
+import { shortAddress } from '../../../../_metronic/helpers/format'
+import ReactTooltip from 'react-tooltip'
+import { ButtonCopy } from '../../../components/Button/button-copy'
 
 type Props = {
   className: string
@@ -18,10 +23,24 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
   const [sort, setSort] = useState({sort_type: '', sort_name: ''})
   const [page, setPage] = useState<string | number>(1)
 
-
   const filterListResults = (results, page) => {
     let newList = [...results]
+    if (sort?.sort_name !== '' && sort?.sort_type !== '') {
+      newList = sortRows(newList, sort)
+    }
     return newList
+  }
+
+  const handleSort = (name) => {
+    let sortTypeNow = sort.sort_type === 'ASC' ? 'DESC' : 'ASC'
+    if (sort.sort_name !== name) {
+      sortTypeNow = 'ASC'
+    }
+    setPage(1) //return the page to 1 when sorting
+    setSort({
+      sort_name: name,
+      sort_type: sortTypeNow,
+    })
   }
 
   const renderList = useCallback(
@@ -33,28 +52,36 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.protocol}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.protocol || 'yieldly'}</span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.chain}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.StakingToken?.TokenTicker}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start'>
+                  <span
+                    className='text-dark fw-bold fs-7'
+                    data-tip={item?.Contracts?.Escrow}
+                    style={{minWidth: '80px'}}
+                  >
+                    {shortAddress(item?.Contracts?.Escrow)}
+                  </span>
+                  <ReactTooltip place='top' effect='solid' />
+                  <ButtonCopy text={item?.Contracts?.Escrow} />
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.address}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.tlv}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.tvl}</span>
                 </div>
               </div>
             </td>
@@ -64,6 +91,25 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
     [results, searched, sort]
   )
 
+  const getListDeFi = async () => {
+    setIsLoading(true)
+    try {
+      const reps = await getListDefi()
+      if (reps) {
+        setListDeFi(reps)
+      }
+    } catch (error) {
+      console.error({error})
+      setListDeFi(DataDeFi)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getListDeFi()
+  }, [])
+
   return (
     <div className={`card ${className}`}>
       <div className='card-body py-4'>
@@ -72,16 +118,48 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
             <thead>
               <tr className='fw-bold text-muted'>
                 <th>
-                  <span className='cursor-pointer'>PROTOCOL</span>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('protocol')}
+                  >
+                    PROTOCOL{' '}
+                    <ICSort type={sort.sort_name === 'protocol' ? sort.sort_type : 'default'} />
+                  </span>
                 </th>
                 <th>
-                  <span className='cursor-pointer'>CHAIN</span>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('StakingToken.TokenTicker')}
+                  >
+                    CHAIN{' '}
+                    <ICSort
+                      type={
+                        sort.sort_name === 'StakingToken.TokenTicker' ? sort.sort_type : 'default'
+                      }
+                    />
+                  </span>
                 </th>
                 <th>
-                  <span className='cursor-pointer'>ADDRESS</span>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('Contracts.Escrow')}
+                  >
+                    ADDRESS{' '}
+                    <ICSort
+                      type={sort.sort_name === 'Contracts.Escrow' ? sort.sort_type : 'default'}
+                    />
+                  </span>
                 </th>
                 <th>
-                  <span className='cursor-pointer'>TLV</span>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('tvl')}
+                  >
+                    TVL{' '}
+                    <ICSort
+                      type={sort.sort_name === 'tvl' ? sort.sort_type : 'default'}
+                    />
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -101,7 +179,6 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
               )}
             </tbody>
           </table>
-
         </div>
         {paginate?.total_page > 0 && (
           <div className='card-footer-v2'>
@@ -113,22 +190,4 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
   )
 }
 
-export { TablesDeFi }
-
-// const NameDropdow = styled.div`
-//   padding: 5px;
-//   font-size: 15px;
-//   min-width: 100px;
-//   display: flex;
-//   cursor: pointer;
-//   border-radius: 4px;
-//   &:hover {
-//     color: #fff;
-//     background-color: #009ef7;
-//     transition: all 0.2s ease;
-//   }
-// `
-// const IconDrop = styled.i`
-//   margin-left: 15px;
-//   margin-bottom: 2px;
-// `
+export {TablesDeFi}
