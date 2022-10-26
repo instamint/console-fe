@@ -2,7 +2,6 @@
 
 import {
   convertType,
-  isNil,
   isNumber,
   toLower,
 } from '../../../_metronic/helpers/convert/convert-type'
