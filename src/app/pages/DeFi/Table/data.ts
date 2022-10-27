@@ -37,7 +37,7 @@ export const DataDeFi = [
     StartDateMs: 1665044915000,
     Type: 'DISTRIBUTION',
     Version: 2,
-    tvl: 6510746825409,
+    tvl: 6536884548918,
   },
   {
     CommunityPool: true,
@@ -80,7 +80,7 @@ export const DataDeFi = [
     StartDateMs: 1664450140000,
     Type: 'LIQUIDITY',
     Version: 3,
-    tvl: 4028855642,
+    tvl: 4039230529,
   },
   {
     CommunityPool: false,
@@ -162,7 +162,7 @@ export const DataDeFi = [
     StartDateMs: 1663203988000,
     Type: 'LIQUIDITY',
     Version: 3,
-    tvl: 1718258004927,
+    tvl: 1721019809242,
   },
   {
     CommunityPool: false,
@@ -200,7 +200,7 @@ export const DataDeFi = [
     StartDateMs: 1662594093000,
     Type: 'MULTI',
     Version: 3,
-    tvl: 778852965754721,
+    tvl: 841901164721284,
   },
   {
     CommunityPool: false,
@@ -238,7 +238,7 @@ export const DataDeFi = [
     StartDateMs: 1662052189000,
     Type: 'MULTI',
     Version: 3,
-    tvl: 34093730266392,
+    tvl: 33621447475238,
   },
   {
     CommunityPool: false,
@@ -281,7 +281,7 @@ export const DataDeFi = [
     StartDateMs: 1660206600000,
     Type: 'LIQUIDITY',
     Version: 3,
-    tvl: 27275993354538,
+    tvl: 27332343823205,
   },
   {
     CommunityPool: false,
@@ -321,7 +321,7 @@ export const DataDeFi = [
     StartDateMs: 1665657194000,
     Type: 'DISTRIBUTION',
     Version: 2,
-    tvl: 23257748,
+    tvl: 23400097,
   },
   {
     CommunityPool: false,
@@ -360,7 +360,7 @@ export const DataDeFi = [
     },
     StartDateMs: 1666261594000,
     Version: 1,
-    tvl: 45980544802459410,
+    tvl: 45375336370459110,
   },
   {
     CommunityPool: false,
@@ -398,7 +398,7 @@ export const DataDeFi = [
     StartDateMs: 1660206657000,
     Type: 'MULTI',
     Version: 3,
-    tvl: 137402150893935,
+    tvl: 137615057540207,
   },
   {
     CommunityPool: true,
@@ -436,7 +436,7 @@ export const DataDeFi = [
     StartDateMs: 1664449494000,
     Type: 'MULTI',
     Version: 3,
-    tvl: 1283419592684839,
+    tvl: 1210181796923793,
   },
   {
     CommunityPool: false,
@@ -479,44 +479,7 @@ export const DataDeFi = [
     StartDateMs: 1666261062000,
     Type: 'LIQUIDITY',
     Version: 3,
-    tvl: 0,
-  },
-  {
-    CommunityPool: false,
-    Contracts: {
-      Escrow: 'FMBXOFAQCSAD4UWU4Q7IX5AV4FRV6AKURJQYGXLW3CTPTQ7XBX6MALMSPY',
-      EscrowProg:
-        'AiAGAgaYv7lvAAUBMgQiDzIEIw4QQQAuMwAYJBJAAANCACMzABAjEjMAGSUSIQQzABkSERAzASAyAxIQMwAgMgMSEEAAAiVDIQVD',
-      Proxy: '233725848',
-      Staking: '233725850',
-    },
-    EndDateMs: 0,
-    Id: 233725850,
-    IsProd: true,
-    LastIndexedMs: 1633801174000,
-    Links: {
-      Website: 'https://yieldly.finance/',
-    },
-    RewardToken: [
-      {
-        Decimals: 6,
-        TinyManTicker: 'yldy',
-        TokenAssetId: 226701642,
-        TokenName: 'Yieldly',
-        TokenTicker: 'YLDY',
-        TokenTotal: 3000000000,
-      },
-    ],
-    StakingToken: {
-      Decimals: 6,
-      TinyManTicker: 'yldy',
-      TokenAssetId: 226701642,
-      TokenName: 'Yieldly',
-      TokenTicker: 'YLDY',
-    },
-    StartDateMs: 1627265699000,
-    Version: 1,
-    tvl: 2462309320308988,
+    tvl: 129671689254678,
   },
   {
     CommunityPool: false,
@@ -559,7 +522,7 @@ export const DataDeFi = [
     StartDateMs: 1662057831000,
     Type: 'LIQUIDITY',
     Version: 3,
-    tvl: 3680180069,
+    tvl: 3682719941,
   },
   {
     CommunityPool: false,
@@ -602,6 +565,6 @@ export const DataDeFi = [
     StartDateMs: 1663253258000,
     Type: 'LIQUIDITY',
     Version: 3,
-    tvl: 4739447502905,
+    tvl: 4733970721433,
   },
 ]

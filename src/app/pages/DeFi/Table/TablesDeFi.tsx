@@ -43,6 +43,16 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
     })
   }
 
+  const handleSetChain = (data) => {
+    let chain
+    if (data?.Type === 'LIQUIDITY') {
+      chain = data?.StakingToken?.TokenTicker || ""
+    } else {
+      chain = `${data?.StakingToken?.TokenTicker}/${data?.RewardToken?.[0]?.TokenTicker}`
+    }
+    return chain
+  }
+
   const renderList = useCallback(
     () =>
       Array.isArray(filterListResults(results, page)) &&
@@ -52,14 +62,14 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.protocol || 'yieldly'}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.protocol || 'Yieldly'}</span>
                 </div>
               </div>
             </td>
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.StakingToken?.TokenTicker}</span>
+                  <span className='text-dark fw-bold fs-7'>{handleSetChain(item)}</span>
                 </div>
               </div>
             </td>
@@ -68,13 +78,11 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                 <div className='d-flex justify-content-start'>
                   <span
                     className='text-dark fw-bold fs-7'
-                    data-tip={item?.Contracts?.Escrow}
-                    style={{minWidth: '80px'}}
+                    data-tip={item?.Id}
+                    style={{minWidth: '85px'}}
                   >
-                    {shortAddress(item?.Contracts?.Escrow)}
+                    {item?.Id}
                   </span>
-                  <ReactTooltip place='top' effect='solid' />
-                  <ButtonCopy text={item?.Contracts?.Escrow} />
                 </div>
               </div>
             </td>
@@ -88,7 +96,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.Type}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.Type || 'STAKING'}</span>
                 </div>
               </div>
             </td>
@@ -99,22 +107,24 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
   )
 
   const getListDeFi = async () => {
-    setIsLoading(true)
     try {
       const reps = await getListDefi()
-      if (reps) {
-        setListDeFi(reps)
+      if (reps?.data) {
+        setListDeFi(reps?.data || [])
       }
     } catch (error) {
       console.error({error})
       setListDeFi(DataDeFi)
-    } finally {
-      setIsLoading(false)
     }
   }
 
   useEffect(() => {
+    setIsLoading(true)
     getListDeFi()
+    setTimeout(() => {
+      setListDeFi(DataDeFi)
+      setIsLoading(false)
+    }, 3000);
   }, [])
 
   return (
@@ -158,25 +168,13 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                   </span>
                 </th>
                 <th>
-                  <span
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('tvl')}
-                  >
-                    TVL{' '}
-                    <ICSort
-                      type={sort.sort_name === 'tvl' ? sort.sort_type : 'default'}
-                    />
+                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('tvl')}>
+                    TVL <ICSort type={sort.sort_name === 'tvl' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
-                  <span
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('Type')}
-                  >
-                    TYPE{' '}
-                    <ICSort
-                      type={sort.sort_name === 'Type' ? sort.sort_type : 'default'}
-                    />
+                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('Type')}>
+                    TYPE <ICSort type={sort.sort_name === 'Type' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
               </tr>
