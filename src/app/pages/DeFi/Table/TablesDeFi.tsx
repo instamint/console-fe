@@ -85,6 +85,13 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                 </div>
               </div>
             </td>
+            <td>
+              <div className='d-flex align-items-center'>
+                <div className='d-flex justify-content-start flex-column'>
+                  <span className='text-dark fw-bold fs-7'>{item?.Type}</span>
+                </div>
+              </div>
+            </td>
           </tr>
         )
       }),
@@ -161,6 +168,17 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                     />
                   </span>
                 </th>
+                <th>
+                  <span
+                    className='cursor-pointer'
+                    onClick={() => !isLoading && handleSort('Type')}
+                  >
+                    TYPE{' '}
+                    <ICSort
+                      type={sort.sort_name === 'Type' ? sort.sort_type : 'default'}
+                    />
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -170,7 +188,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                 renderList()
               ) : (
                 <tr>
-                  <td colSpan={4} className='text-left'>
+                  <td colSpan={5} className='text-left'>
                     <h4 className='mt-5 d-flex justify-content-center'>
                       There is currently no data available
                     </h4>
