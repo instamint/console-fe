@@ -1,14 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
-import {getListDefi} from '../../../../utils/api/defi'
+import {getInfoPoolV2, getInfoPoolV3, getListDefi} from '../../../../utils/api/defi'
 import {Loading} from '../../../components/Loading'
 import Pagination from '../../../components/Pagination'
 import useSearch from '../../../hooks/useSearch'
-import {DataDeFi} from './data'
 import ICSort, { sortRows } from '../../../components/Sort'
-import { shortAddress } from '../../../../_metronic/helpers/format'
-import ReactTooltip from 'react-tooltip'
-import { ButtonCopy } from '../../../components/Button/button-copy'
+import {ThreeDots} from 'react-loader-spinner'
 
 type Props = {
   className: string
@@ -18,6 +15,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
   const [listDeFi, setListDeFi] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listDeFi, [])
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingTvl, setIsLoadingTvl] = useState(true)
   const [paginate, setPaginate] = useState(null)
 
   const [sort, setSort] = useState({sort_type: '', sort_name: ''})
@@ -89,7 +87,16 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.tvl}</span>
+                  {isLoadingTvl ? (
+                    <ThreeDots
+                      height='22'
+                      width='22'
+                      color='#009ef7'
+                      ariaLabel='three-dots-loading'
+                    />
+                  ) : (
+                    <span className='text-dark fw-bold fs-7'>{item?.tvl}</span>
+                  )}
                 </div>
               </div>
             </td>
@@ -106,25 +113,47 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
     [results, searched, sort]
   )
 
+  const getTVL = async (data) => {
+    setIsLoadingTvl(true)
+    if (data?.length < 1) return
+    let tmpListDeFi = [...data]
+    try {
+      for (let i in tmpListDeFi) {
+        const [v2, v3] = await Promise.all([
+          getInfoPoolV2(tmpListDeFi[i]?.Id),
+          getInfoPoolV3(tmpListDeFi[i]?.Id),
+        ])
+        if (v3?.data?.tvl) tmpListDeFi[i].tvl = v3?.data?.tvl
+        else {
+          const idx = v2?.data?.application?.params?.['global-state']?.findIndex((item: any) => item?.key === "R0E=")
+          tmpListDeFi[i].tvl = v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
+        }
+      }
+      setListDeFi(tmpListDeFi)
+    } catch (error) {
+      console.error({error})
+    } finally {
+      setIsLoadingTvl(false)
+    }
+  }
+
   const getListDeFi = async () => {
+    setIsLoading(true)
     try {
       const reps = await getListDefi()
       if (reps?.data) {
-        setListDeFi(reps?.data || [])
+        setListDeFi(reps?.data)
+        getTVL(reps?.data)
       }
     } catch (error) {
       console.error({error})
-      setListDeFi(DataDeFi)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    setIsLoading(true)
     getListDeFi()
-    setTimeout(() => {
-      setListDeFi(DataDeFi)
-      setIsLoading(false)
-    }, 3000);
   }, [])
 
   return (
