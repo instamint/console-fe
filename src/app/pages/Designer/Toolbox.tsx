@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import JsonSchemaService from '../../../utils/api/designer/json-schema.service'
 import IconClear from '../../images/clear-white.png'
@@ -26,6 +27,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   const [actusTypes, setActusTypes] = useState<Array<any>>([])
   const [storageTypes, setStorageTypes] = useState<Array<any>>([])
   const [supplyChainTypes, setSupplyChainTypes] = useState<Array<any>>([])
+  const [settlementTypes, setSettlementTypes] = useState<Array<any>>([])
   const [listCategory, setListCategory] = useState([])
   const [listFavorite, setListFavorite] = useState<Array<any>>([])
   const [isLoadFavorite, setIsLoadFavorite] = useState(true)
@@ -46,7 +48,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   const onDragStart = useCallback((ev: React.DragEvent<HTMLDivElement>) => {
     let item: any = ev.currentTarget.dataset.item
     // change name properties Storage
-    if (typeof item === "string") {
+    if (typeof item === 'string') {
       item = JSON.parse(item)
     }
     item.name = setTypeNameStorage(item?.name).name
@@ -107,6 +109,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       let standardTypes = []
       let storageTypes = []
       let supplyChainTypes = []
+      let settlementTypes = []
       data?.forEach((item) => {
         // convert type Storage
         if (item?.category?.name === 'Storage') {
@@ -119,6 +122,8 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
           actusTypes.push(item)
         } else if (item?.category?.name === 'Supply Chain') {
           supplyChainTypes.push(item)
+        } else if (item?.category?.name === 'Settlement') {
+          settlementTypes.push(item)
         } else {
           storageTypes.push(item)
         }
@@ -127,6 +132,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       setStandardTypes(standardTypes)
       setStorageTypes(storageTypes)
       setSupplyChainTypes(supplyChainTypes)
+      setSettlementTypes(settlementTypes)
     }
   }
 
@@ -194,12 +200,23 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
           name: 'Supply Chain',
           data: supplyChainTypes,
         }
+      case 'settlement':
+        return {
+          name: 'Settlement',
+          data: settlementTypes,
+        }
       default:
         return {
           name: 'Standard',
           data: standardTypes,
         }
     }
+  }
+
+  const navigate = useNavigate()
+  const handleDeploy = () => {
+    localStorage.setItem('deploy', "true")
+    navigate(`/assets`)
   }
 
   useEffect(() => {
@@ -248,18 +265,22 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
           </div>
         </div>
         <div className='mt-3'>
-          {listCategory?.length > 0 && ArrayProperties(selectProperty)?.data?.map((t) => (
-            <Item draggable onDragStart={onDragStart} data-item={JSON.stringify(t)} key={t.id}>
-              <IconStar
-                onClick={(e) => handleAddFavorite(e, t)}
-                className={`fa-star ${favoriteActive(t) ? 'fa-solid text-primary' : 'fa-regular'}`}
-              ></IconStar>
-              {t.name}
-            </Item>
-          ))}
+          {listCategory?.length > 0 &&
+            ArrayProperties(selectProperty)?.data?.map((t) => (
+              <Item draggable onDragStart={onDragStart} data-item={JSON.stringify(t)} key={t.id}>
+                <IconStar
+                  onClick={(e) => handleAddFavorite(e, t)}
+                  className={`fa-star ${
+                    favoriteActive(t) ? 'fa-solid text-primary' : 'fa-regular'
+                  }`}
+                ></IconStar>
+                {t.name}
+              </Item>
+            ))}
         </div>
 
         <GroupBtn>
+          <Button onClick={() => handleDeploy()}>Deploy to Soroban</Button>
           <Button onClick={() => setShowModal(true)}>
             <Image src={IconView} alt='save'></Image>View Json
           </Button>

@@ -56,12 +56,13 @@ const logoutApp = () => {
 }
 
 export function setupAxios(axios: any) {
+  const token = process.env.REACT_APP_TOKEN_API
+  console.log('token', token)
   axios.defaults.headers.Accept = 'application/json'
   axios.interceptors.request.use(
     (config: {headers: {Authorization: string}}) => {
-      const auth = getAuth()
-      if (auth && auth.accessToken) {
-        config.headers.Authorization = `Bearer ${auth.accessToken}`
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
       }
 
       return config

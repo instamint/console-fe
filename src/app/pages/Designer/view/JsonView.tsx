@@ -49,10 +49,29 @@ const JsonView: React.FC = () => {
       }
     }, [tree])
     
+    const stellar = {
+      title: 'Asset Metadata',
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          value: '',
+        },
+        description: {
+          type: 'string',
+          value: '',
+        },
+        image: {
+          type: 'string',
+          value: '',
+        },
+      },
+      required: ['name', 'description', 'image'],
+    }
     
     return (
       <StyledJsonView>
-        {isLoading ? <Loading /> : <pre>{JSON.stringify(dataTree, null, 4)}</pre>}
+        {isLoading ? <Loading /> : <pre>{JSON.stringify(stellar, null, 4)}</pre>}
       </StyledJsonView>
     )
 };

@@ -62,6 +62,9 @@ const TablesAssets: React.FC<Props> = ({className}) => {
   })
   const [sort, setSort] = useState({sort_type: '', sort_name: ''})
 
+  const deploy = localStorage.getItem('deploy')
+  const [trade, setTrade] = useState(false)
+
   const [page, setPage] = useState<string | number>(1)
   const [error, setError] = useState(null)
   const alert = useAlert()
@@ -198,6 +201,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   const filterMintedAssetList = (results, page) => {
     let newListAssets = [...results]
+    newListAssets = newListAssets.splice(0, 1)
     if (sort?.sort_name !== '' && sort?.sort_type !== '') {
       newListAssets = sortRows(newListAssets, sort)
     }
@@ -243,6 +247,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             setIdAssetAuction={setIdAssetAuction}
             error={error}
             setError={setError}
+            setTrade={setTrade}
           />
         )
     }
@@ -265,12 +270,12 @@ const TablesAssets: React.FC<Props> = ({className}) => {
 
   useEffect(() => {
     fetchListAssets(params)
-    const interval = setInterval(() => {
-      fetchListAssets(params)
-    }, 30000)
-    return () => {
-      clearInterval(interval)
-    }
+    // const interval = setInterval(() => {
+    //   fetchListAssets(params)
+    // }, 30000)
+    // return () => {
+    //   clearInterval(interval)
+    // }
   }, [reloadList])
 
   useEffect(() => {
@@ -325,35 +330,12 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             </td>
             <td>
               <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start'>
-                  <SpanTextCopy data-tip={item?.xref} className='text-dark fw-bold fs-7'>
-                    {item?.xref && shortAddress(item?.xref)}
-                  </SpanTextCopy>
-                  <ButtonCopy text={item?.xref} width={16} />
-                  <ReactTooltip place='top' effect='solid' />
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span data-tip={item?.assetTypeName} className='text-dark fw-bold fs-7'>
-                    {item?.assetTypeName && shortAddressBehind(item?.assetTypeName, 10)}
+                  <span className='text-dark fw-bold fs-7'>
+                    {/* {item?.assetTypeName && shortAddressBehind(item?.assetTypeName, 10)} */}
+                    credit_alphanum12
                   </span>
-                  <ReactTooltip place='top' effect='solid' />
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span
-                    data-tip={item?.portfolioName}
-                    className='badge py-3 px-4 fs-7 badge-light-primary'
-                  >
-                    {item?.portfolioName && shortAddressMaxLength(item?.portfolioName, 10)}
-                  </span>
-                  <ReactTooltip place='top' effect='solid' />
+                  {/* <ReactTooltip place='top' effect='solid' /> */}
                 </div>
               </div>
             </td>
@@ -374,7 +356,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.bestBid && `$${showTwoDecimalPlaces(item?.bestBid)}`}
+                    {/* {item?.bestBid && `$${showTwoDecimalPlaces(item?.bestBid)}`} */}
                   </span>
                 </div>
               </div>
@@ -383,7 +365,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.reserve && `$${showTwoDecimalPlaces(item?.reserve)}`}
+                    {item?.reserve && trade ? `$${showTwoDecimalPlaces(trade)}` : ''}
                   </span>
                 </div>
               </div>
@@ -392,7 +374,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.ask && `$${showTwoDecimalPlaces(item?.ask)}`}
+                    {/* {item?.ask && `$${showTwoDecimalPlaces(item?.ask)}`} */}
                   </span>
                 </div>
               </div>
@@ -401,11 +383,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.activeAuction ? (
-                      <img width={19} src={IconCompleted} alt='icon-completed' />
-                    ) : (
-                      ''
-                    )}
+                    {trade ? <img width={19} src={IconCompleted} alt='icon-completed' /> : ''}
                   </span>
                 </div>
               </div>
@@ -413,7 +391,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{showIconChain(item?.chainName)}</span>
+                  <span className='text-dark fw-bold fs-7'>{showIconChain('stellar')}</span>
                 </div>
               </div>
             </td>
@@ -444,7 +422,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           </TrTable>
         )
       }),
-    [results, selectAsset, minted, searched, page, isLoadingAuction, sort]
+    [results, selectAsset, minted, searched, page, isLoadingAuction, sort, trade]
   )
 
   return (
@@ -456,6 +434,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           setSearch={setSearch}
           openModalPool={openModalPool}
           openModalStake={openModalStake}
+          openModalAuction={openModalAuction}
           selectAsset={selectAsset}
           setMinted={setMinted}
           minted={minted}
@@ -486,15 +465,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     />
                   </SpanThTable>
                 </th>
-                <th className='min-w-100px'>
-                  <SpanThTable
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('xref')}
-                  >
-                    Xref
-                    <ICSort type={sort.sort_name === 'xref' ? sort.sort_type : 'default'} />
-                  </SpanThTable>
-                </th>
                 <th className='min-w-150px'>
                   <SpanThTable
                     className='cursor-pointer'
@@ -503,17 +473,6 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     Asset Type{' '}
                     <ICSort
                       type={sort.sort_name === 'assetTypeName' ? sort.sort_type : 'default'}
-                    />
-                  </SpanThTable>
-                </th>
-                <th>
-                  <SpanThTable
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('portfolioName')}
-                  >
-                    Portfolio{' '}
-                    <ICSort
-                      type={sort.sort_name === 'portfolioName' ? sort.sort_type : 'default'}
                     />
                   </SpanThTable>
                 </th>
@@ -599,7 +558,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <tbody>
               {isLoading ? (
                 <Loading />
-              ) : filterMintedAssetList(results, page)?.length > 0 ? (
+              ) : filterMintedAssetList(results, page)?.length > 0 && deploy === "true" ? (
                 renderList()
               ) : (
                 <tr>

@@ -10,7 +10,9 @@ export interface JsonSchema {
 }
 
 const getAllSchemas = async (username: string): Promise<JsonSchema[]> => {
-  const response = await axios.get<JsonSchema[]>(`${API_URL}/json-schemas/user/${username}`)
+  const response = await axios.get<JsonSchema[]>(
+    `${API_URL}/json-schemas/user/${username || 'jamiel@chainhaus.com'}`
+  )
   return response.data
 }
 
@@ -22,7 +24,7 @@ const getSchema = async (id: string): Promise<JsonSchema> => {
 const createSchema = async (schema: string, username: string): Promise<JsonSchema> => {
   const response = await axios.post<JsonSchema>(`${API_URL}/json-schemas`, {
     document: schema,
-    username: username,
+    username: username || 'jamiel@chainhaus.com',
   })
   return response.data
 }
@@ -47,20 +49,24 @@ const getAllProperty = async (): Promise<JsonSchema[]> => {
 }
 
 const getAllFavourite = async (username: string): Promise<any> => {
-  const response = await axios.get<JsonSchema>(`${API_URL}/properties/user/${username}/favourite`)
+  const response = await axios.get<JsonSchema>(
+    `${API_URL}/properties/user/${username || 'jamiel@chainhaus.com'}/favourite`
+  )
   return response.data
 }
 
 const addFavourite = async (id: string | number, username: string): Promise<any> => {
   const response = await axios.post<JsonSchema>(`${API_URL}/properties/user/favourite/add`, {
     propertyId: id,
-    username: username,
+    username: username || 'jamiel@chainhaus.com',
   })
   return response.data
 }
 
 const removeFavourite = async (id: string | number, username: string): Promise<any> => {
-  const response = await axios.delete(`${API_URL}/properties/user/favourite/delete/${username}/${id}`)
+  const response = await axios.delete(
+    `${API_URL}/properties/user/favourite/delete/${username || 'jamiel@chainhaus.com'}/${id}`
+  )
   return response.data
 }
 

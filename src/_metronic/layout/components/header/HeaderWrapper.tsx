@@ -56,9 +56,9 @@ export function HeaderWrapper() {
             </div>
           )}
 
-          <div className='d-flex align-items-stretch flex-shrink-0'>
+          {/* <div className='d-flex align-items-stretch flex-shrink-0'>
             <Topbar />
-          </div>
+          </div> */}
         </div>
         {/* end::Wrapper */}
       </div>

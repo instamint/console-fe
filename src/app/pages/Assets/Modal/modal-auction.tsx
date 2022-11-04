@@ -74,6 +74,7 @@ export default function ModalAuction({
   setIdAssetAuction,
   error,
   setError,
+  setTrade,
 }) {
   const [dropDown, setDropDown] = useState(false)
   const [listAuctionType, setListAuctionType] = useState([])
@@ -82,14 +83,15 @@ export default function ModalAuction({
 
   const handleSubmit = (values, {setSubmitting}) => {
     setSubmitting(true)
-    handleAuction(values)
-    // setModalShow(false)
+    setTrade(values?.reserve_price)
+    // handleAuction(values)
+    setModalShow(false)
   }
 
   const initialValues: MyFormValues = {
     auction_type: listAuctionType?.[0] || '',
     reserve_price: 0,
-    buy_now_price: -1,
+    buy_now_price: 0,
   }
 
   const fetchListAuctionType = async () => {

@@ -6,6 +6,7 @@ export type FilterSearchProps = {
   setSearch: (value: string | null) => void
   openModalPool: (value: boolean) => void
   openModalStake: (value: boolean) => void
+  openModalAuction: (value: boolean) => void
   selectAsset: Array<any>
   setMinted: (value: any) => void
   minted: boolean
@@ -17,6 +18,7 @@ const FilterSearch = ({
   selectAsset,
   setMinted,
   minted,
+  openModalAuction,
 }: FilterSearchProps) => {
   const [term, setTerm] = useState<string>('')
   const alert = useAlert()
@@ -71,6 +73,9 @@ const FilterSearch = ({
                 onClick={() => selectAsset?.length > 0 && handleOpenModalPool(selectAsset)}
               >
                 Assign To Portfolio
+              </NameDropdow>
+              <NameDropdow onClick={() => selectAsset?.length === 1 && openModalAuction(true)}>
+                Auction
               </NameDropdow>
               <NameDropdow>Enable Auction</NameDropdow>
             </div>

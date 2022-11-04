@@ -18,10 +18,10 @@ const EditorPage: React.FC = () => {
       id: 'root',
       category: {
         id: 'root',
-        name: 'assetType',
+        name: 'title',
       },
       isEditing: false,
-      name: 'Json Schema',
+      name: 'Asset Metadata',
     },
   ])
 
@@ -31,10 +31,10 @@ const EditorPage: React.FC = () => {
         id: 'root',
         category: {
           id: 'root',
-          name: 'assetType',
+          name: 'title',
         },
         isEditing: false,
-        name: 'Json Schema',
+        name: 'Asset Metadata',
       },
     ])
   }, [])

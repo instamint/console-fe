@@ -10,12 +10,11 @@ export function MenuInner() {
   return (
     <>
       <MenuItem title={intl.formatMessage({id: 'MENU.ASEETS'})} to='/assets' />
-      <MenuItem title={intl.formatMessage({id: 'MENU.PORTFOLIOS'})} to='/portfolios' />
       <MenuItem
         title={intl.formatMessage({id: 'MENU.DESIGNER'})}
         to='/designer'
-        label='Experimental'
       />
+      {/* <MenuItem title={intl.formatMessage({id: 'MENU.PORTFOLIOS'})} to='/portfolios' />
       <MenuItem title={intl.formatMessage({id: 'MENU.ANALYTICS'})} to='/analytics' />
       <MenuItem title={intl.formatMessage({id: 'MENU.PARTIES'})} to='/parties' />
       <MenuItem title={intl.formatMessage({id: 'MENU.TRANSACTIONS'})} to='/transactions' />
@@ -57,7 +56,7 @@ export function MenuInner() {
         </MenuInnerWithSub>
       ) : (
         ''
-      )}
+      )} */}
 
       {/* <MenuItem title='Layout Builder' to='/builder' /> */}
       {/* <MenuInnerWithSub

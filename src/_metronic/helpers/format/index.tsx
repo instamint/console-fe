@@ -43,6 +43,10 @@ export const showIconChain = (chain: string) => {
     case 'algorand-testnet':
       return <ImgChain src={IconAlgorand}></ImgChain>
     default:
-      return ""
+      return (
+        <ImgChain
+          src={'https://seeklogo.com/images/S/stellar-xlm-logo-A5ED4AC18C-seeklogo.com.png'}
+        ></ImgChain>
+      )
   }
 }

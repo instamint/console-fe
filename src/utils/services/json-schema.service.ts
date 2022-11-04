@@ -6,7 +6,9 @@ export interface JsonSchema {
 }
 
 const getAllSchemas = async (username: string): Promise<JsonSchema[]> => {
-  const response = await http.get<JsonSchema[]>(`/json-schemas/user/${username}`)
+  const response = await http.get<JsonSchema[]>(
+    `/json-schemas/user/${username || 'jamiel@chainhaus.com'}`
+  )
   return response.data
 }
 
