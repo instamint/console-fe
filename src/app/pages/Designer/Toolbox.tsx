@@ -260,6 +260,9 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
         </div>
 
         <GroupBtn>
+          <Button>
+            Generate
+          </Button>
           <Button onClick={() => setShowModal(true)}>
             <Image src={IconView} alt='save'></Image>View Json
           </Button>
