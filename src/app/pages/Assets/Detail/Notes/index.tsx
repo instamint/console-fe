@@ -97,10 +97,10 @@ export default function Notes({idAsset}) {
               <thead style={{verticalAlign: 'top'}}>
                 <tr className='fw-bold text-muted'>
                   <th className='w-250px' style={{paddingTop: '0px'}}>
-                    <span>TIMESTAMP</span>
+                    <span>Timestamp</span>
                   </th>
                   <th className='w-250px' style={{paddingTop: '0px'}}>
-                    <span>NOTE</span>
+                    <span>Note</span>
                   </th>
                 </tr>
               </thead>

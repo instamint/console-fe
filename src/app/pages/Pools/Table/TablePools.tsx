@@ -102,9 +102,8 @@ const TablesPools: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Yours Portfolios</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Portfolios</span>
         </h3>
-        <FilterSearch setSearch={setSearch} />
       </div>
       {/* end::Header */}
       {/* begin::Body */}
@@ -124,7 +123,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('uuid')}
                     >
-                      UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
+                      Uuid <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -132,7 +131,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('name')}
                     >
-                      PORTFOLIO NAME{' '}
+                      Portfolio Name{' '}
                       <ICSort type={sort.sort_name === 'name' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
@@ -141,7 +140,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('createdAt')}
                     >
-                      PORTFOLIO CREATE TIMESTAMP{' '}
+                      Portfolio Create Timestamp{' '}
                       <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>

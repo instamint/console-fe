@@ -47,13 +47,13 @@ export default function BidHistory({idAsset}) {
           <thead style={{verticalAlign: 'top'}}>
             <tr className='fw-bold text-muted'>
               <th className='w-250px'>
-                <span>TIMESTAMP</span>
+                <span>Timestamp</span>
               </th>
               <th>
-                <span>BIDDER</span>
+                <span>Bidder</span>
               </th>
               <th>
-                <span>BID</span>
+                <span>Bid</span>
               </th>
             </tr>
           </thead>

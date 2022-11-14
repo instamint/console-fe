@@ -94,7 +94,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('uuid')}
                   >
-                    UUID
+                    Uuid
                     <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -103,7 +103,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('buyerName')}
                   >
-                    BUYER NAME
+                    Buyer Name
                     <ICSort type={sort.sort_name === 'buyerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -112,7 +112,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('sellerName')}
                   >
-                    SELLER NAME
+                    Seller Name
                     <ICSort type={sort.sort_name === 'sellerName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -121,7 +121,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('fee')}
                   >
-                    FEE
+                    Fee
                     <ICSort type={sort.sort_name === 'fee' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -130,7 +130,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('clientFee')}
                   >
-                    CLIENT FEE
+                    Client Fee
                     <ICSort type={sort.sort_name === 'clientFee' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -139,7 +139,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('instamintPlatformFee')}
                   >
-                    PLATFORM FEE
+                    Platform Fee
                     <ICSort
                       type={sort.sort_name === 'instamintPlatformFee' ? sort.sort_type : 'default'}
                     />
@@ -150,7 +150,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('tradeAmount')}
                   >
-                    TRADE AMOUNT
+                    Trade Amount
                     <ICSort type={sort.sort_name === 'tradeAmount' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -159,7 +159,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('royaltyAmountToIssuer')}
                   >
-                    ROYALTY AMOUNT TO ISSUER
+                    Royalty Amount To Issuer
                     <ICSort
                       type={sort.sort_name === 'royaltyAmountToIssuer' ? sort.sort_type : 'default'}
                     />
@@ -170,7 +170,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('createdAt')}
                   >
-                    CREATE AT
+                    Create at
                     <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -178,19 +178,19 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
             ) : (
               <tr className='fw-bold text-muted'>
                 <th className='min-w-150px'>
-                  <span>BUYER NAME</span>
+                  <span>Buyer Name</span>
                 </th>
                 <th className='min-w-150px'>
-                  <span>SELLER NAME</span>
+                  <span>Seller Name</span>
                 </th>
                 <th>
-                  <span>FEE</span>
+                  <span>Fee</span>
                 </th>
                 <th className='min-w-150px'>
-                  <span>PLATFORM FEE</span>
+                  <span>Platform Fee</span>
                 </th>
                 <th className='min-w-150px'>
-                  <span>TRADE AMOUNT</span>
+                  <span>Trade Amount</span>
                 </th>
               </tr>
             )}

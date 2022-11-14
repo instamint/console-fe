@@ -95,7 +95,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                       ariaLabel='three-dots-loading'
                     />
                   ) : (
-                    <span className='text-dark fw-bold fs-7'>{item?.tvl}</span>
+                    <span className='text-dark fw-bold fs-7'>$ {item?.tvl}</span>
                   )}
                 </div>
               </div>
@@ -168,7 +168,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('protocol')}
                   >
-                    PROTOCOL{' '}
+                    Protocol{' '}
                     <ICSort type={sort.sort_name === 'protocol' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
@@ -177,7 +177,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('StakingToken.TokenTicker')}
                   >
-                    CHAIN{' '}
+                    Pair{' '}
                     <ICSort
                       type={
                         sort.sort_name === 'StakingToken.TokenTicker' ? sort.sort_type : 'default'
@@ -190,7 +190,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('Contracts.Escrow')}
                   >
-                    ADDRESS{' '}
+                    Pool Address{' '}
                     <ICSort
                       type={sort.sort_name === 'Contracts.Escrow' ? sort.sort_type : 'default'}
                     />
@@ -203,7 +203,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                 </th>
                 <th>
                   <span className='cursor-pointer' onClick={() => !isLoading && handleSort('Type')}>
-                    TYPE <ICSort type={sort.sort_name === 'Type' ? sort.sort_type : 'default'} />
+                    Type <ICSort type={sort.sort_name === 'Type' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
               </tr>

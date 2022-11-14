@@ -48,7 +48,6 @@ export function MenuInner() {
           menuPlacement='bottom-start'
           menuTrigger={`{default:'click', lg: 'hover'}`}
         >
-          <MenuItem to='/platform/platform-dashboard' title='Dashboard' icon={IconPlatform} />
           <MenuItem to='/platform/platform-assets' title='Assets' icon={IconPlatform} />
           <MenuItem to='/platform/clients' title='Clients' icon={IconPlatform} />
           <MenuItem to='/platform/delegated-users' title='Delegated Users' icon={IconPlatform} />

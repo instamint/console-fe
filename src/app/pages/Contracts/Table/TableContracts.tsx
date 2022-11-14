@@ -159,7 +159,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('address')}
                     >
-                      ADDRESS{' '}
+                      Address{' '}
                       <ICSort type={sort.sort_name === 'address' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
@@ -168,7 +168,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('description')}
                     >
-                      DESCRIPTION{' '}
+                      Description{' '}
                       <ICSort
                         type={sort.sort_name === 'description' ? sort.sort_type : 'default'}
                       />
@@ -179,7 +179,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('etherscanurl')}
                     >
-                      ETHERSCAN URL{' '}
+                      Etherscan Url{' '}
                       <ICSort
                         type={sort.sort_name === 'etherscanurl' ? sort.sort_type : 'default'}
                       />
@@ -190,7 +190,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('shortName')}
                     >
-                      SHORT NAME{' '}
+                      Short Name{' '}
                       <ICSort type={sort.sort_name === 'shortName' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
@@ -199,7 +199,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('chainName')}
                     >
-                      CHAIN{' '}
+                      Chain{' '}
                       <ICSort type={sort.sort_name === 'chainName' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
@@ -208,7 +208,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('lastUsedTokenId')}
                     >
-                      LAST USED TOKEN ID{' '}
+                      Last User Token Id{' '}
                       <ICSort
                         type={sort.sort_name === 'lastUsedTokenId' ? sort.sort_type : 'default'}
                       />
@@ -219,7 +219,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('contractTypeResponseDto.type')}
                     >
-                      CONTRACT TYPE{' '}
+                      Contract Type{' '}
                       <ICSort
                         type={
                           sort.sort_name === 'contractTypeResponseDto.type'

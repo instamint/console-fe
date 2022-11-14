@@ -49,25 +49,25 @@ export default function AuctionHistory({idAsset}) {
           <thead style={{verticalAlign: 'top'}}>
             <tr className='fw-bold text-muted'>
               <th className='min-w-200px'>
-                <span>BEST BIDDER NAME</span>
+                <span>Best Bidder Name</span>
               </th>
               <th className='min-w-150px'>
-                <span>START TIME</span>
+                <span>Start Time</span>
               </th>
               <th className='min-w-150px'>
-                <span>END TIME</span>
+                <span>End Time</span>
               </th>
               <th className='min-w-200px'>
-                <span>GROSS TRADE AMOUNT</span>
+                <span>Gross Trade Amount</span>
               </th>
               <th>
-                <span>EXPIRED</span>
+                <span>Expried</span>
               </th>
               <th>
-                <span>CURRENCY</span>
+                <span>Currency</span>
               </th>
               <th>
-                <span>CLOSED</span>
+                <span>Closed</span>
               </th>
             </tr>
           </thead>

@@ -70,9 +70,9 @@ const TablesLogin: React.FC<Props> = ({className}) => {
             {/* begin::Table head */}
             <thead>
               <tr className='fw-bold text-muted'>
-                <th className='min-w-200px'>USER NAME</th>
-                <th className='min-w-200px'>TIMESTAMP</th>
-                <th className='min-w-200px'>RESULT</th>
+                <th className='min-w-200px'>User Name</th>
+                <th className='min-w-200px'>Timestamp</th>
+                <th className='min-w-200px'>Result</th>
               </tr>
             </thead>
             {/* end::Table head */}

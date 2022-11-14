@@ -182,7 +182,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('namespace')}
                   >
-                    NAME SPACE{' '}
+                    Name Space{' '}
                     <ICSort type={sort.sort_name === 'namespace' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
@@ -191,7 +191,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('name')}
                   >
-                    NAME <ICSort type={sort.sort_name === 'name' ? sort.sort_type : 'default'} />
+                    Name <ICSort type={sort.sort_name === 'name' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -199,7 +199,7 @@ const TablesClients: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('userName')}
                   >
-                    USER NAME{' '}
+                    User Name{' '}
                     <ICSort type={sort.sort_name === 'userName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>

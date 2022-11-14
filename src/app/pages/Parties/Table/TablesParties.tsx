@@ -195,7 +195,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('partyName')}
                   >
-                    NAME{' '}
+                    Name{' '}
                     <ICSort type={sort.sort_name === 'partyName' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
@@ -204,7 +204,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('partyID')}
                   >
-                    ID <ICSort type={sort.sort_name === 'partyID' ? sort.sort_type : 'default'} />
+                    Id <ICSort type={sort.sort_name === 'partyID' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
@@ -212,7 +212,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('algorandAddress')}
                   >
-                    ALGORAND ADDRESS{' '}
+                    Algorand Address{' '}
                     <ICSort
                       type={sort.sort_name === 'algorandAddress' ? sort.sort_type : 'default'}
                     />
@@ -223,7 +223,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('ethereumAddress')}
                   >
-                    ETHEREUM ADDRESS{' '}
+                    Ethereum Address{' '}
                     <ICSort
                       type={sort.sort_name === 'ethereumAddress' ? sort.sort_type : 'default'}
                     />
@@ -234,13 +234,13 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('opsIncurred')}
                   >
-                    OPS INCURRED{' '}
+                    Ops Incurred{' '}
                     <ICSort
                       type={sort.sort_name === 'opsIncurred' ? sort.sort_type : 'default'}
                     />
                   </span>
                 </th>
-                <th>ACTION</th>
+                <th>Action</th>
               </tr>
             </thead>
             {/* end::Table head */}

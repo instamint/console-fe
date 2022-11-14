@@ -181,88 +181,88 @@ const TablesDelegatedUsers: React.FC<Props> = ({className}) => {
             <thead>
               <tr className='fw-bold text-muted'>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('username')}
                   >
-                    USER NAME{' '}
+                    User Name{' '}
                     <ICSort type={sort.sort_name === 'username' ? sort.sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('uuid')}
                   >
-                    UUID{' '}
+                    Uuid{' '}
                     <ICSort
                       type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'}
                     />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('partyName')}
                   >
-                    PARTY NAME{' '}
+                    Party Name{' '}
                     <ICSort type={sort.sort_name === 'partyName' ? sort.sort_type : 'default'} />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('firstName')}
                   >
-                    FIRST NAME{' '}
+                    First Name{' '}
                     <ICSort
                       type={sort.sort_name === 'firstName' ? sort.sort_type : 'default'}
                     />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('lastName')}
                   >
-                    LAST NAME{' '}
+                    Last Name{' '}
                     <ICSort
                       type={sort.sort_name === 'lastName' ? sort.sort_type : 'default'}
                     />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('createdAt')}
                   >
-                    CREATE AT{' '}
+                    Created At{' '}
                     <ICSort
                       type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'}
                     />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('clientAdmin')}
                   >
-                    CLIENT ADMIN{' '}
+                    Client Admin{' '}
                     <ICSort
                       type={sort.sort_name === 'clientAdmin' ? sort.sort_type : 'default'}
                     />
-                  </span>
+                  </SpanThTable>
                 </th>
                 <th>
-                  <span
+                  <SpanThTable
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('platformAdmin')}
                   >
-                    PLATFORM ADMIN{' '}
+                    Platform Admin{' '}
                     <ICSort
                       type={sort.sort_name === 'platformAdmin' ? sort.sort_type : 'default'}
                     />
-                  </span>
+                  </SpanThTable>
                 </th>
               </tr>
             </thead>
@@ -316,4 +316,10 @@ const NameDropdow = styled.div`
 const IconDrop = styled.i`
   margin-left: 15px;
   margin-bottom: 2px;
+`
+
+const SpanThTable = styled.span`
+  width: max-content;
+  display: flex;
+  align-items: center;
 `
