@@ -19,43 +19,24 @@ const TablesDashboard: React.FC<Props> = ({className}) => {
     sort_type: '',
     limit: '',
   })
-  const fetchListParties = async () => {
-    try {
-      let responsive = await getListParties()
-      if (responsive) {
-        setListParties(responsive?.data?.parties || [])
-      }
-    } catch (error) {
-      console.error({error})
-    }
-  }
 
-  const fetchListAssets = async (params) => {
+  const fetchList = async (params) => {
     try {
-      const responsive = await getListAsset(params)
-      if (responsive) {
-        setListAssets(responsive?.data || [])
-      }
-    } catch (error) {
-      console.error({error})
-    }
-  }
-
-  const fetchListTransactions = async (params) => {
-    try {
-      let reps = await getListTransactions(params)
-      reps && setListTransactions(reps?.data)
+      const resAssets = await getListAsset(params)
+      let resParties = await getListParties()
+      const resTransactions = await getListTransactions(params)
+      resAssets && setListAssets(resAssets?.data || [])
+      resParties && setListParties(resParties?.data?.parties || [])
+      resTransactions && setListTransactions(resTransactions?.data || [])
     } catch (error) {
       console.error({error})
     } finally {
-      setIsLoading(false)
+        setIsLoading(false)
     }
-  }
+  } 
 
   useEffect(() => {
-    fetchListParties()
-    fetchListAssets(params)
-    fetchListTransactions(params)
+    fetchList(params)
   }, [])
 
 
