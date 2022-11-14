@@ -9,6 +9,7 @@ export function MenuInner() {
   const IconPlatform = '/media/icons/icon/platform.svg'
   return (
     <>
+      <MenuItem title={intl.formatMessage({id: 'MENU.DASHBOARD'})} to='/dash' />
       <MenuItem title={intl.formatMessage({id: 'MENU.ASEETS'})} to='/assets' />
       <MenuItem title={intl.formatMessage({id: 'MENU.PORTFOLIOS'})} to='/portfolios' />
       <MenuItem
@@ -47,6 +48,7 @@ export function MenuInner() {
           menuPlacement='bottom-start'
           menuTrigger={`{default:'click', lg: 'hover'}`}
         >
+          <MenuItem to='/platform/platform-dashboard' title='Dashboard' icon={IconPlatform} />
           <MenuItem to='/platform/platform-assets' title='Assets' icon={IconPlatform} />
           <MenuItem to='/platform/clients' title='Clients' icon={IconPlatform} />
           <MenuItem to='/platform/delegated-users' title='Delegated Users' icon={IconPlatform} />

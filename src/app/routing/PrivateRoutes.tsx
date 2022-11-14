@@ -17,6 +17,7 @@ import PartiesDetail from '../pages/Parties/Detail'
 import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
 import { PoolsWrapper } from '../pages/Pools/PoolsWrapper'
 import { TransactionsWrapper } from '../pages/Transactions/TransactionsWrapper'
+import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
 
 const PrivateRoutes = () => {
   const {currentUser} = useAuth()
@@ -58,6 +59,7 @@ const PrivateRoutes = () => {
         <Route path='contracts' element={<ContractsWrapper />} />
         <Route path='monitoring' element={<MonitoringWrapper />} />
         <Route path='defi' element={<DeFiWrapper />} />
+        <Route path='dash' element={<DashboardWrapper />} />
         {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
           <Route
             path='admin/*'
@@ -152,7 +154,7 @@ const PrivateRoutes = () => {
           }
         /> */}
         {/* Page Not Found */}
-        <Route path='*' element={<Navigate to='/assets' />} />
+        <Route path='*' element={<Navigate to='/dash' />} />
       </Route>
     </Routes>
   )

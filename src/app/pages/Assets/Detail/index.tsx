@@ -32,7 +32,7 @@ export default function AssetsDetail() {
 
   useEffect(() => {
     if (!id) {
-      navigate('/assets')
+      navigate('/dash')
     } else {
       fetchDetailAsset(id)
     }
