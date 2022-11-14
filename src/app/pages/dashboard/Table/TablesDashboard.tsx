@@ -80,6 +80,10 @@ const TablesDashboard: React.FC<Props> = ({className}) => {
                 {listTransactions.length > 1 ? 'Transactions' : 'Transaction'}
               </span>
             </div>
+            <div className='card-body pb-10'>
+            </div>
+            <div className='card-body pb-15'>
+            </div>
           </div>
         </div>
       </div>
