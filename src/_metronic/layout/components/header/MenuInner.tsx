@@ -22,7 +22,15 @@ export function MenuInner() {
       <MenuItem title={intl.formatMessage({id: 'MENU.TRANSACTIONS'})} to='/transactions' />
       <MenuItem title={intl.formatMessage({id: 'MENU.CONTRACTS'})} to='/contracts' />
       <MenuItem title={intl.formatMessage({id: 'MENU.MONITORING'})} to='/monitoring' />
-      <MenuItem title={intl.formatMessage({id: 'MENU.DEFI'})} to='/defi' />
+      <MenuInnerWithSub
+        title='DeFi'
+        to='/defi'
+        menuPlacement='bottom-start'
+        menuTrigger={`{default:'click', lg: 'hover'}`}
+      >
+        <MenuItem to='/defi/yieldly' title='Yieldly' fontIcon='bi-layers' />
+        {/* <MenuItem to='/defi/tinyman' title='Tinyman' fontIcon='bi-layers' /> */}
+      </MenuInnerWithSub>
       {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
         <MenuInnerWithSub
           title='Admin'

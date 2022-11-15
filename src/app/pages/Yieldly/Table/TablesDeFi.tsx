@@ -12,7 +12,7 @@ type Props = {
   className: string
 }
 
-const TablesDeFi: React.FC<Props> = ({className}) => {
+const TablesYieldly: React.FC<Props> = ({className}) => {
   const [listDeFi, setListDeFi] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listDeFi, [])
   const [isLoading, setIsLoading] = useState(false)
@@ -126,7 +126,9 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
         ])
         if (v3?.data?.tvl) tmpListDeFi[i].tvl = Math.trunc(v3?.data?.tvlUSD)
         else {
-          const price = await getTokenPrice(tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase())
+          const price = await getTokenPrice(
+            tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase()
+          )
           const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
             (item: any) => item?.key === 'R0E='
           )
@@ -240,4 +242,4 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
   )
 }
 
-export {TablesDeFi}
+export {TablesYieldly}

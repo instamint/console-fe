@@ -10,7 +10,6 @@ import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
 import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
 import AssetsDetail from '../pages/Assets/Detail'
 import { ContractsWrapper } from '../pages/Contracts/ContractsWrapper'
-import { DeFiWrapper } from '../pages/DeFi/DeFiWrapper'
 import { DesignerWrapper } from '../pages/Designer/index'
 import { MonitoringWrapper } from '../pages/Monitoring/MonitoringPageWrapper'
 import PartiesDetail from '../pages/Parties/Detail'
@@ -34,6 +33,8 @@ const PrivateRoutes = () => {
   const DelegatedUsersPage = lazy(() => import('../../app/pages/DelegatedUsers/index'))
   const LoginActivityPage = lazy(() => import('../../app/pages/LoginActivity/index'))
   const TradesPage = lazy(() => import('../../app/pages/Trades/index'))
+  const YieldlyPage = lazy(() => import('../pages/Yieldly/index'))
+  const TinymanPage = lazy(() => import('../pages/Tinyman/index'))
 
   return (
     <Routes>
@@ -41,6 +42,7 @@ const PrivateRoutes = () => {
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
+        <Route path='dash' element={<DashboardWrapper />} />
         <Route path='assets' element={<AssetsWrapper />} />
         <Route
           path='assets/detail/*'
@@ -58,8 +60,15 @@ const PrivateRoutes = () => {
         <Route path='transactions' element={<TransactionsWrapper />} />
         <Route path='contracts' element={<ContractsWrapper />} />
         <Route path='monitoring' element={<MonitoringWrapper />} />
-        <Route path='defi' element={<DeFiWrapper />} />
-        <Route path='dash' element={<DashboardWrapper />} />
+        <Route
+          path='defi/*'
+          element={
+            <SuspensedView>
+              <YieldlyPage />
+              <TinymanPage />
+            </SuspensedView>
+          }
+        />
         {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
           <Route
             path='admin/*'
