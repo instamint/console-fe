@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAlert } from 'react-alert'
 import { endAuction } from '../../../../utils/api/assets'
-import { showTwoDecimalPlaces } from '../../../../_metronic/helpers/format/number'
+import { showNumberFormat, showTwoDecimalPlaces } from '../../../../_metronic/helpers/format/number'
 import { TablesTransactions } from '../../Transactions/Table/TablesTransactions'
 import AuctionHistory from './AuctionHistory'
 import BidHistory from './BidHistory/index'
@@ -66,7 +66,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                         className='counted'
                         data-kt-initialized='1'
                       >
-                        ${showTwoDecimalPlaces(dataDetail?.asset?.bestBid ?? 0)}
+                        $ {showNumberFormat(dataDetail?.asset?.bestBid ?? 0)}
                       </span>
                     </span>
                     <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>
@@ -81,7 +81,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                         data-kt-countup-value='80'
                         data-kt-initialized='1'
                       >
-                        ${showTwoDecimalPlaces(dataDetail?.asset?.ask ?? 0)}
+                        $ {showNumberFormat(dataDetail?.asset?.ask ?? 0)}
                       </span>
                     </span>
                     <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>Ask</span>
@@ -95,7 +95,7 @@ export default function Overview({dataDetail, setReloadPage}) {
                         className='counted'
                         data-kt-initialized='1'
                       >
-                        ${showTwoDecimalPlaces(dataDetail?.asset?.reserve ?? 0)}
+                        $ {showNumberFormat(dataDetail?.asset?.reserve ?? 0)}
                       </span>
                     </span>
                     <span className='fs-6 fw-semibold text-gray-400 d-block lh-1 pt-2'>

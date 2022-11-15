@@ -204,7 +204,7 @@ const TablesParties: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('partyID')}
                   >
-                    Id <ICSort type={sort.sort_name === 'partyID' ? sort.sort_type : 'default'} />
+                    ID <ICSort type={sort.sort_name === 'partyID' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>

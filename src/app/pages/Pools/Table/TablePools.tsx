@@ -123,7 +123,7 @@ const TablesPools: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('uuid')}
                     >
-                      Uuid <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
+                      UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>

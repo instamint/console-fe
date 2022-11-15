@@ -23,7 +23,7 @@ import {Search} from '../../../components/FilterSearch/search'
 import Pagination from '../../../components/Pagination'
 import {ButtonCopy} from '../../../components/Button/button-copy'
 import IconCompleted from '../../../images/icon-completed.svg'
-import {showTwoDecimalPlaces} from '../../../../_metronic/helpers/format/number'
+import {showNumberFormat} from '../../../../_metronic/helpers/format/number'
 import ModalStake from '../Modal/modal-stake'
 
 type Props = {
@@ -374,7 +374,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.bestBid && `$${showTwoDecimalPlaces(item?.bestBid)}`}
+                    {item?.bestBid && `$ ${showNumberFormat(item?.bestBid)}`}
                   </span>
                 </div>
               </div>
@@ -383,7 +383,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.reserve && `$${showTwoDecimalPlaces(item?.reserve)}`}
+                    {item?.reserve && `$ ${showNumberFormat(item?.reserve)}`}
                   </span>
                 </div>
               </div>
@@ -392,7 +392,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.ask && `$${showTwoDecimalPlaces(item?.ask)}`}
+                    {item?.ask && `$ ${showNumberFormat(item?.ask)}`}
                   </span>
                 </div>
               </div>
@@ -480,7 +480,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('instamintAssetHashid')}
                   >
-                    Asset Id{' '}
+                    Asset ID{' '}
                     <ICSort
                       type={sort.sort_name === 'instamintAssetHashid' ? sort.sort_type : 'default'}
                     />

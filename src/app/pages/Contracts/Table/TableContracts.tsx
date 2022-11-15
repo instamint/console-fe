@@ -208,7 +208,7 @@ const TablesContracts: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('lastUsedTokenId')}
                     >
-                      Last User Token Id{' '}
+                      Last User Token ID{' '}
                       <ICSort
                         type={sort.sort_name === 'lastUsedTokenId' ? sort.sort_type : 'default'}
                       />

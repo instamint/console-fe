@@ -137,7 +137,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5 d-flex align-items-center'>
-        <Search title='Search Transactions' setSearch={setSearch} searched={searched}/>
+        <Search title='Search Transactions' setSearch={setSearch} searched={searched} />
         {/* <FilterSearch setSearch={setSearch} /> */}
       </div>
       {/* end::Header */}
@@ -158,7 +158,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('id')}
                     >
-                      Id <ICSort type={sort.sort_name === 'id' ? sort.sort_type : 'default'} />
+                      ID <ICSort type={sort.sort_name === 'id' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -166,7 +166,7 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('uuid')}
                     >
-                      Uuid <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
+                      UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-150px'>
@@ -191,7 +191,8 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('costUnits')}
                     >
-                      Cost Unit <ICSort type={sort.sort_name === 'costUnits' ? sort.sort_type : 'default'} />
+                      Cost Unit{' '}
+                      <ICSort type={sort.sort_name === 'costUnits' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className='min-w-100px'>
@@ -199,7 +200,8 @@ const TablesTransactions: React.FC<Props> = ({className}) => {
                       className='cursor-pointer'
                       onClick={() => !isLoading && handleSort('createdAt')}
                     >
-                      Timestamp <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
+                      Timestamp{' '}
+                      <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                     </SpanThTable>
                   </th>
                   <th className=''></th>
