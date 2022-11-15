@@ -26,6 +26,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
   const [actusTypes, setActusTypes] = useState<Array<any>>([])
   const [storageTypes, setStorageTypes] = useState<Array<any>>([])
   const [supplyChainTypes, setSupplyChainTypes] = useState<Array<any>>([])
+  const [settlementTypes, setSettlementTypes] = useState<Array<any>>([])
   const [listCategory, setListCategory] = useState([])
   const [listFavorite, setListFavorite] = useState<Array<any>>([])
   const [isLoadFavorite, setIsLoadFavorite] = useState(true)
@@ -107,6 +108,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       let standardTypes = []
       let storageTypes = []
       let supplyChainTypes = []
+      let settlementTypes = []
       data?.forEach((item) => {
         // convert type Storage
         if (item?.category?.name === 'Storage') {
@@ -119,6 +121,8 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
           actusTypes.push(item)
         } else if (item?.category?.name === 'Supply Chain') {
           supplyChainTypes.push(item)
+        } else if (item?.category?.name === 'Settlement') {
+          settlementTypes.push(item)
         } else {
           storageTypes.push(item)
         }
@@ -127,6 +131,7 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
       setStandardTypes(standardTypes)
       setStorageTypes(storageTypes)
       setSupplyChainTypes(supplyChainTypes)
+      setSettlementTypes(settlementTypes)
     }
   }
 
@@ -193,6 +198,11 @@ const Toolbox: React.FC<ToolboxProps> = ({clear, setStore, setSchemaList, setSho
         return {
           name: 'Supply Chain',
           data: supplyChainTypes,
+        }
+      case 'settlement':
+        return {
+          name: 'Settlement',
+          data: settlementTypes,
         }
       default:
         return {

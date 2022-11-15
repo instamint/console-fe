@@ -6,6 +6,7 @@ import Pagination from '../../../components/Pagination'
 import useSearch from '../../../hooks/useSearch'
 import ICSort, {sortRows} from '../../../components/Sort'
 import {ThreeDots} from 'react-loader-spinner'
+import { showNumberFormat } from '../../../../_metronic/helpers/format/number'
 
 type Props = {
   className: string
@@ -49,14 +50,6 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
       chain = `${data?.StakingToken?.TokenTicker}/${data?.RewardToken?.[0]?.TokenTicker}`
     }
     return chain
-  }
-
-  const formatTVL = (item) => {
-    let tvl = item?.tvl
-    if (tvl && typeof tvl === 'number') {
-      return tvl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    }
-    return 0
   }
 
   const renderList = useCallback(
@@ -103,7 +96,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                       ariaLabel='three-dots-loading'
                     />
                   ) : (
-                    <span className='text-dark fw-bold fs-7'>$ {formatTVL(item)}</span>
+                    <span className='text-dark fw-bold fs-7'>$ {showNumberFormat(item?.tvl)}</span>
                   )}
                 </div>
               </div>

@@ -194,10 +194,7 @@ const TablesDelegatedUsers: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('uuid')}
                   >
-                    Uuid{' '}
-                    <ICSort
-                      type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'}
-                    />
+                    UUID <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -215,9 +212,7 @@ const TablesDelegatedUsers: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('firstName')}
                   >
                     First Name{' '}
-                    <ICSort
-                      type={sort.sort_name === 'firstName' ? sort.sort_type : 'default'}
-                    />
+                    <ICSort type={sort.sort_name === 'firstName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -226,9 +221,7 @@ const TablesDelegatedUsers: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('lastName')}
                   >
                     Last Name{' '}
-                    <ICSort
-                      type={sort.sort_name === 'lastName' ? sort.sort_type : 'default'}
-                    />
+                    <ICSort type={sort.sort_name === 'lastName' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -237,9 +230,7 @@ const TablesDelegatedUsers: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('createdAt')}
                   >
                     Created At{' '}
-                    <ICSort
-                      type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'}
-                    />
+                    <ICSort type={sort.sort_name === 'createdAt' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>
@@ -248,9 +239,7 @@ const TablesDelegatedUsers: React.FC<Props> = ({className}) => {
                     onClick={() => !isLoading && handleSort('clientAdmin')}
                   >
                     Client Admin{' '}
-                    <ICSort
-                      type={sort.sort_name === 'clientAdmin' ? sort.sort_type : 'default'}
-                    />
+                    <ICSort type={sort.sort_name === 'clientAdmin' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
                 <th>

@@ -6,6 +6,7 @@ import {Dropdown1} from '../../../_metronic/partials'
 import {useLocation} from 'react-router'
 import { useAuth } from '../auth'
 import { useCheckImage } from '../../hooks/useCheckImage'
+import { showNumberFormat } from '../../../_metronic/helpers/format/number'
 
 const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
   const location = useLocation()
@@ -99,14 +100,18 @@ const AccountHeader: React.FC<{dataProfile: any}> = ({dataProfile}) => {
                 <div className='d-flex flex-wrap'>
                   <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                     <div className='d-flex align-items-center'>
-                      <div className='fs-2 fw-bolder'>${dataProfile?.usd || 0}</div>
+                      <div className='fs-2 fw-bolder'>
+                        $ {showNumberFormat(dataProfile?.usd || 0)}
+                      </div>
                     </div>
                     <div className='fw-bold fs-6 text-gray-400'>USD</div>
                   </div>
 
                   <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                     <div className='d-flex align-items-center'>
-                      <div className='fs-2 fw-bolder'>${dataProfile?.usdc || 0}</div>
+                      <div className='fs-2 fw-bolder'>
+                        $ {showNumberFormat(dataProfile?.usdc || 0)}
+                      </div>
                     </div>
                     <div className='fw-bold fs-6 text-gray-400'>USDC</div>
                   </div>

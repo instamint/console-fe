@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import {getListTrade, getListTradeHistory} from '../../../../../utils/api/assets'
 import { shortAddress } from '../../../../../_metronic/helpers/format'
 import { convertTimeZone } from '../../../../../_metronic/helpers/format/datetime'
+import { showNumberFormat } from '../../../../../_metronic/helpers/format/number'
 import {Loading} from '../../../../components/Loading'
 import ICSort, {sortRows} from '../../../../components/Sort'
 
@@ -70,11 +71,11 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
             )}
             <td className=''>{item?.buyerName}</td>
             <td className=''>{item?.sellerName}</td>
-            <td className=''>${item?.fee || 0}</td>
-            {!idAsset && <td className=''>${item?.clientFee || 0}</td>}
-            <td className=''>${item?.instamintPlatformFee || 0}</td>
-            <td className=''>${item?.tradeAmount || 0}</td>
-            {!idAsset && <td className=''>${item?.royaltyAmountToIssuer || 0}</td>}
+            <td className=''>$ {showNumberFormat(item?.fee || 0)}</td>
+            {!idAsset && <td className=''>$ {showNumberFormat(item?.clientFee || 0)}</td>}
+            <td className=''>$ {showNumberFormat(item?.instamintPlatformFee || 0)}</td>
+            <td className=''>$ {item?.tradeAmount || 0}</td>
+            {!idAsset && <td className=''>$ {showNumberFormat(item?.royaltyAmountToIssuer || 0)}</td>}
             {!idAsset && <td className=''>{convertTimeZone(item?.createdAt)}</td>}
           </tr>
         )
@@ -94,7 +95,7 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('uuid')}
                   >
-                    Uuid
+                    UUID
                     <ICSort type={sort.sort_name === 'uuid' ? sort.sort_type : 'default'} />
                   </SpanThTable>
                 </th>
