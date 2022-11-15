@@ -4,7 +4,7 @@ import {getInfoPoolV2, getInfoPoolV3, getListDefi} from '../../../../utils/api/d
 import {Loading} from '../../../components/Loading'
 import Pagination from '../../../components/Pagination'
 import useSearch from '../../../hooks/useSearch'
-import ICSort, { sortRows } from '../../../components/Sort'
+import ICSort, {sortRows} from '../../../components/Sort'
 import {ThreeDots} from 'react-loader-spinner'
 
 type Props = {
@@ -44,11 +44,35 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
   const handleSetChain = (data) => {
     let chain
     if (data?.Type === 'LIQUIDITY') {
-      chain = data?.StakingToken?.TokenTicker || ""
+      chain = data?.StakingToken?.TokenTicker || ''
     } else {
       chain = `${data?.StakingToken?.TokenTicker}/${data?.RewardToken?.[0]?.TokenTicker}`
     }
     return chain
+  }
+
+  const convertBigNumber = (tvl) => {
+    if (tvl && typeof tvl === 'number') {
+      tvl = tvl.toString()
+      tvl = tvl.substring(0, 8)
+      tvl = parseInt(tvl)
+
+      return tvl
+    }
+    return 0
+  }
+
+  const formatTVL = (tvl) => {
+    if (tvl && typeof tvl === 'number') {
+      tvl = tvl.toString()
+      tvl = tvl.split('')
+      for (const i in tvl) {
+        if (i === '2') tvl.splice(2, 0, '.')
+        if (i === '5') tvl.splice(6, 0, '.')
+      }
+      return tvl
+    }
+    return tvl
   }
 
   const renderList = useCallback(
@@ -95,7 +119,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                       ariaLabel='three-dots-loading'
                     />
                   ) : (
-                    <span className='text-dark fw-bold fs-7'>$ {item?.tvl}</span>
+                    <span className='text-dark fw-bold fs-7'>$ {formatTVL(item?.tvl)}</span>
                   )}
                 </div>
               </div>
@@ -123,10 +147,14 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
           getInfoPoolV2(tmpListDeFi[i]?.Id),
           getInfoPoolV3(tmpListDeFi[i]?.Id),
         ])
-        if (v3?.data?.tvl) tmpListDeFi[i].tvl = v3?.data?.tvl
+        if (v3?.data?.tvl) tmpListDeFi[i].tvl = convertBigNumber(v3?.data?.tvl)
         else {
-          const idx = v2?.data?.application?.params?.['global-state']?.findIndex((item: any) => item?.key === "R0E=")
-          tmpListDeFi[i].tvl = v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
+          const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
+            (item: any) => item?.key === 'R0E='
+          )
+          tmpListDeFi[i].tvl = convertBigNumber(
+            v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
+          )
         }
       }
       setListDeFi(tmpListDeFi)
