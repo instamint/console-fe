@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useCallback, useEffect, useState} from 'react'
-import {getInfoPoolV2, getInfoPoolV3, getListDefi} from '../../../../utils/api/defi'
+import {getInfoPoolV2, getInfoPoolV3, getListDefi, getTokenPrice} from '../../../../utils/api/defi'
 import {Loading} from '../../../components/Loading'
 import Pagination from '../../../components/Pagination'
 import useSearch from '../../../hooks/useSearch'
@@ -51,28 +51,12 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
     return chain
   }
 
-  const convertBigNumber = (tvl) => {
+  const formatTVL = (item) => {
+    let tvl = item?.tvl
     if (tvl && typeof tvl === 'number') {
-      tvl = tvl.toString()
-      tvl = tvl.substring(0, 8)
-      tvl = parseInt(tvl)
-
-      return tvl
+      return tvl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
     return 0
-  }
-
-  const formatTVL = (tvl) => {
-    if (tvl && typeof tvl === 'number') {
-      tvl = tvl.toString()
-      tvl = tvl.split('')
-      for (const i in tvl) {
-        if (i === '2') tvl.splice(2, 0, '.')
-        if (i === '5') tvl.splice(6, 0, '.')
-      }
-      return tvl
-    }
-    return tvl
   }
 
   const renderList = useCallback(
@@ -119,7 +103,7 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
                       ariaLabel='three-dots-loading'
                     />
                   ) : (
-                    <span className='text-dark fw-bold fs-7'>$ {formatTVL(item?.tvl)}</span>
+                    <span className='text-dark fw-bold fs-7'>$ {formatTVL(item)}</span>
                   )}
                 </div>
               </div>
@@ -147,14 +131,14 @@ const TablesDeFi: React.FC<Props> = ({className}) => {
           getInfoPoolV2(tmpListDeFi[i]?.Id),
           getInfoPoolV3(tmpListDeFi[i]?.Id),
         ])
-        if (v3?.data?.tvl) tmpListDeFi[i].tvl = convertBigNumber(v3?.data?.tvl)
+        if (v3?.data?.tvl) tmpListDeFi[i].tvl = Math.trunc(v3?.data?.tvlUSD)
         else {
+          const price = await getTokenPrice(tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase())
           const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
             (item: any) => item?.key === 'R0E='
           )
-          tmpListDeFi[i].tvl = convertBigNumber(
-            v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
-          )
+          const uint = v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
+          tmpListDeFi[i].tvl = Math.trunc(parseInt(uint) * parseInt(price))
         }
       }
       setListDeFi(tmpListDeFi)
