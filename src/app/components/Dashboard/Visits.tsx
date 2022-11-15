@@ -19,7 +19,7 @@ export function VisitsDashboard(props: VisitsDashboardProps) {
         <div className='d-flex flex-stack'>
           <img
             src='https://preview.keenthemes.com/metronic8/demo1/assets/media/flags/united-states.svg'
-            className='me-4 w-25px'
+            className='me-4 w-25px rounded-1'
             alt=''
           />
 
@@ -73,7 +73,7 @@ export function VisitsDashboard(props: VisitsDashboardProps) {
         <div className='d-flex flex-stack'>
           <img
             src='https://preview.keenthemes.com/metronic8/demo1/assets/media/flags/brazil.svg'
-            className='me-4 w-25px'
+            className='me-4 w-25px rounded-1'
             alt=''
           />
 
@@ -127,7 +127,7 @@ export function VisitsDashboard(props: VisitsDashboardProps) {
         <div className='d-flex flex-stack'>
           <img
             src='https://preview.keenthemes.com/metronic8/demo1/assets/media/flags/turkey.svg'
-            className='me-4 w-25px'
+            className='me-4 w-25px rounded-1'
             alt=''
           />
 
@@ -181,7 +181,7 @@ export function VisitsDashboard(props: VisitsDashboardProps) {
         <div className='d-flex flex-stack'>
           <img
             src='https://preview.keenthemes.com/metronic8/demo1/assets/media/flags/france.svg'
-            className='me-4 w-25px'
+            className='me-4 w-25px rounded-1'
             alt=''
           />
 
@@ -235,7 +235,7 @@ export function VisitsDashboard(props: VisitsDashboardProps) {
         <div className='d-flex flex-stack'>
           <img
             src='https://preview.keenthemes.com/metronic8/demo1/assets/media/flags/india.svg'
-            className='me-4 w-25px'
+            className='me-4 w-25px rounded-1'
             alt=''
           />
 
@@ -289,7 +289,7 @@ export function VisitsDashboard(props: VisitsDashboardProps) {
         <div className='d-flex flex-stack'>
           <img
             src='https://preview.keenthemes.com/metronic8/demo1/assets/media/flags/sweden.svg'
-            className='me-4 w-25px'
+            className='me-4 w-25px rounded-1'
             alt=''
           />
 
