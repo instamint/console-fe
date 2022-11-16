@@ -103,7 +103,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   }
 
   useEffect(() => {
-    getListTinyman()
+    // getListTinyman()
   }, [])
 
   return (
