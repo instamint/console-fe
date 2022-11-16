@@ -22,10 +22,13 @@ const TablesDashboard: React.FC<Props> = ({className}) => {
   })
 
   const fetchList = async (params) => {
+    setIsLoading(true)
     try {
-      const resAssets = await getListAsset(params)
-      let resParties = await getListParties()
-      const resTransactions = await getListTransactions(params)
+      const [resAssets, resParties, resTransactions] = await Promise.all([
+        getListAsset(params),
+        getListParties(),
+        getListTransactions(params),
+      ])
       resAssets && setListAssets(resAssets?.data || [])
       resParties && setListParties(resParties?.data?.parties || [])
       resTransactions && setListTransactions(resTransactions?.data || [])

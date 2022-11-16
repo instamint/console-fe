@@ -16,7 +16,7 @@ import PartiesDetail from '../pages/Parties/Detail'
 import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
 import { PoolsWrapper } from '../pages/Pools/PoolsWrapper'
 import { TransactionsWrapper } from '../pages/Transactions/TransactionsWrapper'
-import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
+import { DashboardWrapper } from '../pages/Dashboard/DashboardWrapper'
 
 const PrivateRoutes = () => {
   const {currentUser} = useAuth()
