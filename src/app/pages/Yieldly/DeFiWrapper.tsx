@@ -2,7 +2,7 @@
 import {FC} from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {TablesYieldly} from './Table/TablesDeFi'
+import {TablesYieldly} from './Table/TablesYieldly'
 
 const YieldlyPage: FC = () => (
   <>

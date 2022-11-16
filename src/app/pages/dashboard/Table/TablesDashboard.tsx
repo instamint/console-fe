@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { getListAsset } from '../../../../utils/api/assets'
 import { getListParties } from '../../../../utils/api/parties'
 import { getListTransactions } from '../../../../utils/api/transactions'
-import { VisitsDashboard } from '../../../components/Dashboard'
+import { VisitsAsset, VisitsDashboard } from '../../../components/Dashboard'
 import { Loading } from '../../../components/Loading'
 
 type Props = {
@@ -83,7 +83,7 @@ const TablesDashboard: React.FC<Props> = ({className}) => {
 
           <div className='row g-xxl-9'>
             <div className='col-xxl-4 mb-5 mb-xl-0'>
-              <VisitsDashboard />
+              <VisitsAsset listAssets={listAssets} />
             </div>
             <div className='col-xxl-4 mb-5 mb-xl-0'>
               <VisitsDashboard />

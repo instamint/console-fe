@@ -2,7 +2,7 @@
 import {FC} from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import { TablesTinyman } from './Table/TablesDeFi'
+import { TablesTinyman } from './Table/TablesTinyman'
 
 const TinymanPage: FC = () => (
   <>

@@ -374,7 +374,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.bestBid && `$ ${showNumberFormat(item?.bestBid)}`}
+                    {item?.bestBid && `$${showNumberFormat(item?.bestBid)}`}
                   </span>
                 </div>
               </div>
@@ -383,7 +383,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.reserve && `$ ${showNumberFormat(item?.reserve)}`}
+                    {item?.reserve && `$${showNumberFormat(item?.reserve)}`}
                   </span>
                 </div>
               </div>
@@ -392,7 +392,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>
-                    {item?.ask && `$ ${showNumberFormat(item?.ask)}`}
+                    {item?.ask && `$${showNumberFormat(item?.ask)}`}
                   </span>
                 </div>
               </div>
@@ -413,7 +413,11 @@ const TablesAssets: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{showIconChain(item?.chainName)}</span>
+                  <span className='text-dark fw-bold fs-7'>
+                    {showIconChain({
+                      chain: item?.chainName,
+                    })}
+                  </span>
                 </div>
               </div>
             </td>

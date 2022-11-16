@@ -1,1 +1,2 @@
-export * from './Visits'
+export * from './Visits/Visits'
+export * from './Visits/Asset'

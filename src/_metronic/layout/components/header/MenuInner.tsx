@@ -28,8 +28,8 @@ export function MenuInner() {
         menuPlacement='bottom-start'
         menuTrigger={`{default:'click', lg: 'hover'}`}
       >
+        <MenuItem to='/defi/tinyman' title='Tinyman' fontIcon='bi-layers' />
         <MenuItem to='/defi/yieldly' title='Yieldly' fontIcon='bi-layers' />
-        {/* <MenuItem to='/defi/tinyman' title='Tinyman' fontIcon='bi-layers' /> */}
       </MenuInnerWithSub>
       {currentUser?.role?.length && currentUser?.role?.includes('ADMIN') ? (
         <MenuInnerWithSub

@@ -13,8 +13,8 @@ type Props = {
 }
 
 const TablesTinyman: React.FC<Props> = ({className}) => {
-  const [listDeFi, setListDeFi] = useState<Array<any>>([])
-  const {searched, setSearch, results} = useSearch(listDeFi, [])
+  const [listTinyman, setListTinyman] = useState<Array<any>>([])
+  const {searched, setSearch, results} = useSearch(listTinyman, [])
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingTvl, setIsLoadingTvl] = useState(true)
   const [paginate, setPaginate] = useState(null)
@@ -61,13 +61,6 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.protocol || 'Yieldly'}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{handleSetChain(item)}</span>
                 </div>
               </div>
@@ -96,15 +89,8 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
                       ariaLabel='three-dots-loading'
                     />
                   ) : (
-                    <span className='text-dark fw-bold fs-7'>$ {showNumberFormat(item?.tvl)}</span>
+                    <span className='text-dark fw-bold fs-7'>${showNumberFormat(item?.tvl)}</span>
                   )}
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.Type || 'STAKING'}</span>
                 </div>
               </div>
             </td>
@@ -117,26 +103,26 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   const getTVL = async (data) => {
     setIsLoadingTvl(true)
     if (data?.length < 1) return
-    let tmpListDeFi = [...data]
+    let tmpListTinyman = [...data]
     try {
-      for (let i in tmpListDeFi) {
+      for (let i in tmpListTinyman) {
         const [v2, v3] = await Promise.all([
-          getInfoPoolV2(tmpListDeFi[i]?.Id),
-          getInfoPoolV3(tmpListDeFi[i]?.Id),
+          getInfoPoolV2(tmpListTinyman[i]?.Id),
+          getInfoPoolV3(tmpListTinyman[i]?.Id),
         ])
-        if (v3?.data?.tvl) tmpListDeFi[i].tvl = Math.trunc(v3?.data?.tvlUSD)
+        if (v3?.data?.tvl) tmpListTinyman[i].tvl = Math.trunc(v3?.data?.tvlUSD)
         else {
           const price = await getTokenPrice(
-            tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase()
+            tmpListTinyman?.[i]?.StakingToken?.TokenName?.toLowerCase()
           )
           const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
             (item: any) => item?.key === 'R0E='
           )
           const uint = v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
-          tmpListDeFi[i].tvl = Math.trunc(parseInt(uint) * parseInt(price))
+          tmpListTinyman[i].tvl = Math.trunc(parseInt(uint) * parseInt(price))
         }
       }
-      setListDeFi(tmpListDeFi)
+      setListTinyman(tmpListTinyman)
     } catch (error) {
       console.error({error})
     } finally {
@@ -144,12 +130,12 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
     }
   }
 
-  const getListDeFi = async () => {
+  const getListTinyman = async () => {
     setIsLoading(true)
     try {
       const reps = await getListDefi()
       if (reps?.data) {
-        setListDeFi(reps?.data)
+        setListTinyman(reps?.data)
         getTVL(reps?.data)
       }
     } catch (error) {
@@ -160,7 +146,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   }
 
   useEffect(() => {
-    getListDeFi()
+    // getListTinyman()
   }, [])
 
   return (
@@ -170,15 +156,6 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
             <thead>
               <tr className='fw-bold text-muted'>
-                <th>
-                  <span
-                    className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('protocol')}
-                  >
-                    Protocol{' '}
-                    <ICSort type={sort.sort_name === 'protocol' ? sort.sort_type : 'default'} />
-                  </span>
-                </th>
                 <th>
                   <span
                     className='cursor-pointer'
@@ -197,7 +174,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
                     className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('Contracts.Escrow')}
                   >
-                    Pool Address{' '}
+                    % Share{' '}
                     <ICSort
                       type={sort.sort_name === 'Contracts.Escrow' ? sort.sort_type : 'default'}
                     />
@@ -206,11 +183,6 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
                 <th>
                   <span className='cursor-pointer' onClick={() => !isLoading && handleSort('tvl')}>
                     TVL <ICSort type={sort.sort_name === 'tvl' ? sort.sort_type : 'default'} />
-                  </span>
-                </th>
-                <th>
-                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('Type')}>
-                    Type <ICSort type={sort.sort_name === 'Type' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
               </tr>
@@ -222,7 +194,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
                 renderList()
               ) : (
                 <tr>
-                  <td colSpan={5} className='text-left'>
+                  <td colSpan={3} className='text-left'>
                     <h4 className='mt-5 d-flex justify-content-center'>
                       There is currently no data available
                     </h4>

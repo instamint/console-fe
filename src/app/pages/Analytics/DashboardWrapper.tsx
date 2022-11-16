@@ -73,7 +73,7 @@ const AnalyticsPage: FC = () => (
                         <div className='mb-4 px-9'>
                           <div className='d-flex align-items-center mb-2'>
                             <span className='fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2'>
-                              $ 836,000
+                              $836,000
                             </span>
                           </div>
 
@@ -171,7 +171,7 @@ const AnalyticsPage: FC = () => (
                         <div className='mb-4 px-9'>
                           <div className='d-flex align-items-center mb-2'>
                             <span className='fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2'>
-                              $ 87,210
+                              $87,210
                             </span>
                           </div>
 

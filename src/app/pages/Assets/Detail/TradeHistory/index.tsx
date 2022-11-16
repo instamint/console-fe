@@ -71,11 +71,11 @@ export const TradeHistory: FC<Props> = ({idAsset = null}) => {
             )}
             <td className=''>{item?.buyerName}</td>
             <td className=''>{item?.sellerName}</td>
-            <td className=''>$ {showNumberFormat(item?.fee || 0)}</td>
-            {!idAsset && <td className=''>$ {showNumberFormat(item?.clientFee || 0)}</td>}
-            <td className=''>$ {showNumberFormat(item?.instamintPlatformFee || 0)}</td>
-            <td className=''>$ {item?.tradeAmount || 0}</td>
-            {!idAsset && <td className=''>$ {showNumberFormat(item?.royaltyAmountToIssuer || 0)}</td>}
+            <td className=''>${showNumberFormat(item?.fee || 0)}</td>
+            {!idAsset && <td className=''>${showNumberFormat(item?.clientFee || 0)}</td>}
+            <td className=''>${showNumberFormat(item?.instamintPlatformFee || 0)}</td>
+            <td className=''>${item?.tradeAmount || 0}</td>
+            {!idAsset && <td className=''>${showNumberFormat(item?.royaltyAmountToIssuer || 0)}</td>}
             {!idAsset && <td className=''>{convertTimeZone(item?.createdAt)}</td>}
           </tr>
         )
