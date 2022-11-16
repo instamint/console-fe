@@ -1,6 +1,16 @@
 import IconEthereum from '../../../../src/app/images/ethereum.png'
 import IconAlgorand from '../../../../src/app/images/algorand.png'
-import styled from 'styled-components'
+
+interface StyledType {
+  width?: number;
+  height?: number;
+
+  [key: string]: any
+}
+interface DataShowChain {
+  chain: string;
+  styled?: StyledType
+}
 
 // Address token
 export const shortAddress = (value: string = '', n = 4, nlast = 4, v = 13) => {
@@ -31,18 +41,34 @@ export const shortAddressMaxLength = (value: string, n = 25) => {
   return value?.substring(0, n) + '...'
 }
 
-export const showIconChain = (chain: string) => {
+export const showIconChain = (data: DataShowChain) => {
+  const chain = data?.chain
+  const width = data?.styled?.width || 22
+  const height = data?.styled?.height || 20
+
   if (!chain) return
-  const ImgChain = styled.img`
-    width: 22px;
-    height: 20px;
-  `
   switch (chain?.toLowerCase()) {
     case 'ethereum-goerli':
-      return <ImgChain src={IconEthereum}></ImgChain>
+      return (
+        <img
+          src={IconEthereum}
+          width={width}
+          height={height}
+          style={{...data.styled}}
+          alt='logo-chain'
+        />
+      )
     case 'algorand-testnet':
-      return <ImgChain src={IconAlgorand}></ImgChain>
+      return (
+        <img
+          src={IconAlgorand}
+          width={width}
+          height={height}
+          style={{...data.styled}}
+          alt='logo-chain'
+        />
+      )
     default:
-      return ""
+      return ''
   }
 }

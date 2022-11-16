@@ -61,13 +61,6 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.protocol || 'Yieldly'}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className='d-flex align-items-center'>
-                <div className='d-flex justify-content-start flex-column'>
                   <span className='text-dark fw-bold fs-7'>{handleSetChain(item)}</span>
                 </div>
               </div>
@@ -96,7 +89,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
                       ariaLabel='three-dots-loading'
                     />
                   ) : (
-                    <span className='text-dark fw-bold fs-7'>$ {showNumberFormat(item?.tvl)}</span>
+                    <span className='text-dark fw-bold fs-7'>${showNumberFormat(item?.tvl)}</span>
                   )}
                 </div>
               </div>
@@ -173,15 +166,6 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
                 <th>
                   <span
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('protocol')}
-                  >
-                    Protocol{' '}
-                    <ICSort type={sort.sort_name === 'protocol' ? sort.sort_type : 'default'} />
-                  </span>
-                </th>
-                <th>
-                  <span
-                    className='cursor-pointer'
                     onClick={() => !isLoading && handleSort('StakingToken.TokenTicker')}
                   >
                     Pair{' '}
@@ -222,7 +206,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
                 renderList()
               ) : (
                 <tr>
-                  <td colSpan={5} className='text-left'>
+                  <td colSpan={4} className='text-left'>
                     <h4 className='mt-5 d-flex justify-content-center'>
                       There is currently no data available
                     </h4>
