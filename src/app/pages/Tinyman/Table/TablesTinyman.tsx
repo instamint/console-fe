@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useCallback, useEffect, useState} from 'react'
-import {getInfoPoolV2, getInfoPoolV3, getListDefi, getTokenPrice} from '../../../../utils/api/defi'
-import {Loading} from '../../../components/Loading'
-import Pagination from '../../../components/Pagination'
-import useSearch from '../../../hooks/useSearch'
-import ICSort, {sortRows} from '../../../components/Sort'
-import {ThreeDots} from 'react-loader-spinner'
+import React, { useCallback, useEffect, useState } from 'react'
+import { ThreeDots } from 'react-loader-spinner'
+import { getTinyman } from '../../../../utils/api/defi'
 import { showNumberFormat } from '../../../../_metronic/helpers/format/number'
+import { Loading } from '../../../components/Loading'
+import Pagination from '../../../components/Pagination'
+import ICSort, { sortRows } from '../../../components/Sort'
+import useSearch from '../../../hooks/useSearch'
 
 type Props = {
   className: string
@@ -42,16 +42,6 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
     })
   }
 
-  const handleSetChain = (data) => {
-    let chain
-    if (data?.Type === 'LIQUIDITY') {
-      chain = data?.StakingToken?.TokenTicker || ''
-    } else {
-      chain = `${data?.StakingToken?.TokenTicker}/${data?.RewardToken?.[0]?.TokenTicker}`
-    }
-    return chain
-  }
-
   const renderList = useCallback(
     () =>
       Array.isArray(filterListResults(results, page)) &&
@@ -61,7 +51,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{handleSetChain(item)}</span>
+                  <span className='text-dark fw-bold fs-7'>{item?.asset_1?.name}/{item?.asset_2?.name}</span>
                 </div>
               </div>
             </td>
@@ -100,44 +90,11 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
     [results, searched, sort]
   )
 
-  const getTVL = async (data) => {
-    setIsLoadingTvl(true)
-    if (data?.length < 1) return
-    let tmpListTinyman = [...data]
-    try {
-      for (let i in tmpListTinyman) {
-        const [v2, v3] = await Promise.all([
-          getInfoPoolV2(tmpListTinyman[i]?.Id),
-          getInfoPoolV3(tmpListTinyman[i]?.Id),
-        ])
-        if (v3?.data?.tvl) tmpListTinyman[i].tvl = Math.trunc(v3?.data?.tvlUSD)
-        else {
-          const price = await getTokenPrice(
-            tmpListTinyman?.[i]?.StakingToken?.TokenName?.toLowerCase()
-          )
-          const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
-            (item: any) => item?.key === 'R0E='
-          )
-          const uint = v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
-          tmpListTinyman[i].tvl = Math.trunc(parseInt(uint) * parseInt(price))
-        }
-      }
-      setListTinyman(tmpListTinyman)
-    } catch (error) {
-      console.error({error})
-    } finally {
-      setIsLoadingTvl(false)
-    }
-  }
-
   const getListTinyman = async () => {
     setIsLoading(true)
     try {
-      const reps = await getListDefi()
-      if (reps?.data) {
-        setListTinyman(reps?.data)
-        getTVL(reps?.data)
-      }
+      const reps = await getTinyman()
+      reps?.data && setListTinyman(reps?.data?.results)
     } catch (error) {
       console.error({error})
     } finally {
@@ -146,7 +103,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   }
 
   useEffect(() => {
-    // getListTinyman()
+    getListTinyman()
   }, [])
 
   return (
@@ -214,4 +171,5 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   )
 }
 
-export {TablesTinyman}
+export { TablesTinyman }
+

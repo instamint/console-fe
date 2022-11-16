@@ -1,9 +1,10 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import {
-    shortAddressMaxLength,
-    showIconChain
+  shortAddress,
+  shortAddressMaxLength,
+  showIconChain
 } from '../../../../_metronic/helpers/format'
 import { useAuth } from '../../../modules/auth'
 
@@ -12,15 +13,8 @@ export interface VisitsAssetProps {
 }
 
 export function VisitsAsset(props: VisitsAssetProps) {
-  const navigate = useNavigate()
   const {currentUser} = useAuth()
   const listAssets = [...props.listAssets]?.splice(0, 6)
-
-  const navigateDetailAsset = (id) => {
-    if (id) {
-      navigate(`/assets/detail/overview/${id}`)
-    }
-  }
 
   const showBadgeOwnerName = (asset) => {
     if (currentUser?.name === asset?.issuerName || currentUser?.name === asset?.ownerName) {
@@ -37,7 +31,7 @@ export function VisitsAsset(props: VisitsAssetProps) {
         </h3>
 
         <div className='card-toolbar'>
-          <a className='btn btn-sm btn-light'>Assets</a>
+          <Link to={'/assets'} className='btn btn-sm btn-light'>Assets</Link>
         </div>
       </div>
 
@@ -60,16 +54,17 @@ export function VisitsAsset(props: VisitsAssetProps) {
                   <div className='d-flex flex-stack flex-row-fluid d-grid gap-2'>
                     <div className='me-5'>
                       <a
-                        data-tip={asset?.xref?.length > 15 ? asset?.xref : ''}
+                        data-tip={asset?.xref?.length > 10 ? asset?.xref : ''}
                         data-for='xref'
                         className='text-gray-800 fw-bold text-hover-primary fs-6'
                       >
-                        {shortAddressMaxLength(asset?.xref, 15)}
+                        {shortAddressMaxLength(asset?.xref, 10)}
                       </a>
 
                       <ReactTooltip id='xref' place='top' effect='solid' />
 
-                      <span
+                      <Link
+                        to={`/assets/detail/overview/${asset?.id}`}
                         data-tip={
                           asset?.instamintAssetHashid?.length > 15
                             ? asset?.instamintAssetHashid
@@ -77,10 +72,9 @@ export function VisitsAsset(props: VisitsAssetProps) {
                         }
                         data-for='instamintAssetHashid'
                         className='text-gray-400 fw-semibold fs-7 d-block text-start ps-0 cursor-pointer'
-                        onClick={() => navigateDetailAsset(asset?.id)}
                       >
-                        {shortAddressMaxLength(asset?.instamintAssetHashid, 15)}
-                      </span>
+                        {shortAddress(asset?.instamintAssetHashid, 4, 4, 15)}
+                      </Link>
                       <ReactTooltip id='instamintAssetHashid' place='right' effect='solid' />
                     </div>
 
