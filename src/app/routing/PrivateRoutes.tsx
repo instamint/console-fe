@@ -10,13 +10,13 @@ import { AnalyticsWrapper } from '../pages/Analytics/DashboardWrapper'
 import { AssetsWrapper } from '../pages/Assets/AssetsWrapper'
 import AssetsDetail from '../pages/Assets/Detail'
 import { ContractsWrapper } from '../pages/Contracts/ContractsWrapper'
+import { DashboardWrapper } from '../pages/Dashboard/DashboardWrapper'
 import { DesignerWrapper } from '../pages/Designer/index'
 import { MonitoringWrapper } from '../pages/Monitoring/MonitoringPageWrapper'
 import PartiesDetail from '../pages/Parties/Detail'
 import { PartiesWrapper } from '../pages/Parties/PartiesWrapper'
 import { PoolsWrapper } from '../pages/Pools/PoolsWrapper'
 import { TransactionsWrapper } from '../pages/Transactions/TransactionsWrapper'
-import { DashboardWrapper } from '../pages/Dashboard/DashboardWrapper'
 
 const PrivateRoutes = () => {
   const {currentUser} = useAuth()
