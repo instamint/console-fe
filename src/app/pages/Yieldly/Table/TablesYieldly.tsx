@@ -7,6 +7,7 @@ import useSearch from '../../../hooks/useSearch'
 import ICSort, {sortRows} from '../../../components/Sort'
 import {ThreeDots} from 'react-loader-spinner'
 import { showNumberFormat } from '../../../../_metronic/helpers/format/number'
+import BigNumber from 'bignumber.js'
 
 type Props = {
   className: string
@@ -119,14 +120,15 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
         ])
         if (v3?.data?.tvl) tmpListDeFi[i].tvl = Math.trunc(v3?.data?.tvlUSD)
         else {
-          const price = await getTokenPrice(
-            tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase()
-          )
+          let price = await getTokenPrice(tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase())
+          price = price?.data?.price
           const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
             (item: any) => item?.key === 'R0E='
           )
-          const uint = v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
-          tmpListDeFi[i].tvl = Math.trunc(parseInt(uint) * parseInt(price))
+          const uint = new BigNumber(
+            v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
+          )
+          tmpListDeFi[i].tvl = parseInt(uint.multipliedBy(price).toString())
         }
       }
       setListDeFi(tmpListDeFi)
