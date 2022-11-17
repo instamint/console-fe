@@ -25,6 +25,7 @@ import {ButtonCopy} from '../../../components/Button/button-copy'
 import IconCompleted from '../../../images/icon-completed.svg'
 import {showNumberFormat} from '../../../../_metronic/helpers/format/number'
 import ModalStake from '../Modal/modal-stake'
+import {createLiquidityPool} from '../../../../utils/api/defi'
 
 type Props = {
   className: string
@@ -105,11 +106,11 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     setModalShow(true)
   }
 
-  const openModalAuction = (id) => {
-    setIdAssetAuction(id)
-    setTypeModal('auction')
-    setModalShow(true)
-  }
+  // const openModalAuction = (id) => {
+  //   setIdAssetAuction(id)
+  //   setTypeModal('auction')
+  //   setModalShow(true)
+  // }
 
   const handleAddPool = async (values) => {
     try {
@@ -170,17 +171,32 @@ const TablesAssets: React.FC<Props> = ({className}) => {
     }
   }
 
-  const handleEndAuction = async (id) => {
-    setIsLoadingAuction(true)
+  // const handleEndAuction = async (id) => {
+  //   setIsLoadingAuction(true)
+  //   try {
+  //     await endAuction(id)
+  //     alert.success('End Auction successful!')
+  //     setReloadList((preState) => !preState)
+  //     setIsLoadingAuction(false)
+  //   } catch (error) {
+  //     alert.error('End Auction failed, please try again!')
+  //     console.error({error})
+  //     setIsLoadingAuction(false)
+  //   }
+  // }
+
+  const handleLiquidityPool = async (assets) => {
     try {
-      await endAuction(id)
-      alert.success('End Auction successful!')
-      setReloadList((preState) => !preState)
-      setIsLoadingAuction(false)
+      const params = {
+        asset_1: assets?.[0]?.algorandAssetId,
+        asset_2: assets?.[1]?.algorandAssetId,
+      }
+      await createLiquidityPool(params)
+      alert.success('Successful Pool Creation!')
     } catch (error) {
-      alert.error('End Auction failed, please try again!')
       console.error({error})
-      setIsLoadingAuction(false)
+    } finally {
+      setSelectAsset([])
     }
   }
 
@@ -460,6 +476,7 @@ const TablesAssets: React.FC<Props> = ({className}) => {
           setSearch={setSearch}
           openModalPool={openModalPool}
           openModalStake={openModalStake}
+          handleLiquidityPool={handleLiquidityPool}
           selectAsset={selectAsset}
           setMinted={setMinted}
           minted={minted}

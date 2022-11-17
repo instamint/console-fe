@@ -16,10 +16,10 @@ export function VisitsAsset(props: VisitsAssetProps) {
   const {currentUser} = useAuth()
   const listAssets = [...props.listAssets]?.splice(0, 6)
 
-  const showBadgeOwnerName = (asset) => {
-    if (currentUser?.name === asset?.issuerName || currentUser?.name === asset?.ownerName) {
+  const showBadgeOwnerName = (name) => {
+    if (currentUser?.name === name) {
       return 'badge-light-success'
-    } else return 'badge-light-danger'
+    } else return 'text-gray-800 fw-bold d-block'
   }
 
   return (
@@ -31,7 +31,7 @@ export function VisitsAsset(props: VisitsAssetProps) {
         </h3>
 
         <div className='card-toolbar'>
-          <Link to={'/assets'} className='btn btn-sm btn-light'>Assets</Link>
+          <Link to={'/assets'} className='btn btn-sm btn-light'>View All</Link>
         </div>
       </div>
 
@@ -79,12 +79,12 @@ export function VisitsAsset(props: VisitsAssetProps) {
                     </div>
 
                     <div className='d-flex align-items-center'>
-                      <span className='text-gray-800 fw-bold fs-6 me-3 d-block'>
+                      <span className={`badge ${showBadgeOwnerName(asset?.issuerName)} fs-7`}>
                         {asset?.issuerName}
                       </span>
 
                       <DivOwnerName className='m-0'>
-                        <span className={`badge ${showBadgeOwnerName(asset)} fs-base`}>
+                        <span className={`badge ${showBadgeOwnerName(asset?.ownerName)} fs-7`}>
                           {asset?.ownerName}
                         </span>
                       </DivOwnerName>
@@ -103,4 +103,5 @@ export function VisitsAsset(props: VisitsAssetProps) {
 const DivOwnerName = styled.div`
   display: flex;
   justify-content: end;
+  min-width: 95px;
 `

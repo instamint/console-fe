@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAlert } from 'react-alert'
 import { endAuction } from '../../../../utils/api/assets'
-import { showNumberFormat, showTwoDecimalPlaces } from '../../../../_metronic/helpers/format/number'
+import { showNumberFormat } from '../../../../_metronic/helpers/format/number'
 import { TablesTransactions } from '../../Transactions/Table/TablesTransactions'
 import AuctionHistory from './AuctionHistory'
 import BidHistory from './BidHistory/index'

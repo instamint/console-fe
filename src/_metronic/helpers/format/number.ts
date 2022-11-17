@@ -4,6 +4,12 @@ export const showTwoDecimalPlaces = (number) => {
     } else return number || 0
 }
 
+export const showThreeDecimalPlaces = (number) => {
+  if (number && !isNaN(number)) {
+    return number?.toString()?.match(/^-?\d+(?:\.\d{0,3})?/)?.[0]
+  } else return number || 0
+}
+
 export const showNumberFormat = (number) => {
   if (number && !isNaN(number)) {
     return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')

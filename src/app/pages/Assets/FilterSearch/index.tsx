@@ -9,6 +9,7 @@ export type FilterSearchProps = {
   selectAsset: Array<any>
   setMinted: (value: any) => void
   minted: boolean
+  handleLiquidityPool: (value: any) => void
 }
 const FilterSearch = ({
   setSearch,
@@ -17,6 +18,7 @@ const FilterSearch = ({
   selectAsset,
   setMinted,
   minted,
+  handleLiquidityPool,
 }: FilterSearchProps) => {
   const [term, setTerm] = useState<string>('')
   const alert = useAlert()
@@ -35,6 +37,14 @@ const FilterSearch = ({
     if (selectAsset?.some((item) => item?.portfolioName)) {
       alert.error('Please select Assets not already in a Portfolio!')
     } else openModalPool(true)
+  }
+
+  const handleClickLiquidityPool = () => {
+    if (selectAsset?.length === 2) {
+      handleLiquidityPool(selectAsset)
+    } else {
+      alert.error('Please select two Assets!')
+    }
   }
 
   return (
@@ -73,6 +83,7 @@ const FilterSearch = ({
                 Assign To Portfolio
               </NameDropdow>
               <NameDropdow>Enable Auction</NameDropdow>
+              <NameDropdow onClick={() => handleClickLiquidityPool()}>Create Liquidity Pool</NameDropdow>
             </div>
           </div>
         </div>
