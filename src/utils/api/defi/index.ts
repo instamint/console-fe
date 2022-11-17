@@ -8,11 +8,20 @@ export const GET_INFO_POOL_V2 = (id) =>
 export const GET_INFO_POOL_V3 = (id) =>
   `https://app.yieldly.finance/staking/pools/v3/${id}`
 export const GET_TOKEN_PRICE = (name) => `https://app.yieldly.finance/getTokenPrice/${name}`
-export const GET_TINYMAN = `https://testnet.analytics.tinyman.org/api/v1/pools/?liquidity_asset_ids=122663598%2C122774550%2C122795190%2C122806042%2C122816774%2C123095174&limit=all`
+export const LIQUIDITY_POOL = `${API_URL}/create-pools`
 
+export interface ParamsDefi {
+  platform: string
+}
 
-export const getListDefi = async (): Promise<any> => {
-  return axios.get(GET_LIST_DEFI)
+export const getListDefi = async (params: ParamsDefi): Promise<any> => {
+  let url = `${GET_LIST_DEFI}?`
+  if (params) {
+    Object.keys(params).map((key) => {
+      url += key + '=' + params[key] + '&'
+    })
+  }
+  return axios.get(url)
 }
 
 export const getInfoPoolV2 = async (id: string | number): Promise<any> => {
@@ -27,6 +36,7 @@ export const getTokenPrice = async (name: string): Promise<any> => {
   return axios.get(GET_TOKEN_PRICE(name))
 }
 
-export const getTinyman = async (): Promise<any> => {
-  return axios.get(GET_TINYMAN)
+export const createLiquidityPool = async (params: any): Promise<any> => {
+  const response = await axios.post<any>(LIQUIDITY_POOL, params)
+  return response.data
 }

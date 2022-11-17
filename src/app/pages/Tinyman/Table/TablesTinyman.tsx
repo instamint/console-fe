@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import BigNumber from 'bignumber.js'
 import React, { useCallback, useEffect, useState } from 'react'
-import { ThreeDots } from 'react-loader-spinner'
-import { getTinyman } from '../../../../utils/api/defi'
-import { showNumberFormat } from '../../../../_metronic/helpers/format/number'
+import { getListDefi } from '../../../../utils/api/defi'
+import { showNumberFormat, showThreeDecimalPlaces } from '../../../../_metronic/helpers/format/number'
 import { Loading } from '../../../components/Loading'
 import Pagination from '../../../components/Pagination'
 import ICSort, { sortRows } from '../../../components/Sort'
@@ -16,7 +16,6 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   const [listTinyman, setListTinyman] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listTinyman, [])
   const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingTvl, setIsLoadingTvl] = useState(true)
   const [paginate, setPaginate] = useState(null)
 
   const [sort, setSort] = useState({sort_type: '', sort_name: ''})
@@ -51,7 +50,9 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  <span className='text-dark fw-bold fs-7'>{item?.asset_1?.name}/{item?.asset_2?.name}</span>
+                  <span className='text-dark fw-bold fs-7'>
+                    {item?.asset_1?.unit_name}/{item?.asset_2?.unit_name}
+                  </span>
                 </div>
               </div>
             </td>
@@ -60,10 +61,9 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
                 <div className='d-flex justify-content-start'>
                   <span
                     className='text-dark fw-bold fs-7'
-                    data-tip={item?.Id}
                     style={{minWidth: '85px'}}
                   >
-                    {item?.Id}
+                    {item?.share}
                   </span>
                 </div>
               </div>
@@ -71,16 +71,12 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
             <td>
               <div className='d-flex align-items-center'>
                 <div className='d-flex justify-content-start flex-column'>
-                  {isLoadingTvl ? (
-                    <ThreeDots
-                      height='22'
-                      width='22'
-                      color='#009ef7'
-                      ariaLabel='three-dots-loading'
-                    />
-                  ) : (
-                    <span className='text-dark fw-bold fs-7'>${showNumberFormat(item?.tvl)}</span>
-                  )}
+                  <span className='text-dark fw-bold fs-7'>
+                    $
+                    {showNumberFormat(
+                      new BigNumber(showThreeDecimalPlaces(item?.liquidity_in_usd))
+                    )}
+                  </span>
                 </div>
               </div>
             </td>
@@ -93,8 +89,11 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   const getListTinyman = async () => {
     setIsLoading(true)
     try {
-      const reps = await getTinyman()
-      reps?.data && setListTinyman(reps?.data?.results)
+      const params = {
+        platform: 'tinyman',
+      }
+      const reps = await getListDefi(params)
+      reps?.data && setListTinyman(reps?.data)
     } catch (error) {
       console.error({error})
     } finally {
@@ -103,7 +102,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   }
 
   useEffect(() => {
-    // getListTinyman()
+    getListTinyman()
   }, [])
 
   return (
@@ -116,30 +115,26 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
                 <th>
                   <span
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('StakingToken.TokenTicker')}
+                    onClick={() => !isLoading && handleSort('asset_1.unit_name')}
                   >
                     Pair{' '}
                     <ICSort
-                      type={
-                        sort.sort_name === 'StakingToken.TokenTicker' ? sort.sort_type : 'default'
-                      }
+                      type={sort.sort_name === 'asset_1.unit_name' ? sort.sort_type : 'default'}
                     />
                   </span>
                 </th>
                 <th>
                   <span
                     className='cursor-pointer'
-                    onClick={() => !isLoading && handleSort('Contracts.Escrow')}
+                    onClick={() => !isLoading && handleSort('share')}
                   >
                     % Share{' '}
-                    <ICSort
-                      type={sort.sort_name === 'Contracts.Escrow' ? sort.sort_type : 'default'}
-                    />
+                    <ICSort type={sort.sort_name === 'share' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
                 <th>
-                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('tvl')}>
-                    TVL <ICSort type={sort.sort_name === 'tvl' ? sort.sort_type : 'default'} />
+                  <span className='cursor-pointer' onClick={() => !isLoading && handleSort('liquidity_in_usd')}>
+                    TVL <ICSort type={sort.sort_name === 'liquidity_in_usd' ? sort.sort_type : 'default'} />
                   </span>
                 </th>
               </tr>
