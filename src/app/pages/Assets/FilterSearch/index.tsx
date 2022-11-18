@@ -40,10 +40,13 @@ const FilterSearch = ({
   }
 
   const handleClickLiquidityPool = () => {
-    if (selectAsset?.length === 2) {
+    if (
+      selectAsset?.length === 2 &&
+      selectAsset?.every((item) => item?.mintCompletedStatus === true)
+    ) {
       handleLiquidityPool(selectAsset)
     } else {
-      alert.error('Please select two Assets!')
+      alert.error('Please select two Assets was minted!')
     }
   }
 
