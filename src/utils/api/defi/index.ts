@@ -9,6 +9,7 @@ export const GET_INFO_POOL_V3 = (id) =>
   `https://app.yieldly.finance/staking/pools/v3/${id}`
 export const GET_TOKEN_PRICE = (name) => `https://app.yieldly.finance/getTokenPrice/${name}`
 export const LIQUIDITY_POOL = `${API_URL}/create-pools`
+export const GET_DATA_CHART_TVL = (id) => `${API_URL}/chart`
 
 export interface ParamsDefi {
   platform: string
@@ -40,3 +41,14 @@ export const createLiquidityPool = async (params: any): Promise<any> => {
   const response = await axios.post<any>(LIQUIDITY_POOL, params)
   return response.data
 }
+
+export const getDataChartTVL = async (params: any): Promise<any> => {
+  let url = `${GET_DATA_CHART_TVL(params.id)}?`
+  if (params) {
+    Object.keys(params).map((key) => {
+      url += key + '=' + params[key] + '&'
+    })
+  }
+  return axios.get(url)
+}
+
