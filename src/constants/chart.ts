@@ -1,8 +1,10 @@
+import {showNumberFormat} from '../_metronic/helpers/format/number'
+
 export const dataReactApexChart = {
   series: [
     {
       name: 'TVL',
-      data: [65, 80, 80, 60, 60, 45, 45, 80, 80, 70, 70, 90, 90, 80, 80, 60, 60, 50],
+      data: [],
     },
   ],
   options: {
@@ -18,26 +20,17 @@ export const dataReactApexChart = {
     },
     xaxis: {
       type: 'datetime' as 'datetime',
-      categories: [
-        '2018-09-19T00:00:00.000Z',
-        '2018-09-19T01:30:00.000Z',
-        '2018-09-19T02:30:00.000Z',
-        '2018-09-19T03:30:00.000Z',
-        '2018-09-19T04:30:00.000Z',
-        '2018-09-19T05:30:00.000Z',
-        '2018-09-19T06:30:00.000Z',
-        '2018-09-19T07:30:00.000Z',
-        '2018-09-19T08:30:00.000Z',
-        '2018-09-19T09:30:00.000Z',
-        '2018-09-19T10:30:00.000Z',
-        '2018-09-19T11:30:00.000Z',
-        '2018-09-19T12:30:00.000Z',
-        '2018-09-19T13:30:00.000Z',
-        '2018-09-19T14:30:00.000Z',
-        '2018-09-19T15:30:00.000Z',
-        '2018-09-19T16:30:00.000Z',
-        '2018-09-19T17:30:00.000Z',
-      ],
+      categories: [],
+      tooltip: {
+        enabled: false,
+      },
+    },
+    yaxis: {
+      labels: {
+        formatter: (value) => {
+          if (value) return showNumberFormat(value)
+        },
+      },
     },
     tooltip: {
       x: {
