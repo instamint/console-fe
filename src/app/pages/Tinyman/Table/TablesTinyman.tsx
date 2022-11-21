@@ -58,11 +58,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
       const reps = await getDataChartTVL(params)
       if (reps?.data && reps?.data?.length > 0) {
         const data = {...dataReactApexChart}
-        data.series[0].data = reps?.data?.map((item) => {
-          let number: any = new BigNumber(item?.tvl)
-          number = number.toFixed(3)
-          return number
-        })
+        data.series[0].data = reps?.data?.map((item) => item?.tvl)
         data.options.xaxis.categories = reps?.data?.map((item) => item?.snapshotTime)
         setDataChart(data)
       }
