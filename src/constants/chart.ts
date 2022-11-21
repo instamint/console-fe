@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import {showNumberFormat} from '../_metronic/helpers/format/number'
 
 export const dataReactApexChart = {
@@ -28,7 +29,11 @@ export const dataReactApexChart = {
     yaxis: {
       labels: {
         formatter: (value) => {
-          if (value) return showNumberFormat(value)
+          if (value && value < 1000) {
+            let num: any = new BigNumber(value)
+            num = num.toFixed(3)
+            return num.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          } else return showNumberFormat(value)
         },
       },
     },
