@@ -52,20 +52,23 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
     setIsLoadingChart(true)
     try {
       const params = {
-        id,
         defi_protocol_id: 2, // tiny
+        blockchain_id: id,
       }
       const reps = await getDataChartTVL(params)
-      if (reps?.data) {
+      if (reps?.data && reps?.data?.length > 0) {
         const data = {...dataReactApexChart}
-        data.series[0].data = []
-        data.options[0].xaxis.categories = []
-        setDataChart(reps?.data)
+        data.series[0].data = reps?.data?.map((item) => {
+          let number: any = new BigNumber(item?.tvl)
+          number = number.toFixed(3)
+          return number
+        })
+        data.options.xaxis.categories = reps?.data?.map((item) => item?.snapshotTime)
+        setDataChart(data)
       }
     } catch (error) {
       console.error({error})
-      // setDataChart(null)
-      setDataChart({...dataReactApexChart})
+      setDataChart(null)
     } finally {
       setIsLoadingChart(false)
     }
@@ -131,7 +134,7 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
                     <div className='d-flex justify-content-center align-items-center'>
                       <ThreeDots
                         height='30'
-                        width='40'
+                        width='35'
                         color='#009ef7'
                         ariaLabel='three-dots-loading'
                       />

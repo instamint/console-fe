@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = process.env.REACT_APP_API_URL_DEFI
+const API_URL_ORIGIN = process.env.REACT_APP_API_URL
 
 export const GET_LIST_DEFI = `${API_URL}/pools`
 export const GET_INFO_POOL_V2 = (id) =>
@@ -9,7 +10,7 @@ export const GET_INFO_POOL_V3 = (id) =>
   `https://app.yieldly.finance/staking/pools/v3/${id}`
 export const GET_TOKEN_PRICE = (name) => `https://app.yieldly.finance/getTokenPrice/${name}`
 export const LIQUIDITY_POOL = `${API_URL}/create-pools`
-export const GET_DATA_CHART_TVL = (id) => `${API_URL}/chart`
+export const GET_DATA_CHART_TVL = `${API_URL_ORIGIN}/timeServiceSnapShoot`
 
 export interface ParamsDefi {
   platform: string
@@ -43,7 +44,7 @@ export const createLiquidityPool = async (params: any): Promise<any> => {
 }
 
 export const getDataChartTVL = async (params: any): Promise<any> => {
-  let url = `${GET_DATA_CHART_TVL(params.id)}?`
+  let url = `${GET_DATA_CHART_TVL}?`
   if (params) {
     Object.keys(params).map((key) => {
       url += key + '=' + params[key] + '&'

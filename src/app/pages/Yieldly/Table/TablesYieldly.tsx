@@ -30,54 +30,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
   const [isLoadingChart, setIsLoadingChart] = useState(true)
   const [paginate, setPaginate] = useState(null)
   const [idChartTVL, setIdChartTVL] = useState(null)
-  const [dataChart, setDataChart] = useState({
-    series: [
-      {
-        name: 'TVL',
-        data: [65, 80, 80, 60, 60, 45, 45, 80, 80, 70, 70, 90, 90, 80, 80, 60, 60, 50],
-      },
-    ],
-    options: {
-      chart: {
-        height: 350,
-        type: 'area' as 'area',
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'smooth' as 'smooth',
-      },
-      xaxis: {
-        type: 'datetime' as 'datetime',
-        categories: [
-          '2018-09-19T00:00:00.000Z',
-          '2018-09-19T01:30:00.000Z',
-          '2018-09-19T02:30:00.000Z',
-          '2018-09-19T03:30:00.000Z',
-          '2018-09-19T04:30:00.000Z',
-          '2018-09-19T05:30:00.000Z',
-          '2018-09-19T06:30:00.000Z',
-          '2018-09-19T07:30:00.000Z',
-          '2018-09-19T08:30:00.000Z',
-          '2018-09-19T09:30:00.000Z',
-          '2018-09-19T10:30:00.000Z',
-          '2018-09-19T11:30:00.000Z',
-          '2018-09-19T12:30:00.000Z',
-          '2018-09-19T13:30:00.000Z',
-          '2018-09-19T14:30:00.000Z',
-          '2018-09-19T15:30:00.000Z',
-          '2018-09-19T16:30:00.000Z',
-          '2018-09-19T17:30:00.000Z',
-        ],
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm',
-        },
-      },
-    },
-  })
+  const [dataChart, setDataChart] = useState(null)
 
   const [sort, setSort] = useState({sort_type: '', sort_name: ''})
   const [page, setPage] = useState<string | number>(1)
@@ -116,20 +69,23 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
     setIsLoadingChart(true)
     try {
       const params = {
-        id,
         defi_protocol_id: 1, //yieldly
+        blockchain_id: id,
       }
       const reps = await getDataChartTVL(params)
-      if (reps?.data) {
+      if (reps?.data && reps?.data?.length > 0) {
         const data = {...dataReactApexChart}
-        data.series[0].data = []
-        data.options[0].xaxis.categories = []
-        setDataChart(reps?.data)
+        data.series[0].data = reps?.data?.map((item) => {
+          let number: any = new BigNumber(item?.tvl)
+          number = number.toFixed(3)
+          return number
+        })
+        data.options.xaxis.categories = reps?.data?.map((item) => item?.snapshotTime)
+        setDataChart(data)
       }
     } catch (error) {
       console.error({error})
-      // setDataChart(null)
-      setDataChart({...dataReactApexChart})
+      setDataChart(null)
     } finally {
       setIsLoadingChart(false)
     }
@@ -151,7 +107,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
             <TrTable
               className={idChartTVL === item?.Id ? 'show_chart' : ''}
               key={index}
-              onClick={() => handleShowChartTVL(item?.Id)}
+              onClick={() => !isLoadingTvl && handleShowChartTVL(item?.Id)}
             >
               <td>
                 <div className='d-flex align-items-center'>
@@ -208,7 +164,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
                     <div className='d-flex justify-content-center align-items-center'>
                       <ThreeDots
                         height='30'
-                        width='40'
+                        width='35'
                         color='#009ef7'
                         ariaLabel='three-dots-loading'
                       />
