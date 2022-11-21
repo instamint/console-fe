@@ -73,9 +73,13 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
         blockchain_id: id,
       }
       const reps = await getDataChartTVL(params)
-      if (reps?.data && reps?.data?.length > 0) {
+      if (reps?.data) {
         const data = {...dataReactApexChart}
-        data.series[0].data = reps?.data?.map((item) => item?.tvl)
+        data.series[0].data = reps?.data?.map((item) => {
+          let number: any = new BigNumber(item?.tvl)
+          number = number.toFixed(0)
+          return number
+        })
         data.options.xaxis.categories = reps?.data?.map((item) => item?.snapshotTime)
         setDataChart(data)
       }
@@ -167,7 +171,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
                     </div>
                   ) : (
                     <>
-                      {dataChart ? (
+                      {dataChart && dataChart?.series?.[0]?.data.length > 0 ? (
                         <ReactApexChart
                           options={dataChart.options}
                           series={dataChart.series}
@@ -176,7 +180,9 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
                         />
                       ) : (
                         <h5 className='mt-4 d-flex justify-content-center'>
-                          Retrieving chart data error occurred, please try again!
+                          {dataChart?.series?.[0]?.data.length === 0
+                            ? 'There is currently no data available'
+                            : 'Retrieving chart data error occurred, please try again!'}
                         </h5>
                       )}
                     </>
@@ -187,7 +193,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
           </>
         )
       }),
-    [results, searched, sort, idChartTVL, isLoadingChart]
+    [results, searched, sort, idChartTVL, isLoadingChart, dataChart]
   )
 
   const getTVL = async (data) => {

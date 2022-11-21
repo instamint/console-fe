@@ -12,6 +12,9 @@ export const dataReactApexChart = {
     chart: {
       height: 350,
       type: 'area' as 'area',
+      toolbar: {
+        show: false,
+      },
     },
     dataLabels: {
       enabled: false,
@@ -29,11 +32,7 @@ export const dataReactApexChart = {
     yaxis: {
       labels: {
         formatter: (value) => {
-          if (value && value < 1000) {
-            let num: any = new BigNumber(value)
-            num = num.toFixed(3)
-            return num.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          } else return showNumberFormat(value)
+          return showNumberFormat(value)
         },
       },
     },
