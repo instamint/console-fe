@@ -219,10 +219,8 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
   const getListDeFi = async () => {
     setIsLoading(true)
     try {
-      const params = {
-        platform: 'yieldly',
-      }
-      const reps = await getListDefi(params)
+      const platform = 'yieldly'
+      const reps = await getListDefi(platform)
       if (reps?.data) {
         setListDeFi(reps?.data)
         // getTVL(reps?.data)

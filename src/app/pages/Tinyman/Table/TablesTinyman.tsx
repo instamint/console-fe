@@ -169,10 +169,8 @@ const TablesTinyman: React.FC<Props> = ({className}) => {
   const getListTinyman = async () => {
     setIsLoading(true)
     try {
-      const params = {
-        platform: 'tinyman',
-      }
-      const reps = await getListDefi(params)
+      const platform = 'tinyman'
+      const reps = await getListDefi(platform)
       reps?.data && setListTinyman(reps?.data)
     } catch (error) {
       console.error({error})
