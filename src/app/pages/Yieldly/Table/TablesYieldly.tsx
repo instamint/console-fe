@@ -6,11 +6,7 @@ import { ThreeDots } from 'react-loader-spinner'
 import styled from 'styled-components'
 import { dataReactApexChart } from '../../../../constants/chart'
 import {
-  getDataChartTVL,
-  getInfoPoolV2,
-  getInfoPoolV3,
-  getListDefi,
-  getTokenPrice
+  getDataChartTVL, getListDefi
 } from '../../../../utils/api/defi'
 import { showNumberFormat } from '../../../../_metronic/helpers/format/number'
 import { Loading } from '../../../components/Loading'
@@ -26,7 +22,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
   const [listDeFi, setListDeFi] = useState<Array<any>>([])
   const {searched, setSearch, results} = useSearch(listDeFi, [])
   const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingTvl, setIsLoadingTvl] = useState(true)
+  // const [isLoadingTvl, setIsLoadingTvl] = useState(true)
   const [isLoadingChart, setIsLoadingChart] = useState(true)
   const [paginate, setPaginate] = useState(null)
   const [idChartTVL, setIdChartTVL] = useState(null)
@@ -107,7 +103,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
             <TrTable
               className={idChartTVL === item?.Id ? 'show_chart' : ''}
               key={index}
-              onClick={() => !isLoadingTvl && handleShowChartTVL(item?.Id)}
+              onClick={() => handleShowChartTVL(item?.Id)}
             >
               <td>
                 <div className='d-flex align-items-center'>
@@ -132,16 +128,9 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
               <td>
                 <div className='d-flex align-items-center'>
                   <div className='d-flex justify-content-start flex-column'>
-                    {isLoadingTvl ? (
-                      <ThreeDots
-                        height='22'
-                        width='22'
-                        color='#009ef7'
-                        ariaLabel='three-dots-loading'
-                      />
-                    ) : (
-                      <span className='text-dark fw-bold fs-7'>${showNumberFormat(item?.tvl)}</span>
-                    )}
+                    <span className='text-dark fw-bold fs-7'>
+                      ${item?.tvl ? showNumberFormat(Math.trunc(item?.tvl)) : 0}
+                    </span>
                   </div>
                 </div>
               </td>
@@ -196,36 +185,36 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
     [results, searched, sort, idChartTVL, isLoadingChart, dataChart]
   )
 
-  const getTVL = async (data) => {
-    setIsLoadingTvl(true)
-    if (data?.length < 1) return
-    let tmpListDeFi = [...data]
-    try {
-      for (let i in tmpListDeFi) {
-        const [v2, v3] = await Promise.all([
-          getInfoPoolV2(tmpListDeFi[i]?.Id),
-          getInfoPoolV3(tmpListDeFi[i]?.Id),
-        ])
-        if (v3?.data?.tvl) tmpListDeFi[i].tvl = Math.trunc(v3?.data?.tvlUSD)
-        else {
-          let price = await getTokenPrice(tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase())
-          price = price?.data?.price
-          const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
-            (item: any) => item?.key === 'R0E='
-          )
-          const uint = new BigNumber(
-            v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
-          )
-          tmpListDeFi[i].tvl = parseInt(uint.multipliedBy(price).toString())
-        }
-      }
-      setListDeFi(tmpListDeFi)
-    } catch (error) {
-      console.error({error})
-    } finally {
-      setIsLoadingTvl(false)
-    }
-  }
+  // const getTVL = async (data) => {
+  //   setIsLoadingTvl(true)
+  //   if (data?.length < 1) return
+  //   let tmpListDeFi = [...data]
+  //   try {
+  //     for (let i in tmpListDeFi) {
+  //       const [v2, v3] = await Promise.all([
+  //         getInfoPoolV2(tmpListDeFi[i]?.Id),
+  //         getInfoPoolV3(tmpListDeFi[i]?.Id),
+  //       ])
+  //       if (v3?.data?.tvl) tmpListDeFi[i].tvl = Math.trunc(v3?.data?.tvlUSD)
+  //       else {
+  //         let price = await getTokenPrice(tmpListDeFi?.[i]?.StakingToken?.TokenName?.toLowerCase())
+  //         price = price?.data?.price
+  //         const idx = v2?.data?.application?.params?.['global-state']?.findIndex(
+  //           (item: any) => item?.key === 'R0E='
+  //         )
+  //         const uint = new BigNumber(
+  //           v2?.data?.application?.params?.['global-state']?.[idx]?.value?.uint
+  //         )
+  //         tmpListDeFi[i].tvl = parseFloat(uint.multipliedBy(price).toString())
+  //       }
+  //     }
+  //     setListDeFi(tmpListDeFi)
+  //   } catch (error) {
+  //     console.error({error})
+  //   } finally {
+  //     setIsLoadingTvl(false)
+  //   }
+  // }
 
   const getListDeFi = async () => {
     setIsLoading(true)
@@ -236,7 +225,7 @@ const TablesYieldly: React.FC<Props> = ({className}) => {
       const reps = await getListDefi(params)
       if (reps?.data) {
         setListDeFi(reps?.data)
-        getTVL(reps?.data)
+        // getTVL(reps?.data)
       }
     } catch (error) {
       console.error({error})
